@@ -1,112 +1,145 @@
-import { motion } from 'motion/react';
-import { MapPin, Phone, Mail, Clock, Send, ArrowRight } from 'lucide-react';
-import { Button } from './ui/Button';
-import { CONTACT_INFO } from '../constants';
-import { Glow } from './ui/Glow';
+import type { FormEvent } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
+import { ArrowRight, Mail, MapPin, Phone, type LucideIcon } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
+import { Glow } from '@/components/ui/Glow';
+import { CONTACT_INFO, LOCATIONS } from '@/constants';
+
+const ASSURANCES = ['Careful assessment', 'Clear guidance', 'Specialist care'];
+
+const telHref = `tel:${CONTACT_INFO.phone.replace(/[^\d]/g, '')}`;
+const mailHref = `mailto:${CONTACT_INFO.email}`;
+const mapsHref = (address: string) =>
+  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+
+// Front-end-only fallback: compose an email from the form fields. Replace with a
+// real form endpoint (e.g. a serverless function or Formspree) before launch.
+const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  event.preventDefault();
+  const data = new FormData(event.currentTarget);
+  const get = (key: string) => String(data.get(key) ?? '').trim();
+  const body = [
+    `Name: ${get('firstName')} ${get('lastName')}`.trim(),
+    `Email: ${get('email')}`,
+    `Phone: ${get('phone')}`,
+    '',
+    get('message'),
+  ].join('\n');
+  window.location.href = `${mailHref}?subject=${encodeURIComponent('Appointment request')}&body=${encodeURIComponent(body)}`;
+};
 
 export const ContactCTA = () => {
+  const reduceMotion = useReducedMotion();
+  const reveal = (x = 0) => ({
+    initial: reduceMotion ? false : { opacity: 0, x },
+    whileInView: { opacity: 1, x: 0 },
+    viewport: { once: true },
+    transition: { duration: 0.5, ease: 'easeOut' } as const,
+  });
+
   return (
-    <section id="contact" className="py-40 px-6 relative overflow-hidden">
-      <Glow className="bottom-0 left-1/2 -translate-x-1/2 scale-150" color="blue" />
-      
-      <div className="max-w-7xl mx-auto">
-        <div className="glass rounded-[80px] p-10 md:p-24 border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)] relative overflow-hidden bg-brand-panel/40">
-          <div className="absolute top-0 right-0 w-2/3 h-full bg-radial-gradient from-medical-teal/[0.03] via-transparent to-transparent opacity-50 pointer-events-none" />
-          
-          <div className="relative grid lg:grid-cols-2 gap-24 items-start">
-            <div className="space-y-20">
-              <div className="space-y-10">
-                <motion.h2 
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="text-5xl md:text-7xl font-display font-bold leading-[1.1] tracking-tight"
+    <section id="contact" aria-labelledby="contact-heading" className="relative overflow-hidden px-6 py-28 md:py-32">
+      <Glow className="bottom-0 left-1/2 -translate-x-1/2" color="blue" />
+
+      <div className="mx-auto max-w-7xl">
+        <div className="relative overflow-hidden rounded-3xl glass bg-brand-panel/40 p-8 shadow-[0_0_100px_rgba(0,0,0,0.45)] md:rounded-[48px] md:p-16 lg:p-20">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute right-0 top-0 h-full w-2/3 bg-[radial-gradient(circle_at_85%_15%,rgba(20,184,166,0.06),transparent_60%)]"
+          />
+
+          <div className="relative grid items-start gap-16 lg:grid-cols-2 lg:gap-20">
+            <div className="space-y-12">
+              <div className="space-y-6">
+                <motion.h2
+                  {...reveal()}
+                  id="contact-heading"
+                  className="text-balance font-display text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl"
                 >
                   Ready to discuss your <br />
-                  <span className="text-white/20">clinical concern?</span>
+                  <span className="text-white/40">clinical concern?</span>
                 </motion.h2>
-                <motion.p 
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2 }}
-                  className="text-xl text-white/40 leading-relaxed font-light max-w-md text-balance"
-                >
-                  Request a consultation and our specialist team will facilitate a suitable 
-                  time to begin your assessment.
+                <motion.p {...reveal()} className="max-w-md text-pretty text-lg leading-relaxed text-white/65">
+                  Request a consultation and the practice team will arrange a suitable time to begin
+                  your assessment. Consultations are generally available within about 7 days, with
+                  urgent cases prioritised.
                 </motion.p>
-                <div className="flex flex-wrap gap-x-10 gap-y-6 pt-6 uppercase tracking-[0.25em] font-bold text-[10px] text-white/20">
-                  {[
-                    "Careful assessment",
-                    "Clear guidance",
-                    "Specialist care"
-                  ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-2">
-                       <div className="w-1 h-1 rounded-full bg-medical-teal/40" />
-                       <span className="group-hover:text-white/40 transition-colors">{item}</span>
+                <ul className="flex flex-wrap gap-x-8 gap-y-3 pt-1">
+                  {ASSURANCES.map((item) => (
+                    <li key={item} className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55">
+                      <span aria-hidden="true" className="h-1 w-1 rounded-full bg-medical-teal" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="space-y-4 border-t border-white/5 pt-10">
+                <p className="eyebrow">Consulting locations</p>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {LOCATIONS.map((loc) => (
+                    <div key={loc.name} className="group rounded-2xl glass p-5">
+                      <div className="mb-3 flex items-center gap-2.5">
+                        <MapPin aria-hidden="true" size={16} strokeWidth={1.5} className="text-medical-teal" />
+                        <span className="font-display text-base font-semibold text-white">{loc.name}</span>
+                      </div>
+                      <a
+                        href={mapsHref(loc.address)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block text-sm leading-relaxed text-white/70 underline-offset-4 transition-colors hover:text-white hover:underline"
+                      >
+                        {loc.address}
+                      </a>
+                      <p className="mt-2 text-xs leading-relaxed text-white/45">{loc.note}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="grid sm:grid-cols-2 gap-12 pt-12 border-t border-white/5">
-                <ContactDetail 
-                  icon={MapPin} 
-                  label="Practice Location" 
-                  value={CONTACT_INFO.address} 
-                />
-                <ContactDetail 
-                  icon={Phone} 
-                  label="Clinical Contact" 
-                  value={CONTACT_INFO.phone} 
-                />
-                <ContactDetail 
-                  icon={Mail} 
-                  label="Direct Inquiry" 
-                  value={CONTACT_INFO.email} 
-                />
-                <ContactDetail 
-                  icon={Clock} 
-                  label="Practice Hours" 
-                  value={CONTACT_INFO.hours} 
-                />
+              <div className="grid gap-8 sm:grid-cols-2">
+                <ContactDetail icon={Phone} label="Phone" value={CONTACT_INFO.phone} href={telHref} />
+                <ContactDetail icon={Mail} label="Email" value={CONTACT_INFO.email} href={mailHref} />
               </div>
             </div>
 
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="glass bg-white/[0.02] border-white/5 rounded-[60px] p-10 md:p-16 shadow-2xl relative"
+            <motion.div
+              {...reveal(20)}
+              className="rounded-3xl glass bg-white/[0.02] p-8 shadow-2xl md:rounded-[36px] md:p-12"
             >
-              <form className="space-y-10" onSubmit={(e) => e.preventDefault()}>
-                <div className="grid grid-cols-2 gap-6">
-                  <Input label="First Name" placeholder="Gordon" />
-                  <Input label="Last Name" placeholder="Slater" />
+              <form className="space-y-7" onSubmit={handleSubmit} noValidate>
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                  <Field id="firstName" label="First name" autoComplete="given-name" placeholder="Jane" required />
+                  <Field id="lastName" label="Last name" autoComplete="family-name" placeholder="Doe" required />
                 </div>
-                <Input label="Email Address" type="email" placeholder="email@direct.com" />
-                <Input label="Contact Number" type="tel" placeholder="02 0000 0000" />
-                
-                <div className="space-y-3">
-                  <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/20 ml-6">Patient Inquiry</label>
-                  <textarea 
-                    className="w-full bg-white/[0.02] border border-white/5 rounded-3xl p-6 text-white placeholder:text-white/10 focus:outline-hidden focus:border-medical-teal/30 focus:bg-white/[0.04] transition-all min-h-[160px] text-sm font-light leading-relaxed"
-                    placeholder="Provide a brief clinical context..."
+                <Field id="email" label="Email address" type="email" autoComplete="email" placeholder="you@example.com" required />
+                <Field id="phone" label="Contact number" type="tel" autoComplete="tel" placeholder="02 0000 0000" />
+
+                <div className="space-y-2.5">
+                  <label htmlFor="message" className="ml-5 block text-[11px] font-semibold uppercase tracking-[0.18em] text-white/60">
+                    How can we help?
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows={5}
+                    placeholder="A brief clinical context — and any referral details."
+                    className="w-full rounded-3xl border border-white/10 bg-white/[0.03] px-6 py-4 text-sm leading-relaxed text-white transition-colors placeholder:text-white/30 hover:border-white/20 focus:border-medical-teal/40 focus:bg-white/[0.05]"
                   />
                 </div>
 
-                <Button className="w-full py-5 rounded-3xl group h-auto" variant="primary">
-                  <span className="flex items-center gap-3 font-bold tracking-[0.05em] uppercase text-xs">
-                    Send Appointment Request
-                    <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                <Button type="submit" variant="primary" className="group h-auto w-full rounded-2xl py-4">
+                  <span className="flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.12em]">
+                    Send appointment request
+                    <ArrowRight aria-hidden="true" size={16} className="transition-transform group-hover:translate-x-1" />
                   </span>
                 </Button>
-                <div className="px-8 flex items-start gap-3">
-                  <div className="w-1 h-1 rounded-full bg-medical-teal shrink-0 mt-1" />
-                  <p className="text-[9px] uppercase font-bold tracking-[0.15em] text-white/10 leading-relaxed">
-                    By submitting this form, you acknowledge that communications through our website are subject to our clinical privacy protocols.
-                  </p>
-                </div>
+
+                <p className="flex items-start gap-2.5 px-1 text-xs leading-relaxed text-white/45">
+                  <span aria-hidden="true" className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-medical-teal" />
+                  Submitting this form opens a pre-filled email to the practice. Information you send
+                  is handled in line with our privacy practices.
+                </p>
               </form>
             </motion.div>
           </div>
@@ -116,25 +149,54 @@ export const ContactCTA = () => {
   );
 };
 
-const ContactDetail = ({ icon: Icon, label, value }: { icon: any, label: string, value: string }) => (
-  <div className="flex flex-col gap-4 group">
-    <div className="w-12 h-12 rounded-2xl glass flex items-center justify-center text-white/10 group-hover:text-medical-teal transition-all duration-700 bg-white/[0.02] border-white/5">
-      <Icon size={20} strokeWidth={1} />
-    </div>
+interface ContactDetailProps {
+  icon: LucideIcon;
+  label: string;
+  value: string;
+  href?: string;
+}
+
+const ContactDetail = ({ icon: Icon, label, value, href }: ContactDetailProps) => (
+  <div className="group flex items-start gap-4">
+    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl glass text-white/45 transition-colors duration-500 group-hover:text-medical-teal">
+      <Icon aria-hidden="true" size={18} strokeWidth={1.25} />
+    </span>
     <div className="space-y-1">
-      <div className="text-[9px] font-bold uppercase tracking-[0.25em] text-white/20 leading-none">{label}</div>
-      <div className="text-sm font-light text-white/60 leading-relaxed group-hover:text-white transition-colors">{value}</div>
+      <p className="eyebrow">{label}</p>
+      {href ? (
+        <a href={href} className="text-sm leading-relaxed text-white/75 underline-offset-4 transition-colors hover:text-white hover:underline">
+          {value}
+        </a>
+      ) : (
+        <p className="text-sm leading-relaxed text-white/75">{value}</p>
+      )}
     </div>
   </div>
 );
 
-const Input = ({ label, placeholder, type = "text" }: { label: string, placeholder: string, type?: string }) => (
-  <div className="space-y-3">
-    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/20 ml-6">{label}</label>
-    <input 
+interface FieldProps {
+  id: string;
+  label: string;
+  placeholder: string;
+  type?: 'text' | 'email' | 'tel';
+  autoComplete?: string;
+  required?: boolean;
+}
+
+const Field = ({ id, label, placeholder, type = 'text', autoComplete, required }: FieldProps) => (
+  <div className="space-y-2.5">
+    <label htmlFor={id} className="ml-5 block text-[11px] font-semibold uppercase tracking-[0.18em] text-white/60">
+      {label}
+      {required && <span className="text-medical-teal"> *</span>}
+    </label>
+    <input
+      id={id}
+      name={id}
       type={type}
-      className="w-full bg-white/[0.02] border border-white/5 rounded-full px-7 py-4 text-white placeholder:text-white/10 focus:outline-hidden focus:border-medical-teal/30 focus:bg-white/[0.04] transition-all text-sm font-light"
+      autoComplete={autoComplete}
+      required={required}
       placeholder={placeholder}
+      className="w-full rounded-full border border-white/10 bg-white/[0.03] px-6 py-3.5 text-sm text-white transition-colors placeholder:text-white/30 hover:border-white/20 focus:border-medical-teal/40 focus:bg-white/[0.05]"
     />
   </div>
 );
