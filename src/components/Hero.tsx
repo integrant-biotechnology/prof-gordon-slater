@@ -1,21 +1,23 @@
 import { motion } from 'motion/react';
-import { ArrowRight, BookOpen, FlaskConical, Lightbulb, Stethoscope } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowRight, BookOpen, Lightbulb, Microscope, Stethoscope } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Glow } from '@/components/ui/Glow';
 import { Motif } from '@/components/ui/Motif';
 import { DOCTOR_NAME } from '@/constants';
 
 const STRANDS = [
-  { icon: Stethoscope, text: 'Foot & ankle surgeon' },
-  { icon: FlaskConical, text: 'Researcher & editor' },
-  { icon: Lightbulb, text: 'Medical-device development' },
+  { icon: Stethoscope, text: 'Surgeon' },
+  { icon: Microscope, text: 'Researcher' },
   { icon: BookOpen, text: 'Author' },
+  { icon: Lightbulb, text: 'Innovator' },
 ];
 
 const scrollTo = (id: string) => () =>
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
 export const Hero = () => {
+  const navigate = useNavigate();
   return (
     <section
       id="home"
@@ -44,8 +46,8 @@ export const Hero = () => {
             transition={{ duration: 0.7, delay: 0.05 }}
             className="max-w-4xl text-balance font-display text-5xl font-bold leading-[1.02] tracking-tight text-white sm:text-7xl lg:text-8xl"
           >
-            Surgery, research, and a{' '}
-            <span className="text-white/40">wider body of work.</span>
+            Lifespan is an energy balance,{' '}
+            <span className="text-white/40">not a clock.</span>
           </motion.h1>
 
           <motion.p
@@ -54,9 +56,9 @@ export const Hero = () => {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="max-w-2xl text-balance text-lg leading-relaxed text-white/65 md:text-xl"
           >
-            A factual record of {DOCTOR_NAME}&rsquo;s work — foot &amp; ankle surgery,
-            published research, medical-device development, writing, and contribution to the wider
-            field. Not a clinic.
+            The personal site of {DOCTOR_NAME} — foot &amp; ankle orthopaedic surgeon, Professor at
+            UTS, and author of <em>From Chaos to Creation</em>. A factual record of his
+            publications, devices, writing and wider work in Australian medicine.
           </motion.p>
 
           <motion.div
@@ -65,11 +67,11 @@ export const Hero = () => {
             transition={{ duration: 0.6, delay: 0.45 }}
             className="flex flex-col items-center gap-3 pt-2 sm:flex-row"
           >
-            <Button size="lg" variant="primary" className="min-w-[220px]" onClick={scrollTo('work')}>
-              Explore his work
+            <Button size="lg" variant="primary" className="min-w-[220px]" onClick={() => navigate('/book')}>
+              Read the book
             </Button>
-            <Button size="lg" variant="secondary" className="group min-w-[220px]" onClick={scrollTo('writing')}>
-              Read his writing
+            <Button size="lg" variant="secondary" className="group min-w-[220px]" onClick={scrollTo('work')}>
+              Explore his work
               <ArrowRight aria-hidden="true" className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
           </motion.div>
@@ -85,7 +87,7 @@ export const Hero = () => {
               aria-hidden="true"
               className="pointer-events-none absolute inset-0 bg-linear-to-b from-transparent via-brand-bg/30 to-brand-bg"
             />
-            <ul className="absolute inset-x-6 bottom-8 z-10 flex flex-wrap justify-center gap-x-8 gap-y-3 md:bottom-10 md:gap-x-12">
+            <ul className="absolute inset-x-6 bottom-8 z-10 flex flex-wrap justify-center gap-x-8 gap-y-3 md:bottom-10 md:gap-x-14">
               {STRANDS.map(({ icon: Icon, text }) => (
                 <li key={text} className="flex items-center gap-2.5 text-white/70">
                   <Icon aria-hidden="true" className="h-4 w-4 text-medical-teal" strokeWidth={1.75} />

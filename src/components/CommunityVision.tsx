@@ -50,11 +50,11 @@ export const CommunityVision = () => {
               <h3 className="mb-4 font-display text-2xl font-semibold leading-tight text-white">
                 A vision for Australian medical innovation
               </h3>
-              <blockquote className="text-pretty text-lg leading-relaxed text-white/75">
+              <blockquote className="text-pretty text-base leading-relaxed text-white/75">
                 {VISION_STATEMENT}
               </blockquote>
-              <figcaption className="mt-6 text-[10px] uppercase tracking-[0.2em] text-white/30">
-                Placeholder — to be replaced with the surgeon&rsquo;s own stated vision
+              <figcaption className="mt-6 text-[10px] uppercase tracking-[0.22em] text-white/35">
+                Anchored on Slater, Sambo &amp; Hannan (2019) and the FDA–EMA Joint Guiding Principles of Good AI Practice (Jan 2026)
               </figcaption>
             </div>
           </figure>
