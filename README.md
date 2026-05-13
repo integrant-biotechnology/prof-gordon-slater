@@ -1,30 +1,81 @@
-# Dr Gordon Slater Website
+# Prof Gordon Slater — website
 
-A premium personal brand website for Dr Gordon Slater, Specialist Foot & Ankle Orthopaedic Surgeon.
+A single-page personal site for **Prof Gordon Slater**, Specialist Foot & Ankle Orthopaedic Surgeon.
 
-## Design Philosophy
-This website uses a premium dark theme with deep charcoal palettes, glassy navigation components, and subtle radial background glows. It is designed to feel calm, precise, and medically credible, moving away from generic clinic templates towards a polished, specialist-focused aesthetic.
+## Design
 
-## Tech Stack
-- **React 19**
-- **Vite**
-- **Tailwind CSS v4**
-- **Framer Motion** (Subtle reveal animations)
-- **Lucide React** (Consistent iconography)
+A calm, precise dark theme — deep charcoal surfaces, glassy navigation, restrained teal accents,
+and soft ambient glows. The goal is "medically credible and unhurried" rather than a generic clinic
+template. Body copy, labels, and the legal disclaimer are kept at legible contrast; all looping
+motion is disabled for visitors who prefer reduced motion.
 
-## Setup Instructions
-1. Clone the repository.
-2. Run `npm install` to install dependencies.
-3. Run `npm run dev` to start the development server.
-4. Run `npm run build` for production-ready static assets.
+## Tech stack
 
-## Assets for Replacement
-- **Portrait:** Replace the placeholder in `src/components/Hero.tsx` and `src/components/About.tsx` with high-resolution professional photography.
-- **Images:** Any abstract medical visuals should be replaced with high-end, softly lit clinical or anatomical photography.
-- **Domain:** Ensure the APP_URL is correctly configured in the production environment.
+- **React 19** + **TypeScript**
+- **Vite 6**
+- **Tailwind CSS v4** (`@tailwindcss/vite`, theme tokens in `src/index.css`)
+- **Motion** (`motion/react`) — subtle reveal and ambient animations
+- **Lucide React** — iconography (registry in `src/lib/icons.ts`)
+- **ESLint** (flat config) — `npm run lint`
 
-## Medical Compliance
-This site adheres to Australian medical advertising guidelines:
+## Getting started
+
+```bash
+npm install      # install dependencies
+npm run dev      # start the dev server (http://localhost:3000)
+npm run build    # production build → dist/
+npm run preview  # preview the production build
+npm run lint     # eslint
+npm run lint:tsc # type-check only (tsc --noEmit)
+```
+
+## Project layout
+
+```text
+index.html               # document head: title, meta, Open Graph, JSON-LD, fonts
+public/favicon.svg        # "GS" monogram favicon
+src/
+  App.tsx                 # page composition + skip link
+  index.css               # Tailwind import, theme tokens, base styles, reduced-motion
+  constants.ts            # surgeon details, contact info, content data, disclaimer
+  types.ts                # shared content types
+  lib/icons.ts            # string-key → Lucide icon registry
+  lib/utils.ts            # cn() class merge helper
+  components/             # page sections (Hero, About, Procedures, …)
+  components/ui/           # primitives: Button, Card, Glow, Accordion, Motif, SectionHeading
+```
+
+## Content & assets — source and what still needs work
+
+Most copy, the contact details, the training timeline, the conditions/procedures, the article
+links, and the portrait (`public/portrait-gordon-slater.webp`) are drawn from the surgeon's live
+practice site, **<https://orthopaedic-surgeon.com.au/>** — confirm everything with the practice and,
+ideally, replace the portrait with the master file. Condition/procedure descriptions are
+paraphrased from the source.
+
+- **Title — "Prof" vs "Dr":** the source site uses **"Dr Gordon Slater"** throughout; this build
+  displays **"Prof Gordon Slater"** at the client's request (`DOCTOR_NAME` in `src/constants.ts`).
+  Confirm the "Prof" title is accurate and compliant with AHPRA advertising guidelines before launch.
+- **Hero / Procedures visual:** the abstract `Motif` (`src/components/ui/Motif.tsx`) is still a
+  placeholder in the hero banner and the Procedures highlight — swap for soft, professional
+  clinical photography. The About portrait is the real photo.
+- **OG image:** `og:image` / `twitter:image` currently point at the portrait as a stopgap; a
+  purpose-built 1200×630 image is preferred.
+- **Favicon:** `public/favicon.svg` is a simple "GS" monogram — replace if a brand mark exists.
+- **Contact form:** `src/components/ContactCTA.tsx` composes a pre-filled `mailto:` email to
+  `admin@drgordonslater.com.au`. Wire it to a real endpoint (serverless function, Formspree, etc.)
+  for production.
+- **Domain & schema:** canonical URLs and the `Physician` JSON-LD in `index.html` use
+  `https://profgordonslater.com.au` — update if the production domain differs.
+- **Legal pages:** the footer links for *Privacy policy / Medical disclaimer / Accessibility* are
+  placeholders (`#`) and need real pages.
+- **Articles:** the cards link out to the published posts on `orthopaedic-surgeon.com.au`
+  (`ARTICLES` in `src/constants.ts`); host them here if/when the blog migrates.
+
+## Medical advertising compliance
+
+Aligned with Australian guidelines:
+
 - No patient testimonials or star ratings.
-- Careful, non-guaranteed wording (e.g., "may help", "suitability depends on assessment").
-- Prominent footer disclaimers.
+- Careful, non-guaranteed wording ("may support", "suitability depends on assessment", etc.).
+- A prominent, legible disclaimer in the footer (`FOOTER_DISCLAIMER` in `src/constants.ts`).

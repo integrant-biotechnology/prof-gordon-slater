@@ -1,78 +1,81 @@
-import { motion } from 'motion/react';
-import { AccordionItem } from './ui/Accordion';
+import type { PatientInfoItem } from '@/types';
+import { AccordionItem } from '@/components/ui/Accordion';
+import { SectionHeading } from '@/components/ui/SectionHeading';
+import { DOCTOR_NAME } from '@/constants';
+
+const PATIENT_INFO: PatientInfoItem[] = [
+  {
+    title: 'Your first visit',
+    content: (
+      <div className="space-y-3">
+        <p>
+          Please arrive about 10 minutes early to complete your new-patient forms and pain
+          assessment. {DOCTOR_NAME} allows around 30 minutes for an initial consultation — surgical
+          consultations may run up to 60 minutes, depending on your condition.
+        </p>
+        <p>
+          You&rsquo;re welcome to bring a family member or friend. Any decision to proceed with
+          surgical treatment is always entirely yours.
+        </p>
+      </div>
+    ),
+  },
+  {
+    title: 'What to bring',
+    content: (
+      <ul className="list-disc space-y-2.5 pl-5">
+        <li>Current X-rays and diagnostic scans (disc or hard copy) — call ahead if you can&rsquo;t obtain copies</li>
+        <li>A current referral from your GP or specialist (needed to receive the Medicare rebate)</li>
+        <li>Medicare and/or private health insurance details</li>
+        <li>DVA or WorkCover details, if applicable</li>
+        <li>Relevant medical history and a current list of medications</li>
+      </ul>
+    ),
+  },
+  {
+    title: 'Referrals and Medicare',
+    content:
+      'A current referral is needed to claim the Medicare rebate on your consultation. GP referrals are usually valid for 12 months and specialist referrals for 3 months. You pay the full fee on the day, and our staff are happy to process the Medicare claim for you.',
+  },
+  {
+    title: 'Fees and payment plans',
+    content:
+      'Before any treatment we provide an Informed Financial Consent form and a written fee estimate, including any out-of-pocket costs. If surgery is recommended, medical payment plans of up to $30,000 are available through MediPay, with online application and a same-day decision in many cases.',
+  },
+  {
+    title: 'Albury & interstate patients',
+    content: `${DOCTOR_NAME} consults in Albury approximately once a month — please call to confirm the next available dates. Telehealth consultations may also be arranged for initial assessments for regional or interstate patients where appropriate.`,
+  },
+  {
+    title: 'Cancellations',
+    content:
+      'If you can’t make your appointment, please give us as much notice as possible so the time can be offered to another patient. A cancellation policy applies.',
+  },
+];
 
 export const PatientInformation = () => {
-  const patientInfoData = [
-    {
-      title: "Your first visit",
-      content: "Initially, we will discuss your clinical history and any previous treatments. This is followed by a physical examination. We will then discuss diagnosis and work together to formulate a management plan."
-    },
-    {
-      title: "What to bring",
-      content: (
-        <ul className="space-y-4 list-disc pl-5">
-          <li>Current X-rays or diagnostic scans (CD or hard copy)</li>
-          <li>A valid GP or specialist referral</li>
-          <li>Medicare and/or private health insurance details</li>
-          <li>DVA or WorkCover details if applicable</li>
-          <li>Relevant medical history and current list of medications</li>
-        </ul>
-      )
-    },
-    {
-      title: "Referrals and Medicare",
-      content: "A current referral is necessary to claim the Medicare rebate. GP referrals are usually valid for 12 months, while specialist referrals are valid for 3 months."
-    },
-    {
-      title: "Fees and payment",
-      content: "Payment is required at the time of consultation. We accept all major credit cards. Our staff will provide detailed information regarding procedure costs and insurance gaps should surgery be required."
-    },
-    {
-      title: "Hospitals",
-      content: "Dr Gordon Slater consults and operates at established surgical facilities across Sydney, ensuring access to modern clinical infrastructure."
-    },
-    {
-      title: "Interstate and overseas patients",
-      content: "Telehealth consultations may be arranged for initial assessments for regional or interstate patients where appropriate."
-    }
-  ];
-
   return (
-    <section id="patient-info" className="py-40 px-6">
-      <div className="max-w-5xl mx-auto">
-        <div className="mb-32">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-5xl md:text-7xl font-display font-bold tracking-tight mb-8"
-          >
-            Before your visit.
-          </motion.h2>
-          <motion.p 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-xl text-white/40 font-light leading-relaxed"
-          >
-            Helpful information to prepare for your consultation with Dr Gordon Slater.
-          </motion.p>
-        </div>
+    <section id="patient-info" aria-labelledby="patient-info-heading" className="px-6 py-28 md:py-32">
+      <div className="mx-auto max-w-4xl">
+        <SectionHeading
+          id="patient-info-heading"
+          eyebrow="Patient information"
+          title="Before your visit."
+          intro={`Helpful information to prepare for your consultation with ${DOCTOR_NAME}.`}
+          className="mb-12 md:mb-16"
+        />
 
-        <div className="glass rounded-[60px] px-8 md:px-20 py-12 border-white/5 bg-white/[0.01]">
-          {patientInfoData.map((item, i) => (
-            <AccordionItem key={i} title={item.title}>
+        <div className="rounded-3xl glass bg-white/[0.01] px-6 py-6 md:rounded-[40px] md:px-12 md:py-8">
+          {PATIENT_INFO.map((item, i) => (
+            <AccordionItem key={item.title} title={item.title} defaultOpen={i === 0}>
               {item.content}
             </AccordionItem>
           ))}
         </div>
 
-        <div className="mt-16 text-center">
-          <p className="text-xs text-white/20 italic font-light tracking-wide">
-            Initial consultations may include clinical assessment, discussion of treatment options, and forward planning.
-          </p>
-        </div>
+        <p className="mt-10 text-center text-sm italic text-white/45">
+          Consultations are generally available within about 7 days, with urgent cases prioritised.
+        </p>
       </div>
     </section>
   );

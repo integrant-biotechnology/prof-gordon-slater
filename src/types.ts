@@ -1,8 +1,11 @@
+import type { ReactNode } from 'react';
+import type { IconName } from './lib/icons';
+
 export interface Condition {
   id: string;
   title: string;
   description: string;
-  icon: string;
+  icon: IconName;
 }
 
 export interface Procedure {
@@ -16,16 +19,17 @@ export interface Article {
   id: string;
   title: string;
   category: string;
-  readTime: string;
+  /** External URL to the published article. */
+  href: string;
 }
 
 export interface PhilosophyItem {
   title: string;
   description: string;
-  icon: string;
+  icon: IconName;
 }
 
 export interface PatientInfoItem {
   title: string;
-  content: string | React.ReactNode;
+  content: ReactNode;
 }

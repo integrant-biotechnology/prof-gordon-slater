@@ -1,23 +1,24 @@
-import { motion } from 'motion/react';
-import { cn } from '@/src/lib/utils';
+import { motion, useReducedMotion } from 'motion/react';
+import { cn } from '@/lib/utils';
 
-export const Glow = ({ className, color = 'teal' }: { className?: string; color?: 'teal' | 'blue' }) => {
+interface GlowProps {
+  className?: string;
+  color?: 'teal' | 'blue';
+}
+
+/** Soft, blurred ambient light blob used behind hero / CTA sections. Purely decorative. */
+export const Glow = ({ className, color = 'teal' }: GlowProps) => {
+  const reduceMotion = useReducedMotion();
   return (
     <motion.div
+      aria-hidden="true"
       className={cn(
-        'absolute -z-10 blur-[120px] pointer-events-none rounded-full transition-all duration-1000',
-        color === 'teal' ? 'bg-medical-teal/15 w-[500px] h-[500px]' : 'bg-medical-blue/10 w-[600px] h-[600px]',
-        className
+        'pointer-events-none absolute -z-10 rounded-full blur-[120px]',
+        color === 'teal' ? 'h-[480px] w-[480px] bg-medical-teal/12' : 'h-[560px] w-[560px] bg-medical-blue/10',
+        className,
       )}
-      animate={{
-        scale: [1, 1.1, 1],
-        opacity: [0.5, 0.7, 0.5],
-      }}
-      transition={{
-        duration: 8,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }}
+      animate={reduceMotion ? undefined : { scale: [1, 1.08, 1], opacity: [0.5, 0.7, 0.5] }}
+      transition={reduceMotion ? undefined : { duration: 10, repeat: Infinity, ease: 'easeInOut' }}
     />
   );
 };

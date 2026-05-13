@@ -1,49 +1,29 @@
-import { Navbar } from './components/Navbar';
-import { Hero } from './components/Hero';
-import { FocusAreas } from './components/FocusAreas';
-import { About } from './components/About';
-import { Philosophy } from './components/Philosophy';
-import { Procedures } from './components/Procedures';
-import { PatientInformation } from './components/PatientInformation';
-import { Articles } from './components/Articles';
-import { ContactCTA } from './components/ContactCTA';
-import { Footer } from './components/Footer';
-import { DOCTOR_NAME, DOCTOR_TITLE, CONTACT_INFO } from './constants';
+import { Navbar } from '@/components/Navbar';
+import { Hero } from '@/components/Hero';
+import { FocusAreas } from '@/components/FocusAreas';
+import { About } from '@/components/About';
+import { Background } from '@/components/Background';
+import { Philosophy } from '@/components/Philosophy';
+import { Procedures } from '@/components/Procedures';
+import { PatientInformation } from '@/components/PatientInformation';
+import { Articles } from '@/components/Articles';
+import { ContactCTA } from '@/components/ContactCTA';
+import { Footer } from '@/components/Footer';
 
 export default function App() {
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "Physician",
-    "name": DOCTOR_NAME,
-    "image": "https://profgordonslater.com.au/placeholder-dr- Gordon-slater.jpg",
-    "description": DOCTOR_TITLE,
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": CONTACT_INFO.address.split(", ")[0],
-      "addressLocality": "Potts Point",
-      "addressRegion": "NSW",
-      "postalCode": "2011",
-      "addressCountry": "AU"
-    },
-    "telephone": CONTACT_INFO.phone,
-    "url": "https://profgordonslater.com.au",
-    "medicalSpecialty": "OrthopaedicSurgery",
-    "openingHours": "Mo-Fr 09:00-17:00"
-  };
-
   return (
-    <div className="relative selection:bg-medical-teal/30">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
-      
+    <div className="relative">
+      <a href="#main" className="skip-link">
+        Skip to content
+      </a>
+
       <Navbar />
-      
-      <main>
+
+      <main id="main">
         <Hero />
         <FocusAreas />
         <About />
+        <Background />
         <Philosophy />
         <Procedures />
         <PatientInformation />
@@ -55,4 +35,3 @@ export default function App() {
     </div>
   );
 }
-
