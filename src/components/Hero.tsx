@@ -57,7 +57,7 @@ export const Hero = () => {
             className="max-w-2xl text-balance text-lg leading-relaxed text-white/65 md:text-xl"
           >
             The personal site of {DOCTOR_NAME} — foot &amp; ankle orthopaedic surgeon, Professor at
-            UTS, and author of <em>From Chaos to Creation</em>. A factual record of his
+            UTS, and author of <em>Chaos to Creation</em>. A factual record of his
             publications, devices, writing and wider work in Australian medicine.
           </motion.p>
 

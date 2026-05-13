@@ -11,7 +11,7 @@ import { Writing } from '@/components/Writing';
 import { Connect } from '@/components/Connect';
 import { DOCTOR_NAME, DOCTOR_TITLE } from '@/constants';
 
-export const Home = () => {
+const Home = () => {
   const { hash, pathname } = useLocation();
 
   // per-route document title
@@ -48,3 +48,5 @@ export const Home = () => {
     </>
   );
 };
+
+export default Home;

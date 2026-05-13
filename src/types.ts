@@ -72,3 +72,39 @@ export interface CaseStudy {
   body: string;
   attribution: string;
 }
+
+/** A single purchasable format of the book (Amazon AU URLs). */
+export interface BookFormat {
+  format: 'Hardcover' | 'Paperback' | 'Kindle';
+  url: string;
+}
+
+/** A book-jacket endorsement (verbatim, attributed). */
+export interface Endorsement {
+  quote: string;
+  by: string;
+  /** Role / institution for attribution. */
+  title: string;
+}
+
+/** A short "Inside this book" bullet for the /book page. */
+export interface BookBullet {
+  text: string;
+}
+
+/** A philanthropic event surfaced on /giving. */
+export interface GivingEvent {
+  id: string;
+  /** Event name, e.g. "The Pink Luncheon". */
+  name: string;
+  /** Event host, e.g. "Australian Turf Club". */
+  host: string;
+  /** Beneficiary organisation, e.g. "Vision Australia". */
+  beneficiary?: string;
+  /** What the event funds, e.g. "Breast cancer research". */
+  cause: string;
+  /** What Prof Slater contributes. */
+  contribution: string;
+  /** Subtle accent colour used per event card. */
+  accent: 'pink' | 'red' | 'neutral';
+}

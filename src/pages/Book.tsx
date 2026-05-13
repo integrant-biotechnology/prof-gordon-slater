@@ -1,11 +1,20 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ArrowUpRight, Quote } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
+import { ArrowLeft, ArrowUpRight, Quote, Sparkle } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Glow } from '@/components/ui/Glow';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { BOOK, BOOK_RULES, CASE_STUDIES, DOCTOR_NAME, LIFE_FORCE } from '@/constants';
+import {
+  BOOK,
+  BOOK_COVER_SRCSET,
+  BOOK_ENDORSEMENTS,
+  BOOK_FORMATS,
+  BOOK_INSIDE,
+  BOOK_RULES,
+  CASE_STUDIES,
+  DOCTOR_NAME,
+  LIFE_FORCE,
+} from '@/constants';
 
 const FOUR_QUESTIONS = [
   'What can we address with the data at hand?',
@@ -34,9 +43,9 @@ const EPILOGUE_POINTS = [
   },
 ];
 
-export const Book = () => {
+const Book = () => {
   useEffect(() => {
-    document.title = `${BOOK.title} — ${BOOK.subtitle} | ${DOCTOR_NAME}`;
+    document.title = `${BOOK.title}: ${BOOK.subtitle} | ${DOCTOR_NAME}`;
     return () => {
       document.title = `${DOCTOR_NAME} | Personal site`;
     };
@@ -45,14 +54,47 @@ export const Book = () => {
   return (
     <>
       <BookHero />
+      <InsideThisBook />
       <OpeningFraming />
       <LifeForceFormulaSection />
       <ThreeRules />
       <HypothesisCallout />
       <EpilogueExtract />
       <ClinicalCases />
+      <EndorsementsSection />
       <BookCloseCTA />
     </>
+  );
+};
+
+export default Book;
+
+// -------------------------------------------------------------
+// Reusable: 3-format buttons (Hardcover · Paperback · Kindle)
+// -------------------------------------------------------------
+
+const FormatButtons = ({ size = 'md' }: { size?: 'md' | 'lg' }) => {
+  const padding = size === 'lg' ? 'px-5 py-3' : 'px-4 py-2.5';
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      {BOOK_FORMATS.map((f, i) => (
+        <a
+          key={f.format}
+          href={f.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`${f.format} on Amazon AU (opens in a new tab)`}
+          className={`inline-flex items-center gap-2 rounded-full text-sm font-medium transition-colors ${padding} ${
+            i === 0
+              ? 'bg-white text-brand-bg hover:bg-white/90'
+              : 'glass text-white/80 hover:text-white hover:border-medical-teal/40'
+          }`}
+        >
+          {f.format}
+          <ArrowUpRight aria-hidden="true" size={14} />
+        </a>
+      ))}
+    </div>
   );
 };
 
@@ -84,9 +126,16 @@ const BookHero = () => (
           id="book-hero"
           className="text-balance font-display text-5xl font-bold leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-7xl"
         >
-          {BOOK.title}{' '}
-          <span className="text-white/40">{BOOK.subtitle}.</span>
+          {BOOK.title} <span className="text-white/40">{BOOK.subtitle}.</span>
         </h1>
+
+        <p className="text-pretty font-display text-2xl font-semibold leading-snug text-medical-teal/85 sm:text-3xl">
+          {BOOK.tagline}
+        </p>
+
+        <p className="text-pretty text-base leading-relaxed text-white/65 md:text-lg">
+          {BOOK.subtagline}
+        </p>
 
         <blockquote className="border-l-2 border-medical-teal/50 pl-5 text-pretty text-lg leading-relaxed text-white/75 md:text-xl">
           “{BOOK.heroQuote}”
@@ -95,62 +144,72 @@ const BookHero = () => (
           </footer>
         </blockquote>
 
-        <div className="flex flex-col items-start gap-3 pt-2 sm:flex-row sm:items-center">
-          <Button
-            size="lg"
-            variant="primary"
-            className="min-w-[200px]"
-            onClick={() => window.open(BOOK.purchaseUrl, '_blank', 'noopener,noreferrer')}
-          >
-            <span className="flex items-center gap-2">
-              {BOOK.purchaseLabel}
-              <ArrowUpRight aria-hidden="true" size={16} />
-            </span>
-          </Button>
-          {BOOK.purchasePlaceholder && (
-            <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/35">
-              Purchase link to be supplied
-            </span>
-          )}
+        <div className="pt-3">
+          <FormatButtons size="lg" />
         </div>
       </div>
 
-      <BookCover />
+      <BookCoverImage priority />
     </div>
   </section>
 );
 
-/** Calm, premium book-cover placeholder — replace with a real image asset when available. */
-const BookCover = () => (
-  <div className="relative mx-auto aspect-[2/3] w-full max-w-[18rem] overflow-hidden rounded-2xl glass shadow-2xl shadow-black/60 sm:max-w-[20rem]">
-    <div className="absolute inset-0 bg-linear-to-br from-medical-teal/20 via-transparent to-medical-blue/20" />
-    <div
-      aria-hidden="true"
-      className="absolute inset-0 bg-[radial-gradient(circle_at_30%_25%,rgba(20,184,166,0.18),transparent_55%)]"
+interface BookCoverImageProps {
+  /** When true, hint the browser this is the LCP element (eager + fetchpriority high). */
+  priority?: boolean;
+}
+
+const BookCoverImage = ({ priority = false }: BookCoverImageProps) => (
+  <div className="relative mx-auto aspect-[2/3] w-full max-w-[18rem] overflow-hidden rounded-2xl shadow-2xl shadow-black/60 sm:max-w-[20rem]">
+    <img
+      src={BOOK.coverImage}
+      srcSet={BOOK_COVER_SRCSET}
+      sizes="(min-width: 1024px) 320px, (min-width: 640px) 320px, 288px"
+      alt={BOOK.coverAlt}
+      loading={priority ? 'eager' : 'lazy'}
+      // fetchPriority is React 19+
+      fetchPriority={priority ? 'high' : 'auto'}
+      decoding="async"
+      className="h-full w-full object-cover"
     />
-    <div className="relative flex h-full flex-col justify-between p-7 md:p-8">
-      <div>
-        <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/40">A book by</p>
-        <p className="mt-1 font-display text-sm font-semibold text-white">{BOOK.byline}</p>
-      </div>
-      <div>
-        <h2 className="font-display text-3xl font-bold leading-[1.05] text-white md:text-4xl">
-          {BOOK.title}
-        </h2>
-        <p className="mt-2 font-display text-base font-medium italic text-white/70 md:text-lg">
-          {BOOK.subtitle}
-        </p>
-      </div>
-      <div className="flex items-end justify-between">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-white/35">
-          {BOOK.publishedDate}
-        </p>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-white/20">
-          Cover · placeholder
-        </span>
-      </div>
-    </div>
   </div>
+);
+
+const InsideThisBook = () => (
+  <section
+    aria-labelledby="inside-heading"
+    className="border-t border-white/5 px-6 py-20 md:py-24"
+  >
+    <div className="mx-auto max-w-4xl">
+      <SectionHeading
+        id="inside-heading"
+        eyebrow="Inside this book"
+        title="What you’ll explore."
+        intro="A short orientation, lifted from the back jacket."
+        className="mb-10"
+      />
+
+      <ul className="space-y-3">
+        {BOOK_INSIDE.map((b, i) => (
+          <li
+            key={i}
+            className="flex items-start gap-4 rounded-2xl glass bg-white/[0.01] p-5"
+          >
+            <Sparkle
+              aria-hidden="true"
+              size={16}
+              strokeWidth={1.5}
+              className="mt-1 shrink-0 text-medical-teal"
+            />
+            <p className="text-[15px] leading-relaxed text-white/75">{b.text}</p>
+          </li>
+        ))}
+      </ul>
+      <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/40">
+        From the back cover
+      </p>
+    </div>
+  </section>
 );
 
 const OpeningFraming = () => (
@@ -171,7 +230,7 @@ const OpeningFraming = () => (
         “Just as a civilisation as mighty as the Roman Empire did not fail all at once, the death
         of each organism occurs in different measurable stages.”
         <footer className="mt-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
-          — From Chaos to Creation, p. 14
+          — Chaos to Creation, p. 14
         </footer>
       </blockquote>
 
@@ -191,7 +250,7 @@ const OpeningFraming = () => (
           ))}
         </ol>
         <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/40">
-          From Chaos to Creation, p. 15
+          Chaos to Creation, p. 15
         </p>
       </div>
     </div>
@@ -208,7 +267,7 @@ const LifeForceFormulaSection = () => (
         id="formula-heading"
         eyebrow="The Life Force Formula"
         title="Life Force = environment × (regeneration − damage) ÷ inertia, plus stem-cell input."
-        intro="The book's Appendix is where Slater formally states his synthesis."
+        intro="The book’s Appendix is where Slater formally states his synthesis."
         align="center"
         className="mb-12 md:mb-14"
       />
@@ -268,7 +327,7 @@ const ThreeRules = () => (
     <div className="mx-auto max-w-7xl">
       <SectionHeading
         id="rules-heading"
-        eyebrow="Slater's Three Rules"
+        eyebrow="Slater’s Three Rules"
         title="The three claims the rest of the book rests on."
         intro="Stated verbatim from the book — the spine of the Life Force argument."
         className="mb-12 md:mb-14"
@@ -332,7 +391,7 @@ const HypothesisCallout = () => (
         </p>
       </div>
       <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/40">
-        From Chaos to Creation, pp. 209–218
+        Chaos to Creation, pp. 209–218
       </p>
     </div>
   </section>
@@ -365,7 +424,7 @@ const EpilogueExtract = () => (
             “Biology is too complex to be fully captured in one equation.”
           </p>
           <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/40">
-            — From Chaos to Creation, p. 221
+            — Chaos to Creation, p. 221
           </p>
         </div>
       </blockquote>
@@ -406,6 +465,45 @@ const ClinicalCases = () => (
   </section>
 );
 
+const EndorsementsSection = () => (
+  <section
+    aria-labelledby="endorsements-heading"
+    className="border-y border-white/5 bg-brand-panel/30 px-6 py-20 md:py-24"
+  >
+    <div className="mx-auto max-w-7xl">
+      <SectionHeading
+        id="endorsements-heading"
+        eyebrow="Praise for the book"
+        title="From the book jacket."
+        intro="Reactions to Chaos to Creation from beyond the author’s own field."
+        className="mb-12 md:mb-14"
+      />
+
+      <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {BOOK_ENDORSEMENTS.map((e) => (
+          <li key={e.by}>
+            <Card className="flex h-full flex-col gap-5 bg-white/[0.01] p-8" glow>
+              <Quote
+                aria-hidden="true"
+                size={22}
+                strokeWidth={1.5}
+                className="text-medical-teal/80"
+              />
+              <blockquote className="text-pretty text-base leading-relaxed text-white/80">
+                “{e.quote}”
+              </blockquote>
+              <footer className="mt-auto pt-2">
+                <p className="font-display text-base font-semibold text-white">{e.by}</p>
+                <p className="text-xs leading-relaxed text-white/55">{e.title}</p>
+              </footer>
+            </Card>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+);
+
 const BookCloseCTA = () => (
   <section
     aria-label="Close"
@@ -414,31 +512,21 @@ const BookCloseCTA = () => (
     <Glow className="bottom-0 left-1/2 -translate-x-1/2" color="teal" />
 
     <div className="relative mx-auto max-w-3xl text-center">
-      <p className="eyebrow">From Chaos to Creation</p>
+      <p className="eyebrow">{BOOK.title}</p>
       <h2 className="mt-4 text-balance font-display text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl">
         “Lifespan is an energy balance, not a clock.”
       </h2>
       <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/40">
-        From Chaos to Creation, p. 221 — Rule 3
+        Chaos to Creation, p. 221 — Rule 3
       </p>
 
-      <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-        <Button
-          size="lg"
-          variant="primary"
-          className="min-w-[200px]"
-          onClick={() => window.open(BOOK.purchaseUrl, '_blank', 'noopener,noreferrer')}
-        >
-          <span className="flex items-center gap-2">
-            {BOOK.purchaseLabel}
-            <ArrowUpRight aria-hidden="true" size={16} />
-          </span>
-        </Button>
+      <div className="mt-10 flex flex-col items-center justify-center gap-5">
+        <FormatButtons size="lg" />
         <Link
           to="/"
-          className="inline-flex items-center gap-2 rounded-full glass px-6 py-3 text-sm font-medium text-white/80 transition-colors hover:text-white"
+          className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55 transition-colors hover:text-white"
         >
-          <ArrowLeft aria-hidden="true" size={14} />
+          <ArrowLeft aria-hidden="true" size={13} />
           Back to the personal site
         </Link>
       </div>
