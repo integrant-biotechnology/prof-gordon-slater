@@ -1,28 +1,42 @@
+import { Link, useLocation } from 'react-router-dom';
 import { ArrowUp, ArrowUpRight } from 'lucide-react';
 import { DOCTOR_NAME, DOCTOR_TITLE, FOOTER_DISCLAIMER, PRACTICE_URL } from '@/constants';
 
-const FOOTER_SECTIONS = [
+interface FooterLink {
+  label: string;
+  /** Required when `route` or `external` is set. Omitted for `hash` links. */
+  href?: string;
+  /** Internal route (use react-router Link). */
+  route?: boolean;
+  /** Internal hash anchor — rendered as `#anchor` on home, `/#anchor` elsewhere. */
+  hash?: string;
+  /** External URL (use <a target="_blank">). */
+  external?: boolean;
+}
+
+const FOOTER_SECTIONS: { title: string; links: FooterLink[] }[] = [
   {
     title: 'Site',
     links: [
-      { label: 'Home', href: '#home' },
-      { label: 'About', href: '#about' },
-      { label: 'Background', href: '#background' },
+      { label: 'Home', hash: 'home' },
+      { label: 'About', hash: 'about' },
+      { label: 'Background', hash: 'background' },
     ],
   },
   {
     title: 'Work',
     links: [
-      { label: 'Body of work', href: '#work' },
-      { label: 'Community & vision', href: '#community' },
-      { label: 'Writing', href: '#writing' },
+      { label: 'The book', href: '/book', route: true },
+      { label: 'Body of work', hash: 'work' },
+      { label: 'Community & vision', hash: 'community' },
+      { label: 'Writing', hash: 'writing' },
     ],
   },
   {
     title: 'Connect',
     links: [
-      { label: 'Get in touch', href: '#connect' },
-      { label: 'Practice site ↗', href: PRACTICE_URL, external: true },
+      { label: 'Get in touch', hash: 'connect' },
+      { label: 'Practice site', href: PRACTICE_URL, external: true },
     ],
   },
 ];
@@ -33,6 +47,8 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const { pathname } = useLocation();
+  const onHome = pathname === '/';
 
   return (
     <footer className="relative z-10 border-t border-white/5 bg-brand-bg px-6 pb-16 pt-24">
@@ -57,25 +73,51 @@ export const Footer = () => {
             <nav key={section.title} aria-label={section.title} className="space-y-6">
               <h2 className="eyebrow">{section.title}</h2>
               <ul className="space-y-3.5">
-                {section.links.map((link) => (
-                  <li key={link.label}>
-                    {link.external ? (
-                      <a
-                        href={link.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-sm text-white/60 transition-colors hover:text-white"
-                      >
-                        {link.label.replace(/ ↗$/, '')}
-                        <ArrowUpRight aria-hidden="true" size={12} />
-                      </a>
-                    ) : (
-                      <a href={link.href} className="text-sm text-white/60 transition-colors hover:text-white">
+                {section.links.map((link) => {
+                  const className = 'text-sm text-white/60 transition-colors hover:text-white';
+                  if (link.external) {
+                    return (
+                      <li key={link.label}>
+                        <a
+                          href={link.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`${className} inline-flex items-center gap-1`}
+                        >
+                          {link.label}
+                          <ArrowUpRight aria-hidden="true" size={12} />
+                        </a>
+                      </li>
+                    );
+                  }
+                  if (link.route) {
+                    return (
+                      <li key={link.label}>
+                        <Link to={link.href!} className={className}>
+                          {link.label}
+                        </Link>
+                      </li>
+                    );
+                  }
+                  // hash anchor — same-page on / , router nav with hash from /book
+                  const id = link.hash!;
+                  if (onHome) {
+                    return (
+                      <li key={link.label}>
+                        <a href={`#${id}`} className={className}>
+                          {link.label}
+                        </a>
+                      </li>
+                    );
+                  }
+                  return (
+                    <li key={link.label}>
+                      <Link to={{ pathname: '/', hash: `#${id}` }} className={className}>
                         {link.label}
-                      </a>
-                    )}
-                  </li>
-                ))}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </nav>
           ))}
