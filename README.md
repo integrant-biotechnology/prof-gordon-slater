@@ -29,6 +29,21 @@ npm run lint     # eslint
 npm run lint:tsc # type-check only (tsc --noEmit)
 ```
 
+## Deploying to Vercel
+
+This is a static Vite build, so Vercel needs no special configuration beyond what's in
+[`vercel.json`](vercel.json) (framework preset, build command `npm run build`, output `dist`, an
+`index.html` rewrite fallback, and long-cache headers for hashed assets).
+
+1. Push this repo to GitHub (already done).
+2. In Vercel, **Add New… → Project**, import `prof-gordon-slater`, and deploy. The defaults
+   (Framework: *Vite*, Build: `npm run build`, Output: `dist`) are picked up automatically.
+3. There are no required environment variables. Add the production domain under **Settings →
+   Domains**, then update the canonical / Open Graph / JSON-LD URLs in `index.html` (currently
+   `https://profgordonslater.com.au`) and the `og:image` to a real 1200×630 image.
+
+Or from the CLI: `npm i -g vercel && vercel` (preview) / `vercel --prod` (production).
+
 ## Project layout
 
 ```text
