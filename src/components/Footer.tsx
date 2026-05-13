@@ -29,6 +29,7 @@ const FOOTER_SECTIONS: { title: string; links: FooterLink[] }[] = [
       { label: 'The book', href: '/book', route: true },
       { label: 'Body of work', hash: 'work' },
       { label: 'Community & vision', hash: 'community' },
+      { label: 'Giving back', href: '/giving', route: true },
       { label: 'Writing', hash: 'writing' },
     ],
   },

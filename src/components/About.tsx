@@ -52,8 +52,9 @@ export const About = () => {
               <em>Foot &amp; Ankle International</em>, sits on the editorial panel of{' '}
               <em>EC Orthopaedics</em>, and chairs Foot &amp; Ankle for the Asia Pacific
               Orthopaedic Association. His book{' '}
-              <em>From Chaos to Creation: The Life Force Formula</em> (February 2026) is the
-              long-form synthesis of that work.
+              <em>Chaos to Creation: Longevity and Regeneration Frontiers</em> (9 April 2026) is
+              the long-form synthesis of that work, drawing on more than fifty peer-reviewed
+              publications and multiple medical-technology patents.
             </p>
             <p className="text-base text-white/55">
               For clinical care or to arrange an appointment, please see the practice site —{' '}

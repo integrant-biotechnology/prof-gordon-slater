@@ -1,4 +1,5 @@
-import { Quote } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Quote } from 'lucide-react';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { COMMUNITY, VISION_STATEMENT } from '@/constants';
 
@@ -22,19 +23,31 @@ export const CommunityVision = () => {
           <div>
             <h3 className="mb-6 font-display text-xl font-semibold text-white">Community contribution</h3>
             <ul className="space-y-3">
-              {COMMUNITY.map((item) => (
-                <li key={item.title} className="rounded-2xl glass bg-white/[0.01] p-6">
-                  <div className="flex items-baseline justify-between gap-3">
-                    <p className="font-medium text-white/85">{item.title}</p>
-                    {item.placeholder && (
-                      <span className="shrink-0 text-[10px] uppercase tracking-[0.2em] text-white/30">
-                        placeholder
-                      </span>
+              {COMMUNITY.map((item) => {
+                const isGiving = item.title === 'Supporting medical research';
+                return (
+                  <li key={item.title} className="rounded-2xl glass bg-white/[0.01] p-6">
+                    <div className="flex items-baseline justify-between gap-3">
+                      <p className="font-medium text-white/85">{item.title}</p>
+                      {item.placeholder && (
+                        <span className="shrink-0 text-[10px] uppercase tracking-[0.2em] text-white/30">
+                          placeholder
+                        </span>
+                      )}
+                    </div>
+                    <p className="mt-1.5 text-sm leading-relaxed text-white/60">{item.description}</p>
+                    {isGiving && (
+                      <Link
+                        to="/giving"
+                        className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-medical-teal/85 transition-colors hover:text-medical-teal"
+                      >
+                        See more
+                        <ArrowRight aria-hidden="true" size={12} />
+                      </Link>
                     )}
-                  </div>
-                  <p className="mt-1.5 text-sm leading-relaxed text-white/60">{item.description}</p>
-                </li>
-              ))}
+                  </li>
+                );
+              })}
             </ul>
           </div>
 
