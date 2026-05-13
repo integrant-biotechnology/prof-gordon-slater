@@ -1,12 +1,12 @@
 import { motion, useReducedMotion } from 'motion/react';
-import { Award, MapPin, Target } from 'lucide-react';
+import { ArrowUpRight, Award, FlaskConical, Target } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
-import { DOCTOR_CREDENTIALS, DOCTOR_NAME } from '@/constants';
+import { DOCTOR_CREDENTIALS, DOCTOR_NAME, PRACTICE_URL } from '@/constants';
 
 const CREDENTIALS = [
   { icon: Target, text: 'Foot & ankle fellowship — Hospital for Special Surgery, New York' },
   { icon: Award, text: 'Fellow, Royal Australasian College of Surgeons (Orthopaedics)' },
-  { icon: MapPin, text: 'Consulting in Sydney & Albury' },
+  { icon: FlaskConical, text: 'Associate Editor, Foot & Ankle International' },
 ];
 
 export const About = () => {
@@ -19,7 +19,7 @@ export const About = () => {
   };
 
   return (
-    <section id="about" aria-labelledby="about-heading" className="overflow-hidden px-6 py-28 md:py-32">
+    <section id="about" aria-labelledby="about-heading" className="overflow-hidden px-6 py-24 md:py-28">
       <div className="mx-auto grid max-w-7xl items-start gap-16 lg:grid-cols-2 lg:gap-24">
         <div className="space-y-12">
           <motion.h2
@@ -27,27 +27,41 @@ export const About = () => {
             id="about-heading"
             className="text-balance font-display text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl"
           >
-            Focused expertise. <br />
-            <span className="text-white/40">Considered care.</span>
+            About <br />
+            <span className="text-white/40">{DOCTOR_NAME}.</span>
           </motion.h2>
 
           <motion.div {...reveal} className="space-y-6 text-pretty text-lg leading-relaxed text-white/65">
             <p>
-              {DOCTOR_NAME} is an orthopaedic surgeon specialising in foot and ankle conditions,
-              sports injuries, and trauma. He was among the first surgeons in Australia to adopt
-              minimally invasive techniques for the foot and ankle, and uses regenerative-medicine
-              adjuncts where appropriate.
+              {DOCTOR_NAME} is an orthopaedic surgeon whose work spans clinical practice, research,
+              education and medical-device innovation. He was among the first surgeons in Australia
+              to adopt minimally invasive techniques for the foot and ankle, and uses
+              regenerative-medicine adjuncts where appropriate.
             </p>
             <p>
               He completed his medical degree at the University of New South Wales, then advanced
-              sub-specialist training in foot and ankle surgery at New York’s Hospital for Special
-              Surgery in 1997. He has been a Fellow of the Royal Australasian College of Surgeons
-              (Orthopaedics) since 1997.
+              sub-specialist training in foot and ankle surgery at New York&rsquo;s Hospital for
+              Special Surgery in 1997. He has been a Fellow of the Royal Australasian College of
+              Surgeons (Orthopaedics) since 1997.
             </p>
             <p>
-              He contributes to the field as Associate Editor of <em>Foot &amp; Ankle International</em>,
-              sits on the editorial panel of <em>EC Orthopaedics</em>, chairs Foot &amp; Ankle for the
-              Asia Pacific Orthopaedic Association, and presents at international surgical conferences.
+              He contributes to the international literature as Associate Editor of{' '}
+              <em>Foot &amp; Ankle International</em>, sits on the editorial panel of{' '}
+              <em>EC Orthopaedics</em>, chairs Foot &amp; Ankle for the Asia Pacific Orthopaedic
+              Association, and presents at international surgical conferences.
+            </p>
+            <p className="text-base text-white/55">
+              For clinical care or to arrange an appointment, please see the practice site —{' '}
+              <a
+                href={PRACTICE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-baseline gap-1 text-medical-teal underline-offset-4 transition-colors hover:underline"
+              >
+                orthopaedic-surgeon.com.au
+                <ArrowUpRight aria-hidden="true" size={12} className="self-center" />
+              </a>
+              .
             </p>
           </motion.div>
 
@@ -68,7 +82,7 @@ export const About = () => {
             <div className="relative aspect-[3/2] w-full overflow-hidden bg-brand-bg">
               <img
                 src="/portrait-gordon-slater.webp"
-                alt="Prof Gordon Slater, foot and ankle orthopaedic surgeon"
+                alt={`${DOCTOR_NAME}, foot and ankle orthopaedic surgeon`}
                 loading="lazy"
                 decoding="async"
                 className="h-full w-full object-cover object-center"

@@ -3,16 +3,16 @@ import { Card } from '@/components/ui/Card';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { ARTICLES, BLOG_INDEX_URL } from '@/constants';
 
-export const Articles = () => {
+export const Writing = () => {
   return (
-    <section id="articles" aria-labelledby="articles-heading" className="px-6 py-28 md:py-32">
+    <section id="writing" aria-labelledby="writing-heading" className="px-6 py-24 md:py-28">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-16 flex flex-col gap-8 md:mb-20 lg:flex-row lg:items-end lg:justify-between">
+        <div className="mb-14 flex flex-col gap-8 md:mb-16 lg:flex-row lg:items-end lg:justify-between">
           <SectionHeading
-            id="articles-heading"
-            eyebrow="Medical insights"
-            title="Insights for informed decisions."
-            intro="Clear, clinical writing from Prof Slater on foot and ankle conditions, regenerative approaches, and the research behind them."
+            id="writing-heading"
+            eyebrow="Writing & commentary"
+            title="In his own words."
+            intro="Long-form pieces on foot and ankle conditions, regenerative orthopaedics, and the research behind current practice. Hosted on the practice's clinical blog."
           />
           <a
             href={BLOG_INDEX_URL}
