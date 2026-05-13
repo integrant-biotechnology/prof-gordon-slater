@@ -1,17 +1,19 @@
 import { motion } from 'motion/react';
-import { ArrowRight, BadgeCheck, Crosshair, Route } from 'lucide-react';
+import { ArrowRight, BookOpen, FlaskConical, Lightbulb, Stethoscope } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Glow } from '@/components/ui/Glow';
 import { Motif } from '@/components/ui/Motif';
-import { DOCTOR_TITLE } from '@/constants';
+import { DOCTOR_NAME } from '@/constants';
 
-const TRUST_POINTS = [
-  { icon: BadgeCheck, text: 'Foot & ankle specialist' },
-  { icon: Crosshair, text: 'Precision-focused' },
-  { icon: Route, text: 'Patient-centred planning' },
+const STRANDS = [
+  { icon: Stethoscope, text: 'Foot & ankle surgeon' },
+  { icon: FlaskConical, text: 'Researcher & editor' },
+  { icon: Lightbulb, text: 'Medical-device development' },
+  { icon: BookOpen, text: 'Author' },
 ];
 
-const scrollTo = (id: string) => () => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+const scrollTo = (id: string) => () =>
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
 export const Hero = () => {
   return (
@@ -32,7 +34,7 @@ export const Hero = () => {
             className="flex items-center gap-3 rounded-full glass px-4 py-1.5"
           >
             <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-medical-teal" />
-            <span className="eyebrow">{DOCTOR_TITLE}</span>
+            <span className="eyebrow">Personal site of {DOCTOR_NAME}</span>
           </motion.p>
 
           <motion.h1
@@ -42,8 +44,8 @@ export const Hero = () => {
             transition={{ duration: 0.7, delay: 0.05 }}
             className="max-w-4xl text-balance font-display text-5xl font-bold leading-[1.02] tracking-tight text-white sm:text-7xl lg:text-8xl"
           >
-            Precision care for{' '}
-            <span className="text-white/40">complex feet and ankles.</span>
+            Surgery, research, and a{' '}
+            <span className="text-white/40">wider body of work.</span>
           </motion.h1>
 
           <motion.p
@@ -52,8 +54,9 @@ export const Hero = () => {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="max-w-2xl text-balance text-lg leading-relaxed text-white/65 md:text-xl"
           >
-            Specialist orthopaedic care for foot and ankle conditions, sports injuries, and
-            trauma — with a clinical focus on careful assessment and considered patient outcomes.
+            A factual record of {DOCTOR_NAME}&rsquo;s work — foot &amp; ankle surgery,
+            published research, medical-device development, writing, and contribution to the wider
+            field. Not a clinic.
           </motion.p>
 
           <motion.div
@@ -62,11 +65,11 @@ export const Hero = () => {
             transition={{ duration: 0.6, delay: 0.45 }}
             className="flex flex-col items-center gap-3 pt-2 sm:flex-row"
           >
-            <Button size="lg" variant="primary" className="min-w-[220px]" onClick={scrollTo('contact')}>
-              Request appointment
+            <Button size="lg" variant="primary" className="min-w-[220px]" onClick={scrollTo('work')}>
+              Explore his work
             </Button>
-            <Button size="lg" variant="secondary" className="group min-w-[220px]" onClick={scrollTo('conditions')}>
-              Explore areas of care
+            <Button size="lg" variant="secondary" className="group min-w-[220px]" onClick={scrollTo('writing')}>
+              Read his writing
               <ArrowRight aria-hidden="true" className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
           </motion.div>
@@ -77,13 +80,13 @@ export const Hero = () => {
             transition={{ duration: 1, delay: 0.2 }}
             className="relative mt-10 aspect-video w-full max-w-5xl overflow-hidden rounded-3xl glass md:aspect-[21/9] md:rounded-[40px]"
           >
-            <Motif placeholderLabel="Replace with clinical photography" />
+            <Motif />
             <div
               aria-hidden="true"
               className="pointer-events-none absolute inset-0 bg-linear-to-b from-transparent via-brand-bg/30 to-brand-bg"
             />
-            <ul className="absolute inset-x-6 bottom-8 z-10 flex flex-wrap justify-center gap-x-10 gap-y-3 md:bottom-10 md:gap-x-14">
-              {TRUST_POINTS.map(({ icon: Icon, text }) => (
+            <ul className="absolute inset-x-6 bottom-8 z-10 flex flex-wrap justify-center gap-x-8 gap-y-3 md:bottom-10 md:gap-x-12">
+              {STRANDS.map(({ icon: Icon, text }) => (
                 <li key={text} className="flex items-center gap-2.5 text-white/70">
                   <Icon aria-hidden="true" className="h-4 w-4 text-medical-teal" strokeWidth={1.75} />
                   <span className="text-[11px] font-semibold uppercase tracking-[0.18em]">{text}</span>

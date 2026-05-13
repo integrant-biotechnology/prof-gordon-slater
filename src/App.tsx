@@ -1,13 +1,12 @@
 import { Navbar } from '@/components/Navbar';
 import { Hero } from '@/components/Hero';
-import { FocusAreas } from '@/components/FocusAreas';
+import { WhatHeDoes } from '@/components/WhatHeDoes';
 import { About } from '@/components/About';
 import { Background } from '@/components/Background';
-import { Philosophy } from '@/components/Philosophy';
-import { Procedures } from '@/components/Procedures';
-import { PatientInformation } from '@/components/PatientInformation';
-import { Articles } from '@/components/Articles';
-import { ContactCTA } from '@/components/ContactCTA';
+import { BodyOfWork } from '@/components/BodyOfWork';
+import { CommunityVision } from '@/components/CommunityVision';
+import { Writing } from '@/components/Writing';
+import { Connect } from '@/components/Connect';
 import { Footer } from '@/components/Footer';
 
 export default function App() {
@@ -21,14 +20,13 @@ export default function App() {
 
       <main id="main">
         <Hero />
-        <FocusAreas />
+        <WhatHeDoes />
         <About />
         <Background />
-        <Philosophy />
-        <Procedures />
-        <PatientInformation />
-        <Articles />
-        <ContactCTA />
+        <BodyOfWork />
+        <CommunityVision />
+        <Writing />
+        <Connect />
       </main>
 
       <Footer />

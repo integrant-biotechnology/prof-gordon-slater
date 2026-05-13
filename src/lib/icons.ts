@@ -1,39 +1,38 @@
 import {
-  Activity,
-  ChevronRightSquare,
-  Footprints,
-  HeartPulse,
-  Layout,
-  MessageSquare,
-  Repeat,
-  Scan,
-  Search,
-  Shield,
-  User,
-  Zap,
+  Award,
+  BookOpen,
+  Cpu,
+  FlaskConical,
+  Globe,
+  GraduationCap,
+  Instagram,
+  Lightbulb,
+  Linkedin,
+  Microscope,
+  Stethoscope,
+  Twitter,
+  Youtube,
   type LucideIcon,
 } from 'lucide-react';
 
 /**
- * Central registry mapping the string keys used in `constants.ts`
- * to their Lucide icon components. Keeping this in one place keeps
- * the data files plain and the icon set easy to audit.
+ * Central registry of icons used in `constants.ts` data.
+ * Keys are the Lucide component names so the mapping reads 1:1.
  */
 export const ICONS = {
-  // conditions / focus areas
-  Focus: Scan,
-  Activity,
-  Shield,
-  Zap,
-  Footprints,
-  HeartPulse,
-  ChevronRightSquare,
-  Layout,
-  // philosophy
-  Search,
-  MessageSquare,
-  User,
-  Repeat,
+  Award,
+  BookOpen,
+  Cpu,
+  FlaskConical,
+  Globe,
+  GraduationCap,
+  Instagram,
+  Lightbulb,
+  Linkedin,
+  Microscope,
+  Stethoscope,
+  Twitter,
+  Youtube,
 } satisfies Record<string, LucideIcon>;
 
 export type IconName = keyof typeof ICONS;
