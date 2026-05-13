@@ -72,29 +72,36 @@ src/
   pages/
     Home.tsx                    # the / route
     Book.tsx                    # the /book route — dedicated to From Chaos to Creation
+  pages/
+    Home · Book · Giving · NotFound      # code-split routes (React.lazy)
   components/
     Hero · WhatHeDoes · About · Background · BookPreview
     BodyOfWork · CommunityVision · Writing · Connect
     Navbar · Footer
+    ErrorBoundary · ScrollToTop · RouteFallback
   components/ui/                # primitives: Button · Card · Glow · Motif · SectionHeading
 public/
   favicon.svg
-  portrait-gordon-slater.webp   # real headshot
+  portrait-gordon-slater.webp        # real headshot
+  book-cover-chaos-to-creation.webp  # real book cover (also -480/-800/-1200 + .jpg fallback)
+  robots.txt · sitemap.xml
 docs/
   voice-source-v0_1.md          # canonical content KB this site is built from (see "Content sourcing" below)
 ```
+
+Three routes: **`/`** (home), **`/book`** (the dedicated book page for *Chaos to Creation*),
+**`/giving`** (philanthropic activity). Each is code-split via `React.lazy`, so the first paint
+on `/` doesn't ship the other routes' JS. A real `404` lives at `*`.
 
 ## What you need to supply (placeholder checklist)
 
 The site is built and ready; these items render today as clearly-marked placeholders. Replace
 them in `src/constants.ts` (and rebuild) — no component edits needed:
 
-- [ ] **Book purchase URL** — `BOOK.purchaseUrl` is `'#'` and the UI marks it as
-      *"Purchase link to be supplied"*. Drop in the real Amazon / publisher URL and remove the
-      `purchasePlaceholder: true` flag.
-- [ ] **Book cover image** — both BookPreview (home) and BookHero (`/book`) use a stylised
-      typographic placeholder. Drop a real cover into `public/book-cover-chaos-to-creation.webp`
-      and swap the placeholder cover blocks for an `<img>`.
+- [x] ~~Book purchase URL~~ — done. `BOOK_FORMATS` (Hardcover · Paperback · Kindle) carries the
+      three real Amazon AU URLs.
+- [x] ~~Book cover image~~ — done. Real cover at `public/book-cover-chaos-to-creation.webp`,
+      with `-480.webp`, `-800.webp`, `-1200.webp` and a `.jpg` fallback for `<picture>`/`srcset`.
 - [ ] **Verified social URLs** — `SOCIAL_LINKS`: LinkedIn, X, research profile (Google Scholar /
       ResearchGate / ORCID / PubMed), YouTube, Instagram. Each currently uses `url: '#'`.
 - [ ] **Selected publications links** — `SELECTED_PUBLICATIONS` entries currently have no
@@ -104,12 +111,21 @@ them in `src/constants.ts` (and rebuild) — no component edits needed:
 - [ ] **Personal contact email** — `CONTACT_EMAIL` is `marketing@drgordonslater.com.au`
       (Adelaide Slater handles, per the KB). Swap if a different general address is preferred.
 - [ ] **Real OG image** — `og:image`/`twitter:image` currently point at the portrait as a
-      stopgap; a purpose-built 1200×630 image is preferred.
+      stopgap; a purpose-built 1200×630 image is preferred. Per-route OG (e.g. cover image on
+      `/book`) needs a pre-rendering plugin — flagged as a TODO in `index.html`.
 - [ ] **Favicon** — `public/favicon.svg` is a "GS" monogram — replace if a brand mark exists.
 - [ ] **Domain & canonical** — `index.html` canonical / OG / JSON-LD URLs use
       `https://profgordonslater.com.au`; update if the production domain differs.
 - [ ] **Legal pages** — footer *Privacy / Disclaimer / Accessibility* links currently `#`;
       build real pages or remove.
+
+### Cross-site work — not in this repo
+
+The `/giving` page (and the *"Professor Slater is a proud supporter of …"* surface) is on this
+personal site only. The same treatment should be applied to two adjacent properties Sam owns:
+
+- The **RegenU** site.
+- The **practice site** at `orthopaedic-surgeon.com.au` (WordPress / Elementor).
 
 ## Content sourcing
 

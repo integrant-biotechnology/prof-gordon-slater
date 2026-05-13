@@ -1,9 +1,13 @@
 import type {
   Article,
+  BookBullet,
+  BookFormat,
   BookRule,
   Capability,
   CaseStudy,
   CommunityItem,
+  Endorsement,
+  GivingEvent,
   LifeForceVariable,
   Publication,
   SocialLink,
@@ -71,49 +75,103 @@ export const CAPABILITIES: Capability[] = [
   {
     title: 'Surgeon',
     description:
-      'A 30-year clinical record in foot and ankle surgery, including minimally invasive techniques.',
+      'Decades of clinical experience in foot and ankle surgery, including minimally invasive techniques.',
     icon: 'Stethoscope',
   },
   {
     title: 'Researcher & editor',
     description:
-      'Sixty peer-reviewed papers across foot & ankle surgery, orthobiologics, HBOT, regenerative medicine and aging biology.',
+      'More than fifty peer-reviewed papers across foot & ankle surgery, orthobiologics, HBOT, regenerative medicine and aging biology.',
     icon: 'Microscope',
   },
   {
     title: 'Author',
     description:
-      'Author of From Chaos to Creation: The Life Force Formula (February 2026) — a synthesis of his clinical and research thinking.',
+      'Author of Chaos to Creation: Longevity and Regeneration Frontiers (9 April 2026) — a synthesis of his clinical and research thinking.',
     icon: 'BookOpen',
   },
   {
     title: 'Innovator',
     description:
-      'Eponymous techniques, a granted peptide patent, and a long-running record in Australian medical-device regulatory work.',
+      'Eponymous techniques, multiple medical-technology patents, and a long-running record in Australian medical-device regulatory work.',
     icon: 'Lightbulb',
   },
 ];
 
 // -------------------------------------------------------------
-// The Book — From Chaos to Creation (Feb 2026)
+// The Book — Chaos to Creation: Longevity and Regeneration Frontiers
+// (Professor Gordon Slater, published 9 April 2026)
 // -------------------------------------------------------------
 
 export const BOOK = {
-  title: 'From Chaos to Creation',
-  subtitle: 'The Life Force Formula',
-  publishedDate: 'February 2026',
-  byline: 'Prof Gordon Slater',
-  /** Strongest hero pull for the /book page (KB §10 → book p. 15). */
+  title: 'Chaos to Creation',
+  subtitle: 'Longevity and Regeneration Frontiers',
+  publishedDate: '9 April 2026',
+  byline: 'Professor Gordon Slater',
+  /** Cover hook on the published jacket. */
+  tagline: 'What if decline isn’t inevitable?',
+  subtagline: 'Exploring longevity, regeneration and the science reshaping how we age.',
+  /** Cover image (responsive sizes via srcset, see BOOK_COVER_SRCSET). */
+  coverImage: '/book-cover-chaos-to-creation.webp',
+  coverImageJpg: '/book-cover-chaos-to-creation.jpg',
+  coverAlt: 'Chaos to Creation by Professor Gordon Slater — book cover.',
+  /** Pull-quote used inside the /book page (book p. 15). */
   heroQuote: 'Aging is a challenge to address rather than an inevitable fate to be endured.',
-  heroQuoteSource: 'From Chaos to Creation, p. 15',
+  heroQuoteSource: 'Chaos to Creation, p. 15',
   /** Short blurb for the home BookPreview block. */
   summary:
-    'A book-length synthesis of three decades of foot & ankle practice, an emerging body of regenerative-medicine research, and a working frame for thinking about lifespan as a modifiable outcome.',
-  /** Replace with the real Amazon / publisher URL when supplied. */
-  purchaseUrl: '#',
-  purchaseLabel: 'Find the book',
-  purchasePlaceholder: true as const,
+    'A book-length synthesis of decades of foot & ankle practice, peer-reviewed regenerative-medicine research, and a working frame for thinking about lifespan as a modifiable outcome.',
 };
+
+/** Responsive srcset for the cover. */
+export const BOOK_COVER_SRCSET =
+  '/book-cover-chaos-to-creation-480.webp 480w, /book-cover-chaos-to-creation-800.webp 800w, /book-cover-chaos-to-creation-1200.webp 1200w';
+
+/** Three Amazon AU formats — Hardcover · Paperback · Kindle. */
+export const BOOK_FORMATS: BookFormat[] = [
+  {
+    format: 'Hardcover',
+    url: 'https://www.amazon.com.au/Chaos-Creation-Prof-Gordon-Slater/dp/B0GWTSZN7M',
+  },
+  {
+    format: 'Paperback',
+    url: 'https://www.amazon.com.au/Chaos-Creation-Prof-Gordon-Slater/dp/B0GWTQFMSP',
+  },
+  {
+    format: 'Kindle',
+    url: 'https://www.amazon.com.au/Chaos-Creation-Prof-Gordon-Slater-ebook/dp/B0GWTGTHBN',
+  },
+];
+
+/** "Inside this book" — the four bullets from the back cover. */
+export const BOOK_INSIDE: BookBullet[] = [
+  { text: 'How chaos theory and evolution reshape the way we see aging and regeneration.' },
+  { text: 'What nature’s "immortal" creatures can teach us about the body’s hidden potential.' },
+  { text: 'Which breakthroughs in regenerative medicine are real, and which ones are still being built.' },
+  { text: 'The simplest habits that can shift your health trajectory, starting now.' },
+];
+
+/** Three book-jacket endorsements — verbatim, attributed. */
+export const BOOK_ENDORSEMENTS: Endorsement[] = [
+  {
+    quote:
+      'Chaos to Creation will change the way you think about life, aging and what it means to regenerate, essential reading for today and tomorrow.',
+    by: 'Mark Bouris',
+    title: 'Entrepreneur & Investor',
+  },
+  {
+    quote:
+      'Rarely does a book make science feel this alive — challenging, provocative, and utterly fascinating from first page to last.',
+    by: 'Dr Marty O’Malley',
+    title: 'Associate Professor of Clinical Orthopaedic Surgery, Weill Cornell Medical College',
+  },
+  {
+    quote:
+      'Deeply thoughtful and thought-provoking, addressing the elusive Fountain of Youth with evidence, explaining how close and how far we are from it and, most importantly, what is possible.',
+    by: 'Dr Katherine Samaras',
+    title: 'Australian Centre for Metabolic Health',
+  },
+];
 
 /** The Life Force Formula — book Appendix pp. 220–226. */
 export const LIFE_FORCE = {
@@ -129,7 +187,7 @@ export const LIFE_FORCE = {
   ] satisfies LifeForceVariable[],
   reading:
     'Life Force = environmental envelope × (net regenerative work / inertia) + stem-cell input.',
-  attribution: 'From Chaos to Creation, Appendix pp. 220–226',
+  attribution: 'Chaos to Creation, Appendix pp. 220–226',
 };
 
 /** Slater's Three Rules — verbatim from book p. 221. */
@@ -139,21 +197,21 @@ export const BOOK_RULES: BookRule[] = [
     title: 'Life Exists in a Constant Drift Toward Degeneration.',
     quote:
       'All cellular and biological systems are subject to entropy, accumulating damage over time. In order to extend life, we must actively slow or counteract this degenerative flux.',
-    attribution: 'From Chaos to Creation, p. 221',
+    attribution: 'Chaos to Creation, p. 221',
   },
   {
     number: 2,
     title: 'Biologic Inertia Must Be Overcome.',
     quote:
       'Living systems in motion accumulate biological inertia — the weight of past damage, disease, and metabolic wear. This inertia can be overcome by a corrective input proportional to age and biological burden, followed by sustained support.',
-    attribution: 'From Chaos to Creation, p. 221',
+    attribution: 'Chaos to Creation, p. 221',
   },
   {
     number: 3,
     title: 'Lifespan Is an Energy Balance, Not a Clock.',
     quote:
       'Biology is too complex to be reduced to a single equation. Still, we can outline the key variables that shape lifespan and describe how they interact.',
-    attribution: 'From Chaos to Creation, p. 221',
+    attribution: 'Chaos to Creation, p. 221',
   },
 ];
 
@@ -164,7 +222,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     title: 'Talus reconstitution',
     body:
       'A non-weight-bearing talus reconstituted to load-bearing form in eight weeks via 20 mL autologous mesenchymal stem cells with external fixation — a distraction-arthroplasty + biologics protocol producing documented cartilage regeneration in case-series form.',
-    attribution: 'From Chaos to Creation, pp. 176, 202',
+    attribution: 'Chaos to Creation, pp. 176, 202',
   },
   {
     id: 'hbot-brooker-4',
@@ -185,7 +243,7 @@ export const BODY_OF_WORK: WorkItem[] = [
     id: 'research',
     title: 'Research & publications',
     description:
-      'Sixty peer-reviewed papers (2003–2026) across foot & ankle surgery, orthobiologics, HBOT, regenerative medicine and aging biology.',
+      'More than fifty peer-reviewed papers (2003–2026) across foot & ankle surgery, orthobiologics, HBOT, regenerative medicine and aging biology.',
     icon: 'FlaskConical',
     href: '#publications',
     linkLabel: 'See selected publications',
@@ -202,7 +260,7 @@ export const BODY_OF_WORK: WorkItem[] = [
     id: 'book',
     title: 'Book',
     description:
-      'From Chaos to Creation: The Life Force Formula (February 2026) — a synthesis of three decades of clinical and research work.',
+      'Chaos to Creation: Longevity and Regeneration Frontiers (9 April 2026) — a synthesis of decades of clinical and research work.',
     icon: 'BookOpen',
     href: '/book',
     linkLabel: 'Read the book page',
@@ -291,6 +349,11 @@ export const COMMUNITY: CommunityItem[] = [
     description:
       'Actively building a research team in Sydney — around fifty recent biotech / AI-engineering applicants signal the shape of the local talent pool he is helping to grow.',
   },
+  {
+    title: 'Supporting medical research',
+    description:
+      'A proud supporter of three Sydney charity events that fund breast-cancer, heart, and vision research — including the Pink Luncheon (ATC), the Ingham Charity Raceday, and the Black & White End of Summer Luncheon.',
+  },
 ];
 
 export const VISION_STATEMENT =
@@ -351,6 +414,51 @@ export const SOCIAL_LINKS: SocialLink[] = [
   { label: 'Research profile', url: '#', icon: 'GraduationCap', placeholder: true },
   { label: 'YouTube', url: '#', icon: 'Youtube', placeholder: true },
   { label: 'Instagram', url: '#', icon: 'Instagram', placeholder: true },
+];
+
+// -------------------------------------------------------------
+// Philanthropy / giving
+// -------------------------------------------------------------
+
+/** Short pledge line — reusable on home, footer, /giving. */
+export const GIVING_PLEDGE =
+  'Professor Slater is a proud supporter of Australian medical research.';
+
+/** Intro paragraph for the /giving page. */
+export const GIVING_INTRO =
+  'Three Sydney charity events that fund research into conditions Prof Slater treats every week — bone, joint, vascular and ocular. He contributes hyperbaric oxygen therapy (HBOT) sessions and Integrant skincare to each, in support of the institutions that fund the underlying science.';
+
+/** Closing pledge paragraph for the /giving page. */
+export const GIVING_CLOSE =
+  'Better outcomes follow from doing the science. Supporting these events is the practical end of the same idea — and a small thank-you to the researchers, nurses and clinicians who carry the rest of the load.';
+
+/** Three philanthropic events. */
+export const GIVING_EVENTS: GivingEvent[] = [
+  {
+    id: 'pink-luncheon',
+    name: 'The Pink Luncheon',
+    host: 'Australian Turf Club (ATC)',
+    cause: 'Breast cancer research',
+    contribution: 'HBOT sessions and Integrant skincare donations',
+    accent: 'pink',
+  },
+  {
+    id: 'ingham-charity-raceday',
+    name: 'The Ingham Charity Raceday',
+    host: 'A signature Sydney race day',
+    cause: 'Heart research',
+    contribution: 'HBOT sessions and Integrant skincare donations',
+    accent: 'red',
+  },
+  {
+    id: 'black-and-white-luncheon',
+    name: 'The Black & White End of Summer Luncheon',
+    host: 'Sydney',
+    beneficiary: 'Vision Australia',
+    cause: 'Research into blindness',
+    contribution: 'HBOT sessions and Integrant skincare donations',
+    accent: 'neutral',
+  },
 ];
 
 // -------------------------------------------------------------
