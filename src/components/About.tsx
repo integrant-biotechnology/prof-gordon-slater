@@ -1,113 +1,101 @@
-import { motion } from 'motion/react';
-import { Target, Award, MapPin } from 'lucide-react';
-import { Card } from './ui/Card';
-import { DOCTOR_NAME, DOCTOR_CREDENTIALS } from '../constants';
+import { motion, useReducedMotion } from 'motion/react';
+import { Award, MapPin, Target } from 'lucide-react';
+import { Card } from '@/components/ui/Card';
+import { DOCTOR_CREDENTIALS, DOCTOR_NAME } from '@/constants';
+
+const CREDENTIALS = [
+  { icon: Target, text: 'Foot & ankle fellowship — Hospital for Special Surgery, New York' },
+  { icon: Award, text: 'Fellow, Royal Australasian College of Surgeons (Orthopaedics)' },
+  { icon: MapPin, text: 'Consulting in Sydney & Albury' },
+];
 
 export const About = () => {
-  const credentials = [
-    { icon: Target, text: "Advanced Foot & Ankle Training, New York" },
-    { icon: Award, text: "Fellow of the Royal Australasian College of Surgeons" },
-    { icon: MapPin, text: "Strategic Consultations across Sydney" }
-  ];
+  const reduceMotion = useReducedMotion();
+  const reveal = {
+    initial: reduceMotion ? false : { opacity: 0, y: 16 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true },
+    transition: { duration: 0.5, ease: 'easeOut' } as const,
+  };
 
   return (
-    <section id="about" className="py-40 px-6 overflow-hidden">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-32 items-start">
-          <div className="space-y-16">
-            <div className="space-y-6">
-              <motion.h2 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="text-5xl md:text-7xl font-display font-bold tracking-tight text-balance leading-[1.1]"
-              >
-                Focused expertise. <br />
-                <span className="text-white/20">Considered care.</span>
-              </motion.h2>
-            </div>
-            
-            <motion.div 
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="space-y-8 text-white/40 font-light text-xl leading-relaxed text-balance"
-            >
-              <p>
-                Dr Gordon Slater is an orthopaedic surgeon specialising in foot and ankle conditions, 
-                sports injuries, and trauma. He provides high-precision clinical solutions 
-                designed for anatomical integrity and functional recovery.
-              </p>
-              <p>
-                Following his training at the University of New South Wales, Dr Slater completed advanced 
-                sub-specialist training at New York’s Hospital for Special Surgery in 1997.
-              </p>
-              <p>
-                A Fellow of the Royal Australasian College of Surgeons since 1997, he remains committed 
-                to clinical excellence, contributing to medical literature and presenting at leading 
-                international surgical conferences.
-              </p>
-            </motion.div>
-
-            <div className="space-y-6 pt-8 border-t border-white/5">
-              {credentials.map((cred, i) => (
-                <motion.div 
-                  key={i} 
-                  initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.1 * i }}
-                  className="flex items-center gap-4 group"
-                >
-                  <div className="w-10 h-10 rounded-full glass flex items-center justify-center text-white/20 group-hover:text-medical-teal transition-colors">
-                    <cred.icon size={16} strokeWidth={1.5} />
-                  </div>
-                  <span className="text-sm font-medium text-white/50 group-hover:text-white transition-colors">{cred.text}</span>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="sticky top-40"
+    <section id="about" aria-labelledby="about-heading" className="overflow-hidden px-6 py-28 md:py-32">
+      <div className="mx-auto grid max-w-7xl items-start gap-16 lg:grid-cols-2 lg:gap-24">
+        <div className="space-y-12">
+          <motion.h2
+            {...reveal}
+            id="about-heading"
+            className="text-balance font-display text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl"
           >
-            <Card className="p-0 border-white/5 aspect-3/4 flex flex-col overflow-hidden bg-brand-panel">
-              <div className="flex-1 bg-linear-to-b from-white/[0.03] to-transparent relative group">
-                <div className="absolute inset-0 flex items-center justify-center opacity-20 group-hover:opacity-30 transition-opacity">
-                  <div className="w-64 h-64 rounded-full border border-white/10 flex items-center justify-center">
-                    <div className="w-32 h-32 rounded-full border border-white/5 animate-pulse" />
-                  </div>
-                </div>
-                {/* Image Placeholder Link: Replace with Dr Gordon Slater portrait */}
-                <div className="absolute inset-0 flex items-end justify-center pb-20 px-12 text-center">
-                   <p className="text-[10px] uppercase font-bold tracking-[0.3em] text-white/10 hidden group-hover:block">
-                     Replace with Official Portrait
-                   </p>
-                </div>
-              </div>
-              <div className="p-10 space-y-6 glass border-0 border-t border-white/10 backdrop-blur-2xl">
-                <div className="space-y-2 text-center">
-                  <div className="text-3xl font-display font-semibold tracking-tight">{DOCTOR_NAME}</div>
-                  <div className="text-[10px] text-medical-teal font-bold tracking-[0.2em] uppercase">{DOCTOR_CREDENTIALS}</div>
-                </div>
-                <div className="flex justify-center gap-8 border-t border-white/5 pt-6">
-                   <div className="text-center">
-                      <div className="text-white/20 text-[10px] font-bold uppercase tracking-widest mb-1">Focus</div>
-                      <div className="text-xs font-medium text-white/60">Lower Limb</div>
-                   </div>
-                   <div className="text-center">
-                      <div className="text-white/20 text-[10px] font-bold uppercase tracking-widest mb-1">Experience</div>
-                      <div className="text-xs font-medium text-white/60">25+ Years</div>
-                   </div>
-                </div>
-              </div>
-            </Card>
+            Focused expertise. <br />
+            <span className="text-white/40">Considered care.</span>
+          </motion.h2>
+
+          <motion.div {...reveal} className="space-y-6 text-pretty text-lg leading-relaxed text-white/65">
+            <p>
+              {DOCTOR_NAME} is an orthopaedic surgeon specialising in foot and ankle conditions,
+              sports injuries, and trauma. He was among the first surgeons in Australia to adopt
+              minimally invasive techniques for the foot and ankle, and uses regenerative-medicine
+              adjuncts where appropriate.
+            </p>
+            <p>
+              He completed his medical degree at the University of New South Wales, then advanced
+              sub-specialist training in foot and ankle surgery at New York’s Hospital for Special
+              Surgery in 1997. He has been a Fellow of the Royal Australasian College of Surgeons
+              (Orthopaedics) since 1997.
+            </p>
+            <p>
+              He contributes to the field as Associate Editor of <em>Foot &amp; Ankle International</em>,
+              sits on the editorial panel of <em>EC Orthopaedics</em>, chairs Foot &amp; Ankle for the
+              Asia Pacific Orthopaedic Association, and presents at international surgical conferences.
+            </p>
           </motion.div>
+
+          <ul className="space-y-5 border-t border-white/5 pt-8">
+            {CREDENTIALS.map(({ icon: Icon, text }) => (
+              <li key={text} className="group flex items-center gap-4">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full glass text-white/45 transition-colors group-hover:text-medical-teal">
+                  <Icon aria-hidden="true" size={16} strokeWidth={1.5} />
+                </span>
+                <span className="text-sm font-medium text-white/70">{text}</span>
+              </li>
+            ))}
+          </ul>
         </div>
+
+        <motion.div {...reveal} className="lg:sticky lg:top-28">
+          <Card className="flex flex-col overflow-hidden bg-brand-panel p-0">
+            <div className="relative aspect-[3/2] w-full overflow-hidden bg-brand-bg">
+              <img
+                src="/portrait-gordon-slater.webp"
+                alt="Prof Gordon Slater, foot and ankle orthopaedic surgeon"
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-cover object-center"
+              />
+            </div>
+            <div className="space-y-6 border-t border-white/10 bg-brand-panel/70 p-8 backdrop-blur-2xl md:p-10">
+              <div className="space-y-2 text-center">
+                <p className="font-display text-2xl font-semibold tracking-tight text-white md:text-3xl">
+                  {DOCTOR_NAME}
+                </p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-medical-teal">
+                  {DOCTOR_CREDENTIALS}
+                </p>
+              </div>
+              <dl className="flex justify-center gap-10 border-t border-white/5 pt-6">
+                <div className="text-center">
+                  <dt className="eyebrow mb-1">Focus</dt>
+                  <dd className="text-sm font-medium text-white/75">Foot &amp; ankle</dd>
+                </div>
+                <div className="text-center">
+                  <dt className="eyebrow mb-1">Experience</dt>
+                  <dd className="text-sm font-medium text-white/75">25+ years</dd>
+                </div>
+              </dl>
+            </div>
+          </Card>
+        </motion.div>
       </div>
     </section>
   );

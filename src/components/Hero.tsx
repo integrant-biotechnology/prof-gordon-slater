@@ -1,102 +1,95 @@
 import { motion } from 'motion/react';
-import { Shield, ArrowRight, MousePointer2 } from 'lucide-react';
-import { Button } from './ui/Button';
-import { Glow } from './ui/Glow';
-import { DOCTOR_TITLE } from '../constants';
+import { ArrowRight, BadgeCheck, Crosshair, Route } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
+import { Glow } from '@/components/ui/Glow';
+import { Motif } from '@/components/ui/Motif';
+import { DOCTOR_TITLE } from '@/constants';
+
+const TRUST_POINTS = [
+  { icon: BadgeCheck, text: 'Foot & ankle specialist' },
+  { icon: Crosshair, text: 'Precision-focused' },
+  { icon: Route, text: 'Patient-centred planning' },
+];
+
+const scrollTo = (id: string) => () => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
 export const Hero = () => {
   return (
-    <section id="home" className="relative min-h-[100vh] flex flex-col items-center justify-center pt-20 px-6 overflow-hidden">
-      <Glow className="-top-[10%] -left-[10%] scale-150" color="teal" />
-      <Glow className="bottom-[10%] -right-[10%] scale-125" color="blue" />
+    <section
+      id="home"
+      aria-labelledby="hero-heading"
+      className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden px-6 pt-28 pb-20"
+    >
+      <Glow className="-left-[10%] -top-[10%]" color="teal" />
+      <Glow className="-right-[10%] bottom-[10%]" color="blue" />
 
-      <div className="max-w-7xl mx-auto w-full relative z-10">
-        <div className="flex flex-col items-center text-center space-y-12">
-          {/* Eyebrow */}
-          <motion.div
+      <div className="relative z-10 mx-auto w-full max-w-6xl">
+        <div className="flex flex-col items-center space-y-10 text-center">
+          <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="flex items-center gap-3 px-4 py-1.5 rounded-full glass border-white/5 active:scale-95 transition-transform"
+            className="flex items-center gap-3 rounded-full glass px-4 py-1.5"
           >
-            <div className="w-2 h-2 rounded-full bg-medical-teal animate-pulse" />
-            <span className="text-[10px] font-bold tracking-[0.25em] text-white/50 uppercase">
-              {DOCTOR_TITLE}
-            </span>
-          </motion.div>
+            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-medical-teal" />
+            <span className="eyebrow">{DOCTOR_TITLE}</span>
+          </motion.p>
 
-          {/* Headline */}
-          <div className="space-y-6 max-w-4xl">
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              className="text-6xl md:text-8xl lg:text-[100px] font-display font-bold leading-[0.95] tracking-tight text-white text-balance"
-            >
-              Precision care for 
-              <span className="block text-white/20">complex feet and ankles.</span>
-            </motion.h1>
-          </div>
+          <motion.h1
+            id="hero-heading"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.05 }}
+            className="max-w-4xl text-balance font-display text-5xl font-bold leading-[1.02] tracking-tight text-white sm:text-7xl lg:text-8xl"
+          >
+            Precision care for{' '}
+            <span className="text-white/40">complex feet and ankles.</span>
+          </motion.h1>
 
-          {/* Supporting Text */}
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.4 }}
-            className="text-lg md:text-xl text-white/40 leading-relaxed max-w-2xl font-light text-balance"
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="max-w-2xl text-balance text-lg leading-relaxed text-white/65 md:text-xl"
           >
-            Specialist orthopaedic care for foot and ankle conditions, 
-            sports injuries, and trauma with a clinical focus on refined patient outcomes.
+            Specialist orthopaedic care for foot and ankle conditions, sports injuries, and
+            trauma — with a clinical focus on careful assessment and considered patient outcomes.
           </motion.p>
 
-          {/* CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            className="flex flex-col sm:flex-row items-center gap-4 pt-4"
+            transition={{ duration: 0.6, delay: 0.45 }}
+            className="flex flex-col items-center gap-3 pt-2 sm:flex-row"
           >
-            <Button size="lg" variant="primary" className="min-w-[220px]" onClick={() => document.getElementById('contact')?.scrollIntoView()}>
-              Request Appointment
+            <Button size="lg" variant="primary" className="min-w-[220px]" onClick={scrollTo('contact')}>
+              Request appointment
             </Button>
-            <Button size="lg" variant="secondary" className="min-w-[220px] group" onClick={() => document.getElementById('conditions')?.scrollIntoView()}>
-              Explore Areas of Care
-              <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <Button size="lg" variant="secondary" className="group min-w-[220px]" onClick={scrollTo('conditions')}>
+              Explore areas of care
+              <ArrowRight aria-hidden="true" className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
           </motion.div>
 
-          {/* Cinematic Visual Representation (Abstract anatomical precision) */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.5, delay: 0.2 }}
-            className="relative w-full max-w-5xl aspect-video md:aspect-[21/9] mt-12 rounded-[40px] overflow-hidden border border-white/5 glass"
+            transition={{ duration: 1, delay: 0.2 }}
+            className="relative mt-10 aspect-video w-full max-w-5xl overflow-hidden rounded-3xl glass md:aspect-[21/9] md:rounded-[40px]"
           >
-            <div className="absolute inset-0 bg-linear-to-b from-transparent via-brand-bg/40 to-brand-bg select-none pointer-events-none z-10" />
-            
-            {/* Visual Placeholder: In production, replace with high-end clinical sculpture video/image */}
-            <div className="absolute inset-0 bg-linear-to-tr from-medical-teal/5 to-medical-blue/5 flex items-center justify-center">
-               <div className="relative">
-                  <div className="w-64 h-64 md:w-96 md:h-96 rounded-full border border-white/5 animate-spin-slow" />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-32 h-32 md:w-48 md:h-48 rounded-full border border-medical-teal/20 animate-ping" />
-                    <div className="absolute w-2 h-[400px] bg-linear-to-b from-transparent via-medical-teal/40 to-transparent rotate-45 blur-xl opacity-20" />
-                  </div>
-               </div>
-            </div>
-
-            <div className="absolute bottom-12 left-12 right-12 z-20 flex flex-wrap justify-center gap-12">
-               {[
-                 { icon: Shield, text: "Foot & Ankle Specialist" },
-                 { icon: MousePointer2, text: "Minimally Invasive" },
-                 { icon: ArrowRight, text: "Patient-Centred Planning" }
-               ].map((item, i) => (
-                 <div key={i} className="flex items-center gap-3 opacity-40 hover:opacity-100 transition-opacity">
-                    <item.icon className="w-4 h-4 text-medical-teal" />
-                    <span className="text-[10px] font-bold tracking-[0.2em] uppercase">{item.text}</span>
-                 </div>
-               ))}
-            </div>
+            <Motif placeholderLabel="Replace with clinical photography" />
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 bg-linear-to-b from-transparent via-brand-bg/30 to-brand-bg"
+            />
+            <ul className="absolute inset-x-6 bottom-8 z-10 flex flex-wrap justify-center gap-x-10 gap-y-3 md:bottom-10 md:gap-x-14">
+              {TRUST_POINTS.map(({ icon: Icon, text }) => (
+                <li key={text} className="flex items-center gap-2.5 text-white/70">
+                  <Icon aria-hidden="true" className="h-4 w-4 text-medical-teal" strokeWidth={1.75} />
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.18em]">{text}</span>
+                </li>
+              ))}
+            </ul>
           </motion.div>
         </div>
       </div>
