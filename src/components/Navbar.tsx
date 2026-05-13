@@ -19,7 +19,7 @@ const NAV_LINKS: NavLink[] = [
   { name: 'About', hash: 'about' },
   { name: 'Work', hash: 'work' },
   { name: 'Book', route: '/book' },
-  { name: 'Writing', hash: 'writing' },
+  { name: 'Giving', route: '/giving' },
   { name: 'Connect', hash: 'connect' },
 ];
 
