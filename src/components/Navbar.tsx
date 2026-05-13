@@ -8,14 +8,13 @@ import { cn } from '@/lib/utils';
 const NAV_LINKS = [
   { name: 'Home', href: '#home' },
   { name: 'About', href: '#about' },
-  { name: 'Conditions', href: '#conditions' },
-  { name: 'Procedures', href: '#procedures' },
-  { name: 'Patient Info', href: '#patient-info' },
-  { name: 'Contact', href: '#contact' },
+  { name: 'Work', href: '#work' },
+  { name: 'Writing', href: '#writing' },
+  { name: 'Connect', href: '#connect' },
 ];
 
-const scrollToContact = () => {
-  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+const scrollToConnect = () => {
+  document.getElementById('connect')?.scrollIntoView({ behavior: 'smooth' });
 };
 
 export const Navbar = () => {
@@ -74,12 +73,12 @@ export const Navbar = () => {
 
         <div className="flex items-center gap-2">
           <Button
-            variant="primary"
+            variant="secondary"
             size="sm"
             className="hidden h-9 px-5 text-xs sm:inline-flex"
-            onClick={scrollToContact}
+            onClick={scrollToConnect}
           >
-            Request appointment
+            Get in touch
           </Button>
           <button
             type="button"
@@ -119,14 +118,14 @@ export const Navbar = () => {
             </ul>
             <div className="my-5 h-px w-full bg-white/10" />
             <Button
-              variant="primary"
+              variant="secondary"
               className="w-full py-3.5 text-sm"
               onClick={() => {
                 setIsOpen(false);
-                scrollToContact();
+                scrollToConnect();
               }}
             >
-              Request appointment
+              Get in touch
             </Button>
           </motion.div>
         )}

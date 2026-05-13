@@ -1,34 +1,33 @@
-import { ArrowUp } from 'lucide-react';
-import { DOCTOR_NAME, DOCTOR_TITLE, FOOTER_DISCLAIMER } from '@/constants';
+import { ArrowUp, ArrowUpRight } from 'lucide-react';
+import { DOCTOR_NAME, DOCTOR_TITLE, FOOTER_DISCLAIMER, PRACTICE_URL } from '@/constants';
 
 const FOOTER_SECTIONS = [
   {
-    title: 'Navigation',
+    title: 'Site',
     links: [
       { label: 'Home', href: '#home' },
       { label: 'About', href: '#about' },
       { label: 'Background', href: '#background' },
-      { label: 'Conditions', href: '#conditions' },
-      { label: 'Procedures', href: '#procedures' },
     ],
   },
   {
-    title: 'Patient info',
+    title: 'Work',
     links: [
-      { label: 'Before your visit', href: '#patient-info' },
-      { label: 'Request appointment', href: '#contact' },
+      { label: 'Body of work', href: '#work' },
+      { label: 'Community & vision', href: '#community' },
+      { label: 'Writing', href: '#writing' },
     ],
   },
   {
-    title: 'Medical insights',
+    title: 'Connect',
     links: [
-      { label: 'Articles', href: '#articles' },
-      { label: 'Clinical philosophy', href: '#philosophy' },
+      { label: 'Get in touch', href: '#connect' },
+      { label: 'Practice site ↗', href: PRACTICE_URL, external: true },
     ],
   },
 ];
 
-const LEGAL_LINKS = ['Privacy policy', 'Medical disclaimer', 'Accessibility'];
+const LEGAL_LINKS = ['Privacy', 'Disclaimer', 'Accessibility'];
 
 const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -60,9 +59,21 @@ export const Footer = () => {
               <ul className="space-y-3.5">
                 {section.links.map((link) => (
                   <li key={link.label}>
-                    <a href={link.href} className="text-sm text-white/60 transition-colors hover:text-white">
-                      {link.label}
-                    </a>
+                    {link.external ? (
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-sm text-white/60 transition-colors hover:text-white"
+                      >
+                        {link.label.replace(/ ↗$/, '')}
+                        <ArrowUpRight aria-hidden="true" size={12} />
+                      </a>
+                    ) : (
+                      <a href={link.href} className="text-sm text-white/60 transition-colors hover:text-white">
+                        {link.label}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -76,7 +87,7 @@ export const Footer = () => {
             <div className="flex gap-10 lg:col-span-4 lg:justify-end">
               <div className="space-y-1.5">
                 <p className="eyebrow">Qualification</p>
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-white/55">FRACS Orth</p>
+                <p className="text-xs font-medium uppercase tracking-[0.18em] text-white/55">FRACS (Orth)</p>
               </div>
               <div className="space-y-1.5">
                 <p className="eyebrow">Registration</p>
@@ -96,7 +107,7 @@ export const Footer = () => {
               ))}
             </ul>
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
-              © {currentYear} {DOCTOR_NAME}. All rights reserved.
+              © {currentYear} {DOCTOR_NAME}
             </p>
           </div>
         </div>
