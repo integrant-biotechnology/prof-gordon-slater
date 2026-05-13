@@ -81,7 +81,7 @@ export const About = () => {
           <Card className="flex flex-col overflow-hidden bg-brand-panel p-0">
             <div className="relative aspect-[3/2] w-full overflow-hidden bg-brand-bg">
               <img
-                src="/portrait-gordon-slater.webp"
+                src="/portrait-gordon-slater.webp?v=2"
                 alt={`${DOCTOR_NAME}, foot and ankle orthopaedic surgeon`}
                 loading="lazy"
                 decoding="async"
