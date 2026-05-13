@@ -1,35 +1,29 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Navbar } from '@/components/Navbar';
-import { Hero } from '@/components/Hero';
-import { WhatHeDoes } from '@/components/WhatHeDoes';
-import { About } from '@/components/About';
-import { Background } from '@/components/Background';
-import { BodyOfWork } from '@/components/BodyOfWork';
-import { CommunityVision } from '@/components/CommunityVision';
-import { Writing } from '@/components/Writing';
-import { Connect } from '@/components/Connect';
 import { Footer } from '@/components/Footer';
+import { Home } from '@/pages/Home';
+import { Book } from '@/pages/Book';
 
 export default function App() {
   return (
-    <div className="relative">
-      <a href="#main" className="skip-link">
-        Skip to content
-      </a>
+    <BrowserRouter>
+      <div className="relative">
+        <a href="#main" className="skip-link">
+          Skip to content
+        </a>
 
-      <Navbar />
+        <Navbar />
 
-      <main id="main">
-        <Hero />
-        <WhatHeDoes />
-        <About />
-        <Background />
-        <BodyOfWork />
-        <CommunityVision />
-        <Writing />
-        <Connect />
-      </main>
+        <main id="main">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/book" element={<Book />} />
+            <Route path="*" element={<Home />} />
+          </Routes>
+        </main>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </BrowserRouter>
   );
 }

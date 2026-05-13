@@ -1,9 +1,10 @@
 import { motion, useReducedMotion } from 'motion/react';
-import { ArrowUpRight, Award, FlaskConical, Target } from 'lucide-react';
+import { ArrowUpRight, Award, FlaskConical, GraduationCap, Target } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { DOCTOR_CREDENTIALS, DOCTOR_NAME, PRACTICE_URL } from '@/constants';
 
 const CREDENTIALS = [
+  { icon: GraduationCap, text: 'Professor, University of Technology Sydney' },
   { icon: Target, text: 'Foot & ankle fellowship — Hospital for Special Surgery, New York' },
   { icon: Award, text: 'Fellow, Royal Australasian College of Surgeons (Orthopaedics)' },
   { icon: FlaskConical, text: 'Associate Editor, Foot & Ankle International' },
@@ -33,22 +34,26 @@ export const About = () => {
 
           <motion.div {...reveal} className="space-y-6 text-pretty text-lg leading-relaxed text-white/65">
             <p>
-              {DOCTOR_NAME} is an orthopaedic surgeon whose work spans clinical practice, research,
-              education and medical-device innovation. He was among the first surgeons in Australia
-              to adopt minimally invasive techniques for the foot and ankle, and uses
+              {DOCTOR_NAME} is an Australian orthopaedic surgeon with a thirty-year clinical record
+              in foot &amp; ankle surgery, a growing body of peer-reviewed research, and active
+              work in medical-device development. He was among the first surgeons in Australia to
+              adopt minimally invasive techniques for the foot and ankle, and uses
               regenerative-medicine adjuncts where appropriate.
             </p>
             <p>
               He completed his medical degree at the University of New South Wales, then advanced
               sub-specialist training in foot and ankle surgery at New York&rsquo;s Hospital for
               Special Surgery in 1997. He has been a Fellow of the Royal Australasian College of
-              Surgeons (Orthopaedics) since 1997.
+              Surgeons (Orthopaedics) since 1997, and is Professor at the University of Technology
+              Sydney.
             </p>
             <p>
               He contributes to the international literature as Associate Editor of{' '}
               <em>Foot &amp; Ankle International</em>, sits on the editorial panel of{' '}
-              <em>EC Orthopaedics</em>, chairs Foot &amp; Ankle for the Asia Pacific Orthopaedic
-              Association, and presents at international surgical conferences.
+              <em>EC Orthopaedics</em>, and chairs Foot &amp; Ankle for the Asia Pacific
+              Orthopaedic Association. His book{' '}
+              <em>From Chaos to Creation: The Life Force Formula</em> (February 2026) is the
+              long-form synthesis of that work.
             </p>
             <p className="text-base text-white/55">
               For clinical care or to arrange an appointment, please see the practice site —{' '}
@@ -104,7 +109,7 @@ export const About = () => {
                 </div>
                 <div className="text-center">
                   <dt className="eyebrow mb-1">Experience</dt>
-                  <dd className="text-sm font-medium text-white/75">25+ years</dd>
+                  <dd className="text-sm font-medium text-white/75">30+ years</dd>
                 </div>
               </dl>
             </div>

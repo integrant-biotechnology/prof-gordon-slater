@@ -1,25 +1,34 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { DOCTOR_NAME } from '@/constants';
 import { cn } from '@/lib/utils';
 
-const NAV_LINKS = [
-  { name: 'Home', href: '#home' },
-  { name: 'About', href: '#about' },
-  { name: 'Work', href: '#work' },
-  { name: 'Writing', href: '#writing' },
-  { name: 'Connect', href: '#connect' },
-];
+interface NavLink {
+  name: string;
+  /** Hash anchor on the home route (e.g. 'about'). Mutually exclusive with `route`. */
+  hash?: string;
+  /** Internal router path (e.g. '/book'). */
+  route?: string;
+}
 
-const scrollToConnect = () => {
-  document.getElementById('connect')?.scrollIntoView({ behavior: 'smooth' });
-};
+const NAV_LINKS: NavLink[] = [
+  { name: 'Home', hash: 'home' },
+  { name: 'About', hash: 'about' },
+  { name: 'Work', hash: 'work' },
+  { name: 'Book', route: '/book' },
+  { name: 'Writing', hash: 'writing' },
+  { name: 'Connect', hash: 'connect' },
+];
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const onHome = pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -27,6 +36,37 @@ export const Navbar = () => {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const goConnect = () => {
+    if (onHome) {
+      document.getElementById('connect')?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate({ pathname: '/', hash: '#connect' });
+    }
+  };
+
+  const renderLink = (link: NavLink, className: string, onClick?: () => void) => {
+    if (link.route) {
+      return (
+        <Link to={link.route} className={className} onClick={onClick}>
+          {link.name}
+        </Link>
+      );
+    }
+    const id = link.hash!;
+    if (onHome) {
+      return (
+        <a href={`#${id}`} className={className} onClick={onClick}>
+          {link.name}
+        </a>
+      );
+    }
+    return (
+      <Link to={{ pathname: '/', hash: `#${id}` }} className={className} onClick={onClick}>
+        {link.name}
+      </Link>
+    );
+  };
 
   return (
     <nav
@@ -38,12 +78,12 @@ export const Navbar = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.4, ease: 'easeOut' }}
         className={cn(
-          'pointer-events-auto flex items-center gap-6 rounded-full glass px-3 py-2.5 transition-shadow duration-500 md:gap-8 md:px-6',
+          'pointer-events-auto flex items-center gap-5 rounded-full glass px-3 py-2.5 transition-shadow duration-500 md:gap-7 md:px-6',
           isScrolled ? 'shadow-2xl shadow-black/60 ring-1 ring-white/10' : 'ring-1 ring-white/5',
         )}
       >
-        <a
-          href="#home"
+        <Link
+          to="/"
           aria-label={`${DOCTOR_NAME} — home`}
           className="group flex items-center gap-3 border-r border-white/10 pr-4"
         >
@@ -56,17 +96,15 @@ export const Navbar = () => {
           <span className="hidden font-display text-sm font-semibold tracking-tight text-white lg:block">
             {DOCTOR_NAME}
           </span>
-        </a>
+        </Link>
 
-        <ul className="hidden items-center gap-7 md:flex">
+        <ul className="hidden items-center gap-6 md:flex">
           {NAV_LINKS.map((link) => (
             <li key={link.name}>
-              <a
-                href={link.href}
-                className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55 transition-colors hover:text-white"
-              >
-                {link.name}
-              </a>
+              {renderLink(
+                link,
+                'text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55 transition-colors hover:text-white',
+              )}
             </li>
           ))}
         </ul>
@@ -76,7 +114,7 @@ export const Navbar = () => {
             variant="secondary"
             size="sm"
             className="hidden h-9 px-5 text-xs sm:inline-flex"
-            onClick={scrollToConnect}
+            onClick={goConnect}
           >
             Get in touch
           </Button>
@@ -106,13 +144,11 @@ export const Navbar = () => {
             <ul className="flex flex-col gap-5">
               {NAV_LINKS.map((link) => (
                 <li key={link.name}>
-                  <a
-                    href={link.href}
-                    onClick={() => setIsOpen(false)}
-                    className="font-display text-xl font-medium text-white/65 transition-colors hover:text-white"
-                  >
-                    {link.name}
-                  </a>
+                  {renderLink(
+                    link,
+                    'font-display text-xl font-medium text-white/65 transition-colors hover:text-white',
+                    () => setIsOpen(false),
+                  )}
                 </li>
               ))}
             </ul>
@@ -122,7 +158,7 @@ export const Navbar = () => {
               className="w-full py-3.5 text-sm"
               onClick={() => {
                 setIsOpen(false);
-                scrollToConnect();
+                goConnect();
               }}
             >
               Get in touch
