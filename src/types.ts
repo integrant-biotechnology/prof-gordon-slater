@@ -19,9 +19,11 @@ export interface WorkItem {
   title: string;
   description: string;
   icon: IconName;
-  /** Outbound link. Omit (or use '#' with `placeholder: true`) for items still being supplied. */
+  /** Internal route or external URL. Omit (or use '#' with `placeholder: true`) for items still being supplied. */
   href?: string;
   linkLabel?: string;
+  /** Hint to the renderer that this is an in-app route (use <Link/>) rather than an external <a target="_blank">. */
+  internal?: boolean;
   /** Marker for placeholder content the user must verify or replace. */
   placeholder?: boolean;
 }
@@ -46,4 +48,27 @@ export interface SocialLink {
   url: string;
   icon: IconName;
   placeholder?: boolean;
+}
+
+/** A "rule" from the book — quoted verbatim with attribution. */
+export interface BookRule {
+  number: number;
+  title: string;
+  quote: string;
+  attribution: string;
+}
+
+/** A symbol → meaning row in the Life Force Formula variables table. */
+export interface LifeForceVariable {
+  /** Render-as-HTML string so we can use sub/sup tags (e.g. "S<sub>Addition</sub>"). */
+  symbolHtml: string;
+  meaning: string;
+}
+
+/** A factual clinical case panel on the /book page. */
+export interface CaseStudy {
+  id: string;
+  title: string;
+  body: string;
+  attribution: string;
 }

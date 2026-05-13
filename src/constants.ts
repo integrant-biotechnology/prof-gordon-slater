@@ -1,27 +1,40 @@
 import type {
   Article,
+  BookRule,
   Capability,
+  CaseStudy,
   CommunityItem,
+  LifeForceVariable,
   Publication,
   SocialLink,
   WorkItem,
 } from './types';
 
+// -------------------------------------------------------------
+// Identity
+// -------------------------------------------------------------
+
 export const DOCTOR_NAME = 'Prof Gordon Slater';
 export const DOCTOR_CREDENTIALS = 'MBBS, FRACS (Orth), FAOrthA';
-export const DOCTOR_TITLE = 'Specialist Foot & Ankle Orthopaedic Surgeon';
+export const DOCTOR_TITLE =
+  'Foot & Ankle Orthopaedic Surgeon · Professor (UTS) · Author';
 export const TAGLINE =
-  'Foot & ankle surgeon · researcher · medical-device development · author';
+  'Surgeon · researcher · author · medical-device innovator';
+
+// -------------------------------------------------------------
+// Contact / outbound
+// -------------------------------------------------------------
 
 /** Outbound link for anyone seeking clinical care or to arrange an appointment. */
 export const PRACTICE_URL = 'https://orthopaedic-surgeon.com.au/';
 
-/**
- * General contact email used in the Connect section.
- * NOTE: this is the practice admin address as a stopgap — replace with a
- * dedicated personal address (e.g. hello@profgordonslater.com.au) before launch.
- */
-export const CONTACT_EMAIL = 'admin@drgordonslater.com.au';
+/** Public press / marketing contact (Adelaide Slater handles). */
+export const CONTACT_EMAIL = 'marketing@drgordonslater.com.au';
+export const PRESS_PHONE = '+61 2 7232 1153';
+
+// -------------------------------------------------------------
+// Training & background
+// -------------------------------------------------------------
 
 export interface TrainingMilestone {
   year: string;
@@ -44,126 +57,248 @@ export interface LeadershipRole {
 }
 
 export const LEADERSHIP_ROLES: LeadershipRole[] = [
+  { role: 'Professor', org: 'University of Technology Sydney' },
   { role: 'Associate Editor', org: 'Foot & Ankle International' },
   { role: 'Editorial Panel', org: 'EC Orthopaedics' },
   { role: 'Chair, Foot & Ankle', org: 'Asia Pacific Orthopaedic Association (APOA)' },
 ];
 
+// -------------------------------------------------------------
+// Capabilities — the four-card "what he does" overview
+// -------------------------------------------------------------
+
 export const CAPABILITIES: Capability[] = [
   {
     title: 'Surgeon',
     description:
-      'Specialist orthopaedic practice in foot and ankle surgery, including minimally invasive techniques where appropriate.',
+      'A 30-year clinical record in foot and ankle surgery, including minimally invasive techniques.',
     icon: 'Stethoscope',
   },
   {
     title: 'Researcher & editor',
-    description: 'Associate Editor of Foot & Ankle International; contributes to the orthopaedic literature.',
+    description:
+      'Sixty peer-reviewed papers across foot & ankle surgery, orthobiologics, HBOT, regenerative medicine and aging biology.',
     icon: 'Microscope',
   },
   {
-    title: 'Educator',
+    title: 'Author',
     description:
-      'Presents at international surgical conferences; chairs Foot & Ankle for the Asia Pacific Orthopaedic Association.',
-    icon: 'GraduationCap',
+      'Author of From Chaos to Creation: The Life Force Formula (February 2026) — a synthesis of his clinical and research thinking.',
+    icon: 'BookOpen',
   },
   {
     title: 'Innovator',
-    description: 'Works on medical-device development applied to foot and ankle care.',
+    description:
+      'Eponymous techniques, a granted peptide patent, and a long-running record in Australian medical-device regulatory work.',
     icon: 'Lightbulb',
   },
 ];
 
-/**
- * Body of work — categories shown as the main grid in the BodyOfWork section.
- * Items marked `placeholder` need their `href`/`linkLabel`/copy verified
- * before launch (see README checklist).
- */
+// -------------------------------------------------------------
+// The Book — From Chaos to Creation (Feb 2026)
+// -------------------------------------------------------------
+
+export const BOOK = {
+  title: 'From Chaos to Creation',
+  subtitle: 'The Life Force Formula',
+  publishedDate: 'February 2026',
+  byline: 'Prof Gordon Slater',
+  /** Strongest hero pull for the /book page (KB §10 → book p. 15). */
+  heroQuote: 'Aging is a challenge to address rather than an inevitable fate to be endured.',
+  heroQuoteSource: 'From Chaos to Creation, p. 15',
+  /** Short blurb for the home BookPreview block. */
+  summary:
+    'A book-length synthesis of three decades of foot & ankle practice, an emerging body of regenerative-medicine research, and a working frame for thinking about lifespan as a modifiable outcome.',
+  /** Replace with the real Amazon / publisher URL when supplied. */
+  purchaseUrl: '#',
+  purchaseLabel: 'Find the book',
+  purchasePlaceholder: true as const,
+};
+
+/** The Life Force Formula — book Appendix pp. 220–226. */
+export const LIFE_FORCE = {
+  /** Plain-text rendering for screen readers / fallback. */
+  plain: 'L^F = Ē × ((R − D) / I) + S_Addition',
+  variables: [
+    { symbolHtml: 'L<sup>F</sup>', meaning: 'Life Force — instantaneous vitality / regenerative potential. Highest at cellular inception; lowest at death.' },
+    { symbolHtml: 'Ē', meaning: 'Mean environmental / lifestyle envelope (diet, exercise, stress, toxin exposure, healthcare access, geography).' },
+    { symbolHtml: 'R', meaning: 'Net regenerative capability — autophagy, DNA repair, proteostasis, stem-cell function, telomere maintenance, immune renewal.' },
+    { symbolHtml: 'D', meaning: 'Damage — oxidative stress, mutations, DNA damage, mitochondrial dysfunction, protein aggregation, chronic disease, aging itself.' },
+    { symbolHtml: 'I', meaning: 'Biologic Inertia — resistance to regeneration; accumulated weight of past damage, disease, and metabolic wear.' },
+    { symbolHtml: 'S<sub>Addition</sub>', meaning: 'Stem-cell therapeutic input added to the system. Localised application is more effective than systemic.' },
+  ] satisfies LifeForceVariable[],
+  reading:
+    'Life Force = environmental envelope × (net regenerative work / inertia) + stem-cell input.',
+  attribution: 'From Chaos to Creation, Appendix pp. 220–226',
+};
+
+/** Slater's Three Rules — verbatim from book p. 221. */
+export const BOOK_RULES: BookRule[] = [
+  {
+    number: 1,
+    title: 'Life Exists in a Constant Drift Toward Degeneration.',
+    quote:
+      'All cellular and biological systems are subject to entropy, accumulating damage over time. In order to extend life, we must actively slow or counteract this degenerative flux.',
+    attribution: 'From Chaos to Creation, p. 221',
+  },
+  {
+    number: 2,
+    title: 'Biologic Inertia Must Be Overcome.',
+    quote:
+      'Living systems in motion accumulate biological inertia — the weight of past damage, disease, and metabolic wear. This inertia can be overcome by a corrective input proportional to age and biological burden, followed by sustained support.',
+    attribution: 'From Chaos to Creation, p. 221',
+  },
+  {
+    number: 3,
+    title: 'Lifespan Is an Energy Balance, Not a Clock.',
+    quote:
+      'Biology is too complex to be reduced to a single equation. Still, we can outline the key variables that shape lifespan and describe how they interact.',
+    attribution: 'From Chaos to Creation, p. 221',
+  },
+];
+
+/** Two factual clinical-case panels for the /book page. */
+export const CASE_STUDIES: CaseStudy[] = [
+  {
+    id: 'talus-reconstitution',
+    title: 'Talus reconstitution',
+    body:
+      'A non-weight-bearing talus reconstituted to load-bearing form in eight weeks via 20 mL autologous mesenchymal stem cells with external fixation — a distraction-arthroplasty + biologics protocol producing documented cartilage regeneration in case-series form.',
+    attribution: 'From Chaos to Creation, pp. 176, 202',
+  },
+  {
+    id: 'hbot-brooker-4',
+    title: 'Brooker-4 diabetic ulcer',
+    body:
+      'A 60-year-old patient with a Brooker-4 grade diabetic ulcer healed in five HBOT sessions over three weeks, alongside minimally invasive surgery — illustrating HBOT as an adjunct in chronic-wound care.',
+    attribution:
+      'Slater, G. & Bachmid, Z. (2024) — "Application of HBOT with Minimally Invasive Guided Surgery to Heal Chronic Brooker-4 Diabetic Ulcer."',
+  },
+];
+
+// -------------------------------------------------------------
+// Body of work — home grid + selected publications
+// -------------------------------------------------------------
+
 export const BODY_OF_WORK: WorkItem[] = [
   {
     id: 'research',
     title: 'Research & publications',
     description:
-      'Peer-reviewed contributions across foot & ankle surgery, joint preservation and regenerative orthopaedics.',
+      'Sixty peer-reviewed papers (2003–2026) across foot & ankle surgery, orthobiologics, HBOT, regenerative medicine and aging biology.',
     icon: 'FlaskConical',
-    href: '#',
-    linkLabel: 'View on Google Scholar',
-    placeholder: true,
+    href: '#publications',
+    linkLabel: 'See selected publications',
+    internal: true,
   },
   {
     id: 'innovation',
     title: 'Innovation & medical devices',
     description:
-      'Work on orthopaedic devices and instrumentation applied to foot and ankle surgery — described factually, not as therapeutic claims.',
+      'Eponymous techniques (the Gordon Slater ankle-fusion plate, the Slater modification of minimally invasive forefoot surgery), the JP2023106525A peptide patent (cartilage-regeneration cascade), and a fifteen-year personal record of TGA-registered medical-device approvals.',
     icon: 'Cpu',
-    href: '#',
-    linkLabel: 'See devices',
-    placeholder: true,
   },
   {
     id: 'book',
     title: 'Book',
     description:
-      'Long-form writing on foot and ankle surgery and the broader practice of orthopaedics.',
+      'From Chaos to Creation: The Life Force Formula (February 2026) — a synthesis of three decades of clinical and research work.',
     icon: 'BookOpen',
-    href: '#',
-    linkLabel: 'Find the book',
-    placeholder: true,
+    href: '/book',
+    linkLabel: 'Read the book page',
+    internal: true,
   },
   {
     id: 'editorial',
     title: 'Editorial & academic',
     description:
-      'Associate Editor, Foot & Ankle International · Editorial panel, EC Orthopaedics · Chair, APOA Foot & Ankle.',
+      'Professor, University of Technology Sydney · Associate Editor, Foot & Ankle International · Editorial panel, EC Orthopaedics · Chair, APOA Foot & Ankle.',
     icon: 'Award',
   },
 ];
 
 /**
- * Selected publications — placeholder entries shown beneath the body-of-work grid.
- * Replace with 3–5 representative real publications, then add a real
- * `PUBLICATIONS_INDEX_URL` (Google Scholar / PubMed / ORCID).
+ * Selected publications — drawn from the KB Section 4 headline anchors.
+ * Real papers, real years; venues only where the KB attests them.
  */
 export const SELECTED_PUBLICATIONS: Publication[] = [
-  { title: 'Selected publication title — placeholder', venue: 'Journal name', year: 'YYYY', href: '#', placeholder: true },
-  { title: 'Selected publication title — placeholder', venue: 'Journal name', year: 'YYYY', href: '#', placeholder: true },
-  { title: 'Selected publication title — placeholder', venue: 'Journal name', year: 'YYYY', href: '#', placeholder: true },
+  {
+    title: 'Endoscopic plantar fascia release',
+    year: '2003',
+  },
+  {
+    title: 'Gordon Slater ankle-fusion plate',
+    year: '2011',
+  },
+  {
+    title: 'Minimally invasive forefoot surgery — the Slater modification',
+    year: '2018–19',
+  },
+  {
+    title: 'The Future of Medicine: Biologics and Artificial Intelligence (Slater, Sambo & Hannan)',
+    venue: 'J Regen Biol Med, 1(2), 1–11',
+    year: '2019',
+  },
+  {
+    title: 'A Review of Stem Cells: Why Do We Age? (Slater, G. & Slater, T.)',
+    venue: 'J Regen Biol Med, 4: 1–11',
+    year: '2022',
+  },
+  {
+    title: 'Hyperbaric oxygen therapy in anti-aging practice',
+    year: '2023',
+  },
+  {
+    title: 'Application of HBOT with Minimally Invasive Guided Surgery to Heal Chronic Brooker-4 Diabetic Ulcer (Slater & Bachmid)',
+    year: '2024',
+  },
+  {
+    title: 'Age-related decline of mesenchymal stem cells',
+    year: '2026',
+  },
 ];
-export const PUBLICATIONS_INDEX_URL = '#'; // placeholder — link to a Google Scholar / ORCID / PubMed profile
+
+/** Placeholder until a curated Google Scholar / ORCID / PubMed profile URL is supplied. */
+export const PUBLICATIONS_INDEX_URL = '#';
+
+/** Six research themes — verbatim from KB §4 theme taxonomy. */
+export const RESEARCH_THEMES: string[] = [
+  'Foot & ankle surgery',
+  'Orthobiologics',
+  'Stem cells & regenerative medicine',
+  'Hyperbaric oxygen therapy (HBOT)',
+  'Aging biology',
+  'AI in medicine',
+];
+
+// -------------------------------------------------------------
+// Community + vision (real, KB-anchored)
+// -------------------------------------------------------------
 
 export const COMMUNITY: CommunityItem[] = [
   {
-    title: 'Mentoring & teaching',
-    description: 'Supporting trainees and junior surgeons through clinical mentorship and conference teaching.',
-    placeholder: true,
+    title: 'Teaching & academia',
+    description:
+      'Professor at the University of Technology Sydney; collaborates with UTS biomedical engineering on the Life Force measurement workstream.',
   },
   {
-    title: 'Professional bodies',
-    description: 'Active contribution to orthopaedic societies and editorial work in the international literature.',
-    placeholder: true,
+    title: 'Editorial & professional bodies',
+    description:
+      'Associate Editor of Foot & Ankle International, editorial panel of EC Orthopaedics, and Chair of Foot & Ankle for the Asia Pacific Orthopaedic Association.',
   },
   {
-    title: 'Public education',
-    description: 'Writes and speaks on foot & ankle health, regenerative orthopaedics and surgical innovation.',
-    placeholder: true,
+    title: 'Mentoring early-career engineers',
+    description:
+      'Actively building a research team in Sydney — around fifty recent biotech / AI-engineering applicants signal the shape of the local talent pool he is helping to grow.',
   },
 ];
 
-/** Vision statement — placeholder. Replace with the surgeon's own stated vision. */
 export const VISION_STATEMENT =
-  'A practical role for clinicians in shaping Australian medical-device innovation — bringing surgical experience close to product development, supporting local research, and helping new ideas reach patients responsibly.';
+  'Personalised biologics become tractable at scale when AI does the heavy lifting on molecular characterisation, trial design, and post-market surveillance — a thesis Prof Slater first set out in the 2019 paper "The Future of Medicine: Biologics and Artificial Intelligence" (Slater, Sambo & Hannan). The right standard for getting there responsibly is the FDA–EMA Joint Guiding Principles of Good AI Practice (January 2026), the EU AI Act, and EMA Annex 22. The posture for Australian medical-device and biotech work: English-first product, anglosphere-first commercial rollout, regulatory-grown-up from day one.';
 
-/**
- * Verified social / public profiles. Each `url` is currently a placeholder ('#');
- * replace with the actual verified URL before launch (see README checklist).
- */
-export const SOCIAL_LINKS: SocialLink[] = [
-  { label: 'LinkedIn', url: '#', icon: 'Linkedin', placeholder: true },
-  { label: 'X', url: '#', icon: 'Twitter', placeholder: true },
-  { label: 'Research profile', url: '#', icon: 'GraduationCap', placeholder: true },
-  { label: 'YouTube', url: '#', icon: 'Youtube', placeholder: true },
-  { label: 'Instagram', url: '#', icon: 'Instagram', placeholder: true },
-];
+// -------------------------------------------------------------
+// Writing — links to the published clinical blog (real)
+// -------------------------------------------------------------
 
 export const ARTICLES: Article[] = [
   {
@@ -205,6 +340,22 @@ export const ARTICLES: Article[] = [
 ];
 
 export const BLOG_INDEX_URL = 'https://orthopaedic-surgeon.com.au/about-us/in-the-news/';
+
+// -------------------------------------------------------------
+// Verified social profiles — placeholder URLs (KB §9 [GAP])
+// -------------------------------------------------------------
+
+export const SOCIAL_LINKS: SocialLink[] = [
+  { label: 'LinkedIn', url: '#', icon: 'Linkedin', placeholder: true },
+  { label: 'X', url: '#', icon: 'Twitter', placeholder: true },
+  { label: 'Research profile', url: '#', icon: 'GraduationCap', placeholder: true },
+  { label: 'YouTube', url: '#', icon: 'Youtube', placeholder: true },
+  { label: 'Instagram', url: '#', icon: 'Instagram', placeholder: true },
+];
+
+// -------------------------------------------------------------
+// Footer disclaimer
+// -------------------------------------------------------------
 
 export const FOOTER_DISCLAIMER =
   'This is the personal website of Prof Gordon Slater. Information provided here is general in nature, is not medical advice, and does not create a clinician–patient relationship. For clinical care or to arrange an appointment, please see the practice site.';

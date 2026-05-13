@@ -1,9 +1,10 @@
-import { ArrowUpRight, Mail } from 'lucide-react';
+import { ArrowUpRight, Mail, Phone } from 'lucide-react';
 import { Glow } from '@/components/ui/Glow';
 import { ICONS } from '@/lib/icons';
-import { CONTACT_EMAIL, PRACTICE_URL, SOCIAL_LINKS } from '@/constants';
+import { CONTACT_EMAIL, PRACTICE_URL, PRESS_PHONE, SOCIAL_LINKS } from '@/constants';
 
 const mailHref = `mailto:${CONTACT_EMAIL}`;
+const telHref = `tel:${PRESS_PHONE.replace(/[^\d+]/g, '')}`;
 
 export const Connect = () => {
   return (
@@ -62,7 +63,7 @@ export const Connect = () => {
             })}
           </ul>
 
-          <div className="mt-10 flex flex-col items-center gap-2 border-t border-white/5 pt-8 text-center">
+          <div className="mt-10 flex flex-col items-center gap-3 border-t border-white/5 pt-8 text-center">
             <a
               href={mailHref}
               className="inline-flex items-center gap-2 text-base font-medium text-white underline-offset-4 transition-colors hover:text-medical-teal hover:underline"
@@ -70,8 +71,15 @@ export const Connect = () => {
               <Mail aria-hidden="true" size={18} strokeWidth={1.5} />
               {CONTACT_EMAIL}
             </a>
-            <p className="text-xs text-white/45">
-              For media or speaking enquiries, please use the email above.
+            <a
+              href={telHref}
+              className="inline-flex items-center gap-2 text-sm text-white/65 underline-offset-4 transition-colors hover:text-medical-teal hover:underline"
+            >
+              <Phone aria-hidden="true" size={15} strokeWidth={1.5} />
+              {PRESS_PHONE}
+            </a>
+            <p className="mt-1 text-xs text-white/45">
+              Media &amp; speaking enquiries — Adelaide Slater handles via the address above.
             </p>
           </div>
         </div>
