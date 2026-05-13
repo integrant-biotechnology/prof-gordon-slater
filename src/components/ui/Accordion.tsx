@@ -1,41 +1,57 @@
-import { motion, AnimatePresence } from 'motion/react';
-import { useState } from 'react';
+import { useId, useState, type ReactNode } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { ChevronDown } from 'lucide-react';
-import { cn } from '@/src/lib/utils';
+import { cn } from '@/lib/utils';
 
 interface AccordionItemProps {
   title: string;
-  children: React.ReactNode;
+  children: ReactNode;
+  defaultOpen?: boolean;
 }
 
-export const AccordionItem = ({ title, children }: AccordionItemProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+export const AccordionItem = ({ title, children, defaultOpen = false }: AccordionItemProps) => {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+  const reduceMotion = useReducedMotion();
+  const id = useId();
+  const triggerId = `${id}-trigger`;
+  const panelId = `${id}-panel`;
 
   return (
-    <div className="border-b border-brand-border last:border-0 overflow-hidden">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between py-6 text-left hover:text-white transition-colors group"
-      >
-        <span className="text-lg font-medium text-white/70 group-hover:text-white">{title}</span>
-        <ChevronDown 
-          className={cn(
-            "w-5 h-5 text-white/40 transition-transform duration-300",
-            isOpen && "rotate-180 text-white"
-          )} 
-        />
-      </button>
-      <AnimatePresence>
+    <div className="border-b border-brand-border last:border-0">
+      <h3>
+        <button
+          id={triggerId}
+          type="button"
+          aria-expanded={isOpen}
+          aria-controls={panelId}
+          onClick={() => setIsOpen((open) => !open)}
+          className="group flex w-full items-center justify-between gap-6 py-6 text-left transition-colors"
+        >
+          <span className="text-lg font-medium text-white/75 transition-colors group-hover:text-white">
+            {title}
+          </span>
+          <ChevronDown
+            aria-hidden="true"
+            className={cn(
+              'h-5 w-5 shrink-0 text-white/45 transition-transform duration-300',
+              isOpen && 'rotate-180 text-white',
+            )}
+          />
+        </button>
+      </h3>
+      <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            id={panelId}
+            role="region"
+            aria-labelledby={triggerId}
+            className="overflow-hidden"
+            initial={reduceMotion ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={reduceMotion ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }}
+            transition={{ duration: reduceMotion ? 0 : 0.3, ease: 'easeInOut' }}
           >
-            <div className="pb-8 text-white/50 leading-relaxed font-light">
-              {children}
-            </div>
+            <div className="pb-8 text-[15px] leading-relaxed text-white/65">{children}</div>
           </motion.div>
         )}
       </AnimatePresence>
