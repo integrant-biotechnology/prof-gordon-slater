@@ -35,7 +35,7 @@ export const About = () => (
       <div className="lg:sticky lg:top-28">
         <Reveal>
           <EditorialImage
-            fallbackSrc="/portrait-gordon-slater.webp?v=3"
+            fallbackSrc="/portrait-gordon-slater-about.webp?v=4"
             alt={`${DOCTOR_NAME}, foot and ankle orthopaedic surgeon`}
             aspect="3/4"
             sizes="(min-width: 1024px) 40vw, 100vw"
