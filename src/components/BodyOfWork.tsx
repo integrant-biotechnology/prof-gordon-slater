@@ -152,7 +152,7 @@ export const BodyOfWork = () => {
                         <h3
                           className="font-display font-medium"
                           style={{
-                            fontSize: '1.25rem',
+                            fontSize: 'var(--text-title)',
                             lineHeight: 1.15,
                             letterSpacing: '-0.008em',
                           }}
