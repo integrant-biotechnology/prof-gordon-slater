@@ -1,34 +1,38 @@
 import type { ReactNode } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
 import { cn } from '@/lib/utils';
+import { Reveal } from './Motion';
 
 interface CardProps {
   children: ReactNode;
   className?: string;
-  /** Adds a subtle teal sheen that fades in on hover. */
+  /**
+   * Legacy prop kept for backward-compat with existing callers.
+   * Apple-grade hover is colour-shift only — no glow swell.
+   * The `glow` flag is now a no-op visually but preserved so
+   * existing call-sites compile without edits.
+   */
   glow?: boolean;
 }
 
-export const Card = ({ children, className, glow }: CardProps) => {
-  const reduceMotion = useReducedMotion();
-  return (
-    <motion.div
-      initial={reduceMotion ? false : { opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '0px 0px -10% 0px' }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
+/**
+ * Card — the default content surface.
+ *
+ * Apple-grade refinement vs. the previous version:
+ *  • The teal-sheen glow swell on hover is removed (it broke the
+ *    "subtract, don't add" rule)
+ *  • Hover is now a calibrated 220ms colour shift on the border only
+ *  • The reveal entry routes through the shared <Reveal> primitive
+ *    so timing stays consistent with the rest of the page
+ */
+export const Card = ({ children, className }: CardProps) => (
+  <Reveal>
+    <div
       className={cn(
-        'group relative overflow-hidden rounded-3xl glass p-8 transition-colors duration-500 hover:border-white/15',
+        'relative overflow-hidden rounded-3xl glass p-8 transition-colors duration-[220ms] ease-out hover:border-white/15',
         className,
       )}
     >
-      {glow && (
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-linear-to-br from-medical-teal/8 via-transparent to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100"
-        />
-      )}
       <div className="relative z-10">{children}</div>
-    </motion.div>
-  );
-};
+    </div>
+  </Reveal>
+);

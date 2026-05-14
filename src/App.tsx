@@ -5,6 +5,7 @@ import { Footer } from '@/components/Footer';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { ScrollToTop } from '@/components/ScrollToTop';
 import { RouteFallback } from '@/components/RouteFallback';
+import { PageEnterHairline } from '@/components/ui/PageEnterHairline';
 
 // Code-split routes — first paint on / no longer ships /book or /giving JS.
 const Home = lazy(() => import('@/pages/Home'));
@@ -16,6 +17,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <PageEnterHairline />
       <div className="relative">
         <a href="#main" className="skip-link">
           Skip to content

@@ -1,100 +1,137 @@
-import { motion } from 'motion/react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowRight, BookOpen, Lightbulb, Microscope, Stethoscope } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
-import { Glow } from '@/components/ui/Glow';
-import { Motif } from '@/components/ui/Motif';
+import { useRef } from 'react';
+import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
+import { ArrowDown } from 'lucide-react';
+import { Reveal } from '@/components/ui/Motion';
+import { EditorialImage } from '@/components/ui/EditorialImage';
 import { DOCTOR_NAME } from '@/constants';
 
-const STRANDS = [
-  { icon: Stethoscope, text: 'Surgeon' },
-  { icon: Microscope, text: 'Researcher' },
-  { icon: BookOpen, text: 'Author' },
-  { icon: Lightbulb, text: 'Innovator' },
-];
-
-const scrollTo = (id: string) => () =>
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-
+/**
+ * Hero — the moment.
+ *
+ * One sentence. One photograph. Nothing else above the fold.
+ *
+ * Scroll-driven settle: the portrait scales 1.05 → 1.0 and its inner
+ * image shifts +5% → 0% as the user scrolls from page-top through the
+ * end of the hero section. Calibrated through the shared Apple-feel
+ * easing so it never feels "scrolled past" — it feels delivered.
+ *
+ * `prefers-reduced-motion` users get the photograph in its rest pose
+ * with no scroll-driven transformation.
+ */
 export const Hero = () => {
-  const navigate = useNavigate();
+  const sectionRef = useRef<HTMLElement>(null);
+  const reduceMotion = useReducedMotion();
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+
+  // Portrait settle: 1.05 → 1.0 across the hero scroll range.
+  const scale = useTransform(scrollYProgress, [0, 1], [1.05, 1.0]);
+  // Subtle parallax inside the frame so the photo "leans into" the page.
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '6%']);
+
   return (
     <section
+      ref={sectionRef}
       id="home"
       aria-labelledby="hero-heading"
-      className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden px-6 pt-28 pb-20"
+      className="relative flex min-h-svh items-center overflow-hidden px-6 pt-32 pb-16 md:pt-40 md:pb-24"
     >
-      <Glow className="-left-[10%] -top-[10%]" color="teal" />
-      <Glow className="-right-[10%] bottom-[10%]" color="blue" />
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 md:grid-cols-12 md:gap-16">
+        {/* Sentence column — 7/12 at desktop, full-width on mobile. */}
+        <div className="md:col-span-7">
+          <Reveal>
+            <p className="eyebrow nums-tabular">
+              Sydney <span aria-hidden="true" className="mx-2 text-white/30">·</span>
+              UTS <span aria-hidden="true" className="mx-2 text-white/30">·</span>
+              Author
+            </p>
+          </Reveal>
 
-      <div className="relative z-10 mx-auto w-full max-w-6xl">
-        <div className="flex flex-col items-center space-y-10 text-center">
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="flex items-center gap-3 rounded-full glass px-4 py-1.5"
-          >
-            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-medical-teal" />
-            <span className="eyebrow">Personal site of {DOCTOR_NAME}</span>
-          </motion.p>
+          <Reveal delay={0.08}>
+            <h1
+              id="hero-heading"
+              className="mt-7 text-balance font-display font-medium"
+              style={{
+                fontSize: 'var(--text-hero)',
+                lineHeight: 0.95,
+                letterSpacing: '-0.025em',
+              }}
+            >
+              The future of surgery is{' '}
+              <em
+                className="font-display italic font-normal"
+                style={{ fontStyle: 'italic' }}
+              >
+                regenerative.
+              </em>
+            </h1>
+          </Reveal>
 
-          <motion.h1
-            id="hero-heading"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.05 }}
-            className="max-w-4xl text-balance font-display text-5xl font-bold leading-[1.02] tracking-tight text-white sm:text-7xl lg:text-8xl"
-          >
-            Lifespan is an energy balance,{' '}
-            <span className="text-white/40">not a clock.</span>
-          </motion.h1>
+          <Reveal delay={0.18}>
+            <p
+              className="mt-8 max-w-xl text-pretty leading-relaxed text-white/65"
+              style={{ fontSize: 'var(--text-lede)' }}
+            >
+              The personal site of {DOCTOR_NAME} — foot &amp; ankle orthopaedic
+              surgeon, Professor at the University of Technology Sydney, and
+              author of <em>Chaos to Creation</em>.
+            </p>
+          </Reveal>
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="max-w-2xl text-balance text-lg leading-relaxed text-white/65 md:text-xl"
-          >
-            The personal site of {DOCTOR_NAME} — foot &amp; ankle orthopaedic surgeon, Professor at
-            UTS, and author of <em>Chaos to Creation</em>. A factual record of his
-            publications, devices, writing and wider work in Australian medicine.
-          </motion.p>
+          {/* Quiet "scroll to read" affordance — Apple-grade affordance,
+              not a CTA button. */}
+          <Reveal delay={0.32}>
+            <a
+              href="#work"
+              className="mt-12 inline-flex items-center gap-2 text-[length:var(--text-meta)] font-medium text-white/55 transition-colors hover:text-white/85"
+            >
+              <span className="eyebrow !text-white/55">Read on</span>
+              <span
+                aria-hidden="true"
+                className="ml-1 inline-flex h-7 w-7 items-center justify-center rounded-full glass-thin"
+              >
+                <ArrowDown size={13} strokeWidth={1.5} />
+              </span>
+            </a>
+          </Reveal>
+        </div>
 
+        {/* Photograph column — 5/12 at desktop, full-width above the
+            sentence on mobile so the visitor's first impression is
+            still photographic. */}
+        <div className="order-first md:order-last md:col-span-5">
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.45 }}
-            className="flex flex-col items-center gap-3 pt-2 sm:flex-row"
+            transition={{
+              duration: reduceMotion ? 0.2 : 1.0,
+              ease: reduceMotion ? 'linear' : [0.22, 1, 0.36, 1],
+              delay: reduceMotion ? 0 : 0.05,
+            }}
+            style={{ scale: reduceMotion ? 1 : scale }}
+            className="relative origin-center will-change-transform"
           >
-            <Button size="lg" variant="primary" className="min-w-[220px]" onClick={() => navigate('/book')}>
-              Read the book
-            </Button>
-            <Button size="lg" variant="secondary" className="group min-w-[220px]" onClick={scrollTo('work')}>
-              Explore his work
-              <ArrowRight aria-hidden="true" className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.2 }}
-            className="relative mt-10 aspect-video w-full max-w-5xl overflow-hidden rounded-3xl glass md:aspect-[21/9] md:rounded-[40px]"
-          >
-            <Motif />
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 bg-linear-to-b from-transparent via-brand-bg/30 to-brand-bg"
-            />
-            <ul className="absolute inset-x-6 bottom-8 z-10 flex flex-wrap justify-center gap-x-8 gap-y-3 md:bottom-10 md:gap-x-14">
-              {STRANDS.map(({ icon: Icon, text }) => (
-                <li key={text} className="flex items-center gap-2.5 text-white/70">
-                  <Icon aria-hidden="true" className="h-4 w-4 text-medical-teal" strokeWidth={1.75} />
-                  <span className="text-[11px] font-semibold uppercase tracking-[0.18em]">{text}</span>
-                </li>
-              ))}
-            </ul>
+            <motion.div
+              style={{ y: reduceMotion ? 0 : y }}
+              className="relative overflow-hidden rounded-3xl"
+            >
+              <EditorialImage
+                fallbackSrc="/portrait-gordon-slater.webp?v=2"
+                alt={`${DOCTOR_NAME} — portrait`}
+                aspect="3/4"
+                priority
+                imgClassName="object-cover"
+                sizes="(min-width: 1024px) 40vw, (min-width: 768px) 50vw, 100vw"
+              />
+              {/* Bottom-edge gradient — lifts the photo into the page. */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-brand-bg/60 to-transparent"
+              />
+            </motion.div>
           </motion.div>
         </div>
       </div>
