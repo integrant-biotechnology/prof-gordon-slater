@@ -1,15 +1,48 @@
 @import "tailwindcss";
 
-@theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Outfit", "Inter", ui-sans-serif, system-ui, sans-serif;
+/* -------------------------------------------------------------
+ * Design tokens — Apple-grade calibration
+ *
+ * Type, color, materials, motion. The site stands on these.
+ * Every component below reads from `@theme` so a token change
+ * here propagates everywhere.
+ * ----------------------------------------------------------- */
 
+@theme {
+  /* Typography ------------------------------------------------ */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display:
+    "Fraunces", "Outfit", "Inter", ui-serif, Georgia, ui-sans-serif, system-ui, sans-serif;
+
+  /* Musical type scale — fluid clamps for one-size-fits-most. */
+  --text-eyebrow: 0.6875rem; /* 11px */
+  --text-meta: 0.8125rem;    /* 13px */
+  --text-body: 1.0625rem;    /* 17px — a hair larger than default; reads premium */
+  --text-lede: clamp(1.125rem, 1.5vw, 1.375rem);
+  --text-title: clamp(1.5rem, 2.5vw, 2.25rem);
+  --text-display: clamp(2.5rem, 5vw, 4rem);
+  --text-hero: clamp(3.5rem, 8vw, 6.5rem);
+
+  /* Calibrated near-blacks — Apple uses these, not pure black. */
+  --color-brand-bg: #0a0a0c;
+  --color-brand-panel: #141416;
+  --color-brand-elevated: #1c1c1f;
+  --color-brand-border: rgba(255, 255, 255, 0.06);
+
+  /* Off-white text — Apple's signature on dark surfaces. */
+  --color-brand-text: #f5f5f7;
+
+  /* Accents — keep teal, use sparingly (one per viewport). */
   --color-medical-teal: #14b8a6;
   --color-medical-blue: #0ea5e9;
-  --color-brand-bg: #050505;
-  --color-brand-panel: #0e0e0e;
-  --color-brand-border: rgba(255, 255, 255, 0.08);
+  /* Warm tone used only in selenium-toned photographic overlays. */
+  --color-photo-warm: #d4a373;
 
+  /* Motion — single source of easing + duration. */
+  --ease-apple: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Legacy animations kept for /giving Motif compatibility. */
   --animate-spin-slow: spin 32s linear infinite;
   --animate-drift: drift 18s ease-in-out infinite;
 }
@@ -26,38 +59,141 @@
   }
 }
 
+/* -------------------------------------------------------------
+ * Hairline page-enter scan — runs once on first paint.
+ * A 1px teal line travels top → bottom of the viewport,
+ * then dissolves. Calibrated, not flashy. Apple-grade page
+ * acknowledgement.
+ * ----------------------------------------------------------- */
+@keyframes hairline-scan {
+  0%   { transform: translate3d(0, -10vh, 0); opacity: 0; }
+  10%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translate3d(0, 110vh, 0); opacity: 0; }
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
-    /* Keep anchored sections clear of the fixed navbar */
+    /* Anchor sections clear of the floating Navbar pill. */
     scroll-padding-top: 6rem;
   }
 
   body {
-    @apply bg-brand-bg text-white/90 antialiased;
-    @apply selection:bg-medical-teal/30 selection:text-white;
+    @apply bg-brand-bg antialiased;
+    color: var(--color-brand-text);
+    font-size: var(--text-body);
+    line-height: 1.6;
     font-feature-settings: "ss01", "ss02", "cv01", "cv11";
+    /* Selection refined: 28% opacity teal, slightly cooler than 30%. */
+    &::selection,
+    & *::selection {
+      background-color: color-mix(in oklab, var(--color-medical-teal) 28%, transparent);
+      color: var(--color-brand-text);
+    }
   }
 
-  /* Visible, consistent focus indicator everywhere */
+  /* Display typography defaults — used by font-display utility. */
+  .font-display {
+    font-feature-settings: "ss01", "ss02", "kern", "liga";
+    letter-spacing: -0.015em;
+    line-height: 1.05;
+  }
+
+  /* Visible, calibrated focus halo — color-mix gives a soft edge
+     rather than a hard stripe. Sits on `:focus-visible` only. */
   :focus-visible {
-    outline: 2px solid color-mix(in oklab, var(--color-medical-teal) 80%, white);
-    outline-offset: 2px;
+    outline: 2px solid color-mix(in oklab, var(--color-medical-teal) 70%, white);
+    outline-offset: 3px;
     border-radius: 2px;
+    transition: outline-offset 0.18s var(--ease-soft);
   }
 }
 
 @layer components {
+  /* ---- Materials system -------------------------------------
+   * Three calibrated glass weights. Apple has multiple
+   * materials so depth reads correctly; we mirror that.
+   * --------------------------------------------------------- */
+
+  .glass-thin {
+    @apply border bg-brand-panel/30;
+    border-color: var(--color-brand-border);
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    /* Hairline top-edge highlight — the detail that makes glass read as glass. */
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+
   .glass {
-    @apply bg-brand-panel/40 backdrop-blur-3xl border border-brand-border;
+    @apply border bg-brand-panel/55;
+    border-color: var(--color-brand-border);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
   }
 
-  /* Standard small-caps label used for eyebrows / metadata throughout the site */
+  .glass-thick {
+    @apply border;
+    background-color: color-mix(in srgb, var(--color-brand-panel) 80%, transparent);
+    border-color: var(--color-brand-border);
+    backdrop-filter: blur(48px) saturate(200%) brightness(110%);
+    -webkit-backdrop-filter: blur(48px) saturate(200%) brightness(110%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      0 1px 0 rgba(0, 0, 0, 0.4);
+  }
+
+  /* ---- Text primitives ------------------------------------- */
+
+  /* Eyebrow — calibrated tracking (was 0.22em, too rigid for Apple register). */
   .eyebrow {
-    @apply text-[11px] font-semibold uppercase tracking-[0.22em] text-white/55;
+    @apply text-[length:var(--text-eyebrow)] font-semibold uppercase;
+    letter-spacing: 0.18em;
+    color: color-mix(in oklab, var(--color-brand-text) 55%, transparent);
   }
 
-  /* Accessible "visually hidden until focused" helper, used for the skip link */
+  /* Lede — opening paragraph treatment. Larger, serif-leaning. */
+  .lede {
+    font-family: var(--font-display);
+    font-size: var(--text-lede);
+    line-height: 1.45;
+    letter-spacing: -0.005em;
+    color: color-mix(in oklab, var(--color-brand-text) 82%, transparent);
+    font-weight: 400;
+  }
+
+  /* Drop cap — used on the first paragraph of editorial bodies. */
+  .drop-cap::first-letter {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 4.5em;
+    line-height: 0.85;
+    float: left;
+    margin: 0.1em 0.1em 0 -0.05em;
+    color: var(--color-brand-text);
+  }
+
+  /* Page-enter hairline scan — one-shot teal line, top → bottom. */
+  .page-enter-hairline {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    pointer-events: none;
+    z-index: 80;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in oklab, var(--color-medical-teal) 80%, white) 50%,
+      transparent 100%
+    );
+    animation: hairline-scan 1200ms var(--ease-apple) forwards;
+    will-change: transform, opacity;
+  }
+
+  /* Accessible "visually hidden until focused" helper. */
   .skip-link {
     @apply sr-only;
   }
@@ -70,13 +206,18 @@
   .mask-radial {
     mask-image: radial-gradient(circle, white, transparent);
   }
+  /* Tabular figures for numeric labels (years, page numbers). */
+  .nums-tabular {
+    font-variant-numeric: tabular-nums;
+  }
 }
 
+/* Calibrated scrollbar — thin, near-invisible, theme-matched. */
 ::-webkit-scrollbar {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #050505;
+  background: var(--color-brand-bg);
 }
 ::-webkit-scrollbar-thumb {
   background: #232323;
@@ -86,7 +227,7 @@
   background: #2e2e2e;
 }
 
-/* Respect users who prefer reduced motion: neutralise looping/long animations */
+/* Respect users who prefer reduced motion. */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -98,4 +239,17 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
+  .page-enter-hairline {
+    display: none;
+  }
+}
+
+/* View Transitions API — calibrated cross-fade on route change. */
+@view-transition {
+  navigation: auto;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 360ms;
+  animation-timing-function: var(--ease-apple);
 }

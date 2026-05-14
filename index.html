@@ -9,7 +9,7 @@
       name="description"
       content="The personal site of Prof Gordon Slater — foot &amp; ankle orthopaedic surgeon, Professor at the University of Technology Sydney, and author of Chaos to Creation: Longevity and Regeneration Frontiers (9 April 2026). A factual record of his publications, devices, writing, and support for Australian medical research. Not a clinic."
     />
-    <meta name="theme-color" content="#050505" />
+    <meta name="theme-color" content="#0a0a0c" />
     <link rel="canonical" href="https://profgordonslater.com.au/" />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -41,12 +41,20 @@
     />
     <meta name="twitter:image" content="https://profgordonslater.com.au/portrait-gordon-slater.webp?v=2" />
 
-    <!-- Fonts -->
+    <!-- Fonts — Fraunces (display) + Inter (body). Fraunces is a variable
+         font with optical-size and SOFT axes; we load the variable file
+         so the same family covers 14px italic captions through 96px
+         hero headlines without extra weight requests. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,30..70;1,9..144,300..700,30..70&family=Inter:wght@400;500;600&display=swap"
+    />
+    <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,30..70;1,9..144,300..700,30..70&family=Inter:wght@400;500;600&display=swap"
     />
 
     <!-- Person JSON-LD -->
