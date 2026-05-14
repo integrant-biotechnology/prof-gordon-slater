@@ -405,15 +405,16 @@ export const ARTICLES: Article[] = [
 export const BLOG_INDEX_URL = 'https://orthopaedic-surgeon.com.au/about-us/in-the-news/';
 
 // -------------------------------------------------------------
-// Verified social profiles — placeholder URLs (KB §9 [GAP])
+// Verified social profiles — the four canonical accounts Prof Slater
+// maintains personally. Each is the source of truth for that platform's
+// identity (mirrored into Person.sameAs JSON-LD in index.html).
 // -------------------------------------------------------------
 
 export const SOCIAL_LINKS: SocialLink[] = [
-  { label: 'LinkedIn', url: '#', icon: 'Linkedin', placeholder: true },
-  { label: 'X', url: '#', icon: 'Twitter', placeholder: true },
-  { label: 'Research profile', url: '#', icon: 'GraduationCap', placeholder: true },
-  { label: 'YouTube', url: '#', icon: 'Youtube', placeholder: true },
-  { label: 'Instagram', url: '#', icon: 'Instagram', placeholder: true },
+  { label: 'LinkedIn',  url: 'https://www.linkedin.com/in/drgordonslater/',  icon: 'Linkedin'  },
+  { label: 'X',         url: 'https://x.com/drgordonslater',                 icon: 'Twitter'   },
+  { label: 'YouTube',   url: 'https://www.youtube.com/@profgordonslater',    icon: 'Youtube'   },
+  { label: 'Instagram', url: 'https://www.instagram.com/profgordonslater/',  icon: 'Instagram' },
 ];
 
 // -------------------------------------------------------------

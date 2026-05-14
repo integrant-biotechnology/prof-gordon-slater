@@ -102,8 +102,11 @@ them in `src/constants.ts` (and rebuild) — no component edits needed:
       three real Amazon AU URLs.
 - [x] ~~Book cover image~~ — done. Real cover at `public/book-cover-chaos-to-creation.webp`,
       with `-480.webp`, `-800.webp`, `-1200.webp` and a `.jpg` fallback for `<picture>`/`srcset`.
-- [ ] **Verified social URLs** — `SOCIAL_LINKS`: LinkedIn, X, research profile (Google Scholar /
-      ResearchGate / ORCID / PubMed), YouTube, Instagram. Each currently uses `url: '#'`.
+- [x] ~~Verified social URLs~~ — done. `SOCIAL_LINKS` carries the four canonical accounts
+      (LinkedIn, X, YouTube, Instagram), each rendered with `rel="me noopener noreferrer"` for
+      verified-identity semantics and mirrored into `Person.sameAs` in `index.html` for
+      knowledge-graph entity linking. No public research profile (Scholar / ORCID / ResearchGate
+      / PubMed) is wired yet — drop one into `SOCIAL_LINKS` and `sameAs` when ready.
 - [ ] **Selected publications links** — `SELECTED_PUBLICATIONS` entries currently have no
       `href` (titles render as plain text). Add `href` per entry; populate
       `PUBLICATIONS_INDEX_URL` with the master Google Scholar / ORCID profile so the
