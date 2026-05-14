@@ -84,6 +84,7 @@ public/
   favicon.svg
   portrait-gordon-slater.webp        # real headshot
   book-cover-chaos-to-creation.webp  # real book cover (also -480/-800/-1200 + .jpg fallback)
+  giving/                            # partner logos + event hero images for /giving
   robots.txt · sitemap.xml
 docs/
   voice-source-v0_1.md          # canonical content KB this site is built from (see "Content sourcing" below)
@@ -126,6 +127,18 @@ personal site only. The same treatment should be applied to two adjacent propert
 
 - The **RegenU** site.
 - The **practice site** at `orthopaedic-surgeon.com.au` (WordPress / Elementor).
+
+### Partner logos & event imagery on `/giving`
+
+Logos and hero imagery in [`public/giving/`](public/giving/) belong to their respective
+organisations (the Ingham Institute, The Black & White Committee, the Australian Turf Club).
+They are used here only to identify the events Prof Slater supports, are not modified beyond
+resizing / WebP-encoding, and link back to each event's official page. If a partner asks for a
+specific treatment (or removal), swap the file at the same path or set the entry's `logo` /
+`heroBase` to `undefined` in `src/constants.ts` — the card gracefully falls back to a
+typographic chip. ATC ("Pink Luncheon") currently uses that chip fallback because the ATC site
+blocks automated image fetches; drop a `public/giving/pink-luncheon-logo.webp` and add a
+`heroBase` to upgrade it in place.
 
 ## Content sourcing
 
