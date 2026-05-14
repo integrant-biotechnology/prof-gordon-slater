@@ -1,5 +1,5 @@
-import { motion, useReducedMotion } from 'motion/react';
 import { cn } from '@/lib/utils';
+import { Reveal } from './Motion';
 
 interface SectionHeadingProps {
   /** id applied to the <h2>, so the parent <section> can reference it via aria-labelledby. */
@@ -9,43 +9,56 @@ interface SectionHeadingProps {
   intro?: string;
   align?: 'left' | 'center';
   className?: string;
+  /** Render the title in italic Fraunces for editorial emphasis. */
+  italic?: boolean;
 }
 
+/**
+ * SectionHeading — the canonical section opener.
+ *
+ * Eyebrow (small caps, tracking 0.18em) → title (Fraunces, large) →
+ * intro (Inter, lede-sized). All three reveal through the shared
+ * Motion primitive with a calibrated 50ms / 100ms stagger.
+ */
 export const SectionHeading = ({
   id,
   eyebrow,
   title,
   intro,
   align = 'left',
+  italic = false,
   className,
-}: SectionHeadingProps) => {
-  const reduceMotion = useReducedMotion();
-  const reveal = (delay = 0) => ({
-    initial: reduceMotion ? false : { opacity: 0, y: 16 },
-    whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true },
-    transition: { duration: 0.5, ease: 'easeOut', delay } as const,
-  });
-
-  return (
-    <div className={cn('max-w-3xl space-y-5', align === 'center' && 'mx-auto text-center', className)}>
-      {eyebrow && (
-        <motion.p {...reveal()} className="eyebrow">
-          {eyebrow}
-        </motion.p>
-      )}
-      <motion.h2
-        {...reveal(0.05)}
+}: SectionHeadingProps) => (
+  <div
+    className={cn(
+      'max-w-3xl space-y-5',
+      align === 'center' && 'mx-auto text-center',
+      className,
+    )}
+  >
+    {eyebrow && (
+      <Reveal>
+        <p className="eyebrow">{eyebrow}</p>
+      </Reveal>
+    )}
+    <Reveal delay={0.05}>
+      <h2
         id={id}
-        className="text-balance font-display text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl"
+        className={cn(
+          'text-balance font-display font-medium',
+          italic && 'italic',
+        )}
+        style={{ fontSize: 'var(--text-display)', lineHeight: 1.05, letterSpacing: '-0.015em' }}
       >
         {title}
-      </motion.h2>
-      {intro && (
-        <motion.p {...reveal(0.1)} className="text-pretty text-lg leading-relaxed text-white/65">
+      </h2>
+    </Reveal>
+    {intro && (
+      <Reveal delay={0.1}>
+        <p className="text-pretty leading-relaxed text-white/65" style={{ fontSize: 'var(--text-lede)' }}>
           {intro}
-        </motion.p>
-      )}
-    </div>
-  );
-};
+        </p>
+      </Reveal>
+    )}
+  </div>
+);
