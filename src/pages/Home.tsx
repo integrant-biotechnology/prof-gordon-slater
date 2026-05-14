@@ -9,7 +9,8 @@ import { BodyOfWork } from '@/components/BodyOfWork';
 import { CommunityVision } from '@/components/CommunityVision';
 import { Writing } from '@/components/Writing';
 import { Connect } from '@/components/Connect';
-import { DOCTOR_NAME, DOCTOR_TITLE } from '@/constants';
+import { PullQuote } from '@/components/ui/PullQuote';
+import { BOOK, DOCTOR_NAME, DOCTOR_TITLE } from '@/constants';
 
 const Home = () => {
   const { hash, pathname } = useLocation();
@@ -40,6 +41,20 @@ const Home = () => {
       <WhatHeDoes />
       <About />
       <Background />
+      {/* Editorial pull-quote moment — the book's central claim, lifted
+          before BookPreview so the section opener lands with weight. */}
+      <section
+        aria-label="From the book"
+        className="px-6 py-20 md:py-28"
+      >
+        <PullQuote
+          align="center"
+          width="wide"
+          attribution={BOOK.heroQuoteSource}
+        >
+          {BOOK.heroQuote}
+        </PullQuote>
+      </section>
       <BookPreview />
       <BodyOfWork />
       <CommunityVision />
