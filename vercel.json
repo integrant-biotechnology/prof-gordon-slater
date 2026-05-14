@@ -24,7 +24,7 @@
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
     },
     {
-      "source": "/(favicon.svg|portrait-gordon-slater.webp|book-cover-chaos-to-creation(?:-\\d+)?\\.(?:webp|jpg))",
+      "source": "/(favicon.svg|portrait-gordon-slater\\.(?:webp|jpg)|book-cover-chaos-to-creation(?:-\\d+)?\\.(?:webp|jpg))",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400, must-revalidate" }]
     },
     {
