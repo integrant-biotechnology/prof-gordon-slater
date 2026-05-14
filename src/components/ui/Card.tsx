@@ -5,24 +5,15 @@ import { Reveal } from './Motion';
 interface CardProps {
   children: ReactNode;
   className?: string;
-  /**
-   * Legacy prop kept for backward-compat with existing callers.
-   * Apple-grade hover is colour-shift only — no glow swell.
-   * The `glow` flag is now a no-op visually but preserved so
-   * existing call-sites compile without edits.
-   */
-  glow?: boolean;
 }
 
 /**
  * Card — the default content surface.
  *
- * Apple-grade refinement vs. the previous version:
- *  • The teal-sheen glow swell on hover is removed (it broke the
- *    "subtract, don't add" rule)
- *  • Hover is now a calibrated 220ms colour shift on the border only
+ *  • Hover is a calibrated 220ms colour shift on the border only —
+ *    no glow swell. Apple-grade subtraction.
  *  • The reveal entry routes through the shared <Reveal> primitive
- *    so timing stays consistent with the rest of the page
+ *    so timing stays consistent with the rest of the page.
  */
 export const Card = ({ children, className }: CardProps) => (
   <Reveal>
