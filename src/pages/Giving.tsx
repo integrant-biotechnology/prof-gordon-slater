@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Eye, Heart, Sparkles } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Eye, Heart, Sparkles } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { GivingEvent } from '@/types';
 import { Card } from '@/components/ui/Card';
@@ -12,6 +12,7 @@ import {
   GIVING_EVENTS,
   GIVING_INTRO,
   GIVING_PLEDGE,
+  GIVING_STATS,
 } from '@/constants';
 
 const Giving = () => {
@@ -25,7 +26,9 @@ const Giving = () => {
   return (
     <>
       <GivingHero />
+      <GivingStats />
       <GivingEvents />
+      <GivingPartners />
       <GivingCloseSection />
     </>
   );
@@ -75,24 +78,57 @@ const GivingHero = () => (
   </section>
 );
 
-const ACCENT_META: Record<GivingEvent['accent'], { icon: LucideIcon; ring: string; text: string; dot: string }> = {
+const GivingStats = () => (
+  <section aria-label="By the numbers" className="border-t border-white/5 px-6 py-12 md:py-14">
+    <div className="mx-auto max-w-7xl">
+      <dl className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl bg-white/[0.04] sm:grid-cols-3">
+        {GIVING_STATS.map((s) => (
+          <div key={s.label} className="bg-brand-bg/95 px-7 py-7">
+            <dt className="eyebrow">{s.label}</dt>
+            <dd className="mt-3 font-display text-4xl font-semibold tracking-tight text-white md:text-5xl">
+              {s.value}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+);
+
+const ACCENT_META: Record<
+  GivingEvent['accent'],
+  {
+    icon: LucideIcon;
+    ring: string;
+    text: string;
+    dot: string;
+    chipGrad: string;
+    chipText: string;
+  }
+> = {
   pink: {
     icon: Sparkles,
     ring: 'ring-pink-300/30',
     text: 'text-pink-300',
     dot: 'bg-pink-300',
+    chipGrad: 'from-pink-500/20 via-pink-300/10 to-transparent',
+    chipText: 'text-pink-200',
   },
   red: {
     icon: Heart,
     ring: 'ring-red-400/30',
     text: 'text-red-400',
     dot: 'bg-red-400',
+    chipGrad: 'from-red-500/20 via-red-300/10 to-transparent',
+    chipText: 'text-red-200',
   },
   neutral: {
     icon: Eye,
     ring: 'ring-white/20',
     text: 'text-white/85',
     dot: 'bg-white/85',
+    chipGrad: 'from-white/10 via-white/5 to-transparent',
+    chipText: 'text-white/85',
   },
 };
 
@@ -110,57 +146,186 @@ const GivingEvents = () => (
         className="mb-12 md:mb-16"
       />
 
-      <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {GIVING_EVENTS.map((e) => {
-          const accent = ACCENT_META[e.accent];
-          const Icon = accent.icon;
-          return (
-            <li key={e.id}>
-              <Card className="flex h-full flex-col gap-6 bg-white/[0.01] p-9" glow>
-                <div className="flex items-center gap-3">
-                  <span
-                    aria-hidden="true"
-                    className={`flex h-11 w-11 items-center justify-center rounded-full glass ring-1 ${accent.ring}`}
-                  >
-                    <Icon size={18} strokeWidth={1.5} className={accent.text} />
-                  </span>
-                  <span aria-hidden="true" className={`h-1.5 w-1.5 rounded-full ${accent.dot}`} />
-                </div>
-
-                <div>
-                  <h3 className="font-display text-2xl font-semibold leading-tight text-white">
-                    {e.name}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/55">{e.host}</p>
-                </div>
-
-                <dl className="mt-auto space-y-3 border-t border-white/5 pt-5">
-                  <div>
-                    <dt className="eyebrow">Supporting</dt>
-                    <dd className="mt-1 text-sm leading-relaxed text-white/80">
-                      {e.cause}
-                      {e.beneficiary && (
-                        <>
-                          {' '}
-                          —{' '}
-                          <span className="text-white/65">{e.beneficiary}</span>
-                        </>
-                      )}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="eyebrow">Contribution</dt>
-                    <dd className="mt-1 text-sm leading-relaxed text-white/80">{e.contribution}</dd>
-                  </div>
-                </dl>
-              </Card>
-            </li>
-          );
-        })}
+      <ul className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {GIVING_EVENTS.map((e) => (
+          <li key={e.id}>
+            <EventCard event={e} />
+          </li>
+        ))}
       </ul>
     </div>
   </section>
 );
+
+const EventCard = ({ event: e }: { event: GivingEvent }) => {
+  const accent = ACCENT_META[e.accent];
+  const Icon = accent.icon;
+
+  return (
+    <Card className="flex h-full flex-col overflow-hidden bg-white/[0.01] p-0" glow>
+      <EventHero event={e} />
+
+      <div className="flex flex-1 flex-col gap-5 p-7 md:p-8">
+        <div className="flex items-center gap-3">
+          <span
+            aria-hidden="true"
+            className={`flex h-10 w-10 items-center justify-center rounded-full glass ring-1 ${accent.ring}`}
+          >
+            <Icon size={16} strokeWidth={1.5} className={accent.text} />
+          </span>
+          <span aria-hidden="true" className={`h-1.5 w-1.5 rounded-full ${accent.dot}`} />
+          {e.since && (
+            <span className="ml-auto text-[10px] uppercase tracking-[0.2em] text-white/35">
+              Since {e.since}
+            </span>
+          )}
+        </div>
+
+        <div>
+          <h3 className="font-display text-2xl font-semibold leading-tight text-white">
+            {e.name}
+          </h3>
+          <p className="mt-2 text-sm leading-relaxed text-white/55">{e.host}</p>
+          {e.blurb && (
+            <p className="mt-3 text-pretty text-sm leading-relaxed text-white/65">{e.blurb}</p>
+          )}
+        </div>
+
+        <dl className="mt-auto space-y-3 border-t border-white/5 pt-5">
+          <div>
+            <dt className="eyebrow">Supporting</dt>
+            <dd className="mt-1 text-sm leading-relaxed text-white/80">
+              {e.cause}
+              {e.beneficiary && (
+                <>
+                  {' '}
+                  —{' '}
+                  <span className="text-white/65">{e.beneficiary}</span>
+                </>
+              )}
+            </dd>
+          </div>
+          <div>
+            <dt className="eyebrow">Contribution</dt>
+            <dd className="mt-1 text-sm leading-relaxed text-white/80">{e.contribution}</dd>
+          </div>
+        </dl>
+
+        {e.eventUrl && (
+          <a
+            href={e.eventUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] ${accent.chipText} transition-colors hover:text-white`}
+          >
+            Learn more
+            <ArrowUpRight aria-hidden="true" size={12} />
+          </a>
+        )}
+      </div>
+    </Card>
+  );
+};
+
+const EventHero = ({ event: e }: { event: GivingEvent }) => {
+  const accent = ACCENT_META[e.accent];
+
+  if (e.heroBase) {
+    return (
+      <figure className="relative aspect-[16/10] overflow-hidden">
+        <picture>
+          <source
+            type="image/webp"
+            srcSet={`${e.heroBase}-800.webp 800w, ${e.heroBase}-1600.webp 1600w`}
+            sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+          />
+          <img
+            src={`${e.heroBase}.jpg`}
+            alt={e.heroAlt ?? `${e.name} — event imagery`}
+            loading="lazy"
+            decoding="async"
+            className="h-full w-full object-cover"
+          />
+        </picture>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-linear-to-t from-brand-bg via-brand-bg/40 to-brand-bg/10"
+        />
+        {e.logo && (
+          <img
+            src={e.logo}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            decoding="async"
+            className="absolute bottom-3 right-3 h-7 max-w-[40%] rounded-md bg-white/85 px-2 py-1 object-contain"
+          />
+        )}
+      </figure>
+    );
+  }
+
+  // Typographic chip fallback (used when no event imagery is available).
+  return (
+    <figure
+      className={`relative aspect-[16/10] overflow-hidden bg-linear-to-br ${accent.chipGrad}`}
+      aria-label={`${e.name} — host mark`}
+    >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.06),transparent_60%)]"
+      />
+      <div className="relative flex h-full w-full flex-col items-center justify-center gap-3">
+        <span
+          className={`font-display text-6xl font-bold tracking-[0.12em] ${accent.chipText} md:text-7xl`}
+        >
+          {e.hostMark ?? e.host.slice(0, 3).toUpperCase()}
+        </span>
+        <span className="text-[10px] uppercase tracking-[0.28em] text-white/45">
+          {e.host}
+        </span>
+      </div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-linear-to-t from-brand-bg via-transparent to-transparent"
+      />
+    </figure>
+  );
+};
+
+const GivingPartners = () => {
+  const partners = GIVING_EVENTS.filter((e) => e.logo);
+  if (partners.length === 0) return null;
+
+  return (
+    <section aria-label="In support of" className="border-t border-white/5 px-6 py-14 md:py-16">
+      <div className="mx-auto max-w-5xl">
+        <p className="eyebrow text-center">In support of</p>
+        <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-8 gap-y-4 md:gap-x-10">
+          {partners.map((p) => (
+            <li key={p.id}>
+              <a
+                href={p.eventUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${p.beneficiary ?? p.host} — opens in a new tab`}
+                className="flex h-16 items-center justify-center rounded-xl bg-white/90 px-5 opacity-80 transition-opacity hover:opacity-100 md:h-20 md:px-6"
+              >
+                <img
+                  src={p.logo}
+                  alt={p.beneficiary ?? p.host}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-9 w-auto max-w-[180px] object-contain md:h-11"
+                />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+};
 
 const GivingCloseSection = () => (
   <section

@@ -101,10 +101,24 @@ export interface GivingEvent {
   host: string;
   /** Beneficiary organisation, e.g. "Vision Australia". */
   beneficiary?: string;
+  /** Short typographic mark for the event (used when no logo image is available). */
+  hostMark?: string;
   /** What the event funds, e.g. "Breast cancer research". */
   cause: string;
   /** What Prof Slater contributes. */
   contribution: string;
   /** Subtle accent colour used per event card. */
   accent: 'pink' | 'red' | 'neutral';
+  /** Optional hero image (responsive WebP — base path without size or extension). */
+  heroBase?: string;
+  /** Plain-text caption for the hero image — never a credit line for unknown photographers. */
+  heroAlt?: string;
+  /** Optional partner / event logo (WebP path under /giving/). */
+  logo?: string;
+  /** Public event URL — used as a discreet "Learn more" link. */
+  eventUrl?: string;
+  /** First-held year, e.g. "1936" for the Black & White Committee. */
+  since?: string;
+  /** One-line editorial blurb about the event's significance. */
+  blurb?: string;
 }
