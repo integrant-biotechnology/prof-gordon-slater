@@ -6,6 +6,7 @@ import type { GivingEvent } from '@/types';
 import { Card } from '@/components/ui/Card';
 import { Glow } from '@/components/ui/Glow';
 import { SectionHeading } from '@/components/ui/SectionHeading';
+import { StatStrip } from '@/components/ui/StatStrip';
 import {
   DOCTOR_NAME,
   GIVING_CLOSE,
@@ -26,7 +27,11 @@ const Giving = () => {
   return (
     <>
       <GivingHero />
-      <GivingStats />
+      <StatStrip
+        stats={GIVING_STATS}
+        ariaLabel="By the numbers"
+        className="border-t border-white/5"
+      />
       <GivingEvents />
       <GivingPartners />
       <GivingCloseSection />
@@ -74,23 +79,6 @@ const GivingHero = () => (
       <p className="mt-5 text-pretty text-base italic leading-relaxed text-white/55">
         {GIVING_PLEDGE}
       </p>
-    </div>
-  </section>
-);
-
-const GivingStats = () => (
-  <section aria-label="By the numbers" className="border-t border-white/5 px-6 py-12 md:py-14">
-    <div className="mx-auto max-w-7xl">
-      <dl className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl bg-white/[0.04] sm:grid-cols-3">
-        {GIVING_STATS.map((s) => (
-          <div key={s.label} className="bg-brand-bg/95 px-7 py-7">
-            <dt className="eyebrow">{s.label}</dt>
-            <dd className="mt-3 font-display text-4xl font-semibold tracking-tight text-white md:text-5xl">
-              {s.value}
-            </dd>
-          </div>
-        ))}
-      </dl>
     </div>
   </section>
 );
