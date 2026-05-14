@@ -81,7 +81,7 @@ export const CAPABILITIES: Capability[] = [
   {
     title: 'Researcher & editor',
     description:
-      'More than fifty peer-reviewed papers across foot & ankle surgery, orthobiologics, HBOT, regenerative medicine and aging biology.',
+      'Sixty peer-reviewed papers across foot & ankle surgery, orthobiologics, HBOT, stem cells and regenerative medicine, aging biology, and AI in medicine.',
     icon: 'Microscope',
   },
   {
@@ -243,7 +243,7 @@ export const BODY_OF_WORK: WorkItem[] = [
     id: 'research',
     title: 'Research & publications',
     description:
-      'More than fifty peer-reviewed papers (2003–2026) across foot & ankle surgery, orthobiologics, HBOT, regenerative medicine and aging biology.',
+      'Sixty peer-reviewed papers (2003–2026) across foot & ankle surgery, orthobiologics, HBOT, stem cells and regenerative medicine, aging biology, and AI in medicine.',
     icon: 'FlaskConical',
     href: '#publications',
     linkLabel: 'See selected publications',
@@ -293,6 +293,10 @@ export const SELECTED_PUBLICATIONS: Publication[] = [
     year: '2018–19',
   },
   {
+    title: 'Foetal healing cascade — can we duplicate it in adults?',
+    year: '2019',
+  },
+  {
     title: 'The Future of Medicine: Biologics and Artificial Intelligence (Slater, Sambo & Hannan)',
     venue: 'J Regen Biol Med, 1(2), 1–11',
     year: '2019',
@@ -301,6 +305,14 @@ export const SELECTED_PUBLICATIONS: Publication[] = [
     title: 'A Review of Stem Cells: Why Do We Age? (Slater, G. & Slater, T.)',
     venue: 'J Regen Biol Med, 4: 1–11',
     year: '2022',
+  },
+  {
+    title: 'Hyperbaric oxygen therapy — overview',
+    year: '2022',
+  },
+  {
+    title: 'HBOT as an accelerator of regenerative medicine',
+    year: '2023',
   },
   {
     title: 'Hyperbaric oxygen therapy in anti-aging practice',
