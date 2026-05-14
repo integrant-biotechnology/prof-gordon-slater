@@ -84,13 +84,20 @@ export const About = () => (
               Sydney.
             </p>
             <p>
+              His research sits inside a wider Sydney ecosystem. Regular collaborators include
+              UNSW&rsquo;s Ramaciotti Centre for Genomics, the UTS Biologics Innovation Facility,
+              the Garvan Institute, and the Westmead Institute for Medical Research — partners on
+              the biomarker, methylation and biologics work behind the longevity and regeneration
+              thesis.
+            </p>
+            <p>
               He contributes to the international literature as Associate Editor of{' '}
               <em>Foot &amp; Ankle International</em>, sits on the editorial panel of{' '}
               <em>EC Orthopaedics</em>, and chairs Foot &amp; Ankle for the Asia Pacific
               Orthopaedic Association. His book{' '}
               <em>Chaos to Creation: Longevity and Regeneration Frontiers</em> (9 April 2026) is
-              the long-form synthesis of that work, drawing on more than fifty peer-reviewed
-              publications and multiple medical-technology patents.
+              the long-form synthesis of that work, drawing on sixty peer-reviewed publications
+              and multiple medical-technology patents.
             </p>
           </div>
         </Reveal>
