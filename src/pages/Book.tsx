@@ -1,9 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ArrowUpRight, Quote, Sparkle } from 'lucide-react';
-import { Card } from '@/components/ui/Card';
+import { ArrowLeft, ArrowUpRight, Quote } from 'lucide-react';
+import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
 import { Glow } from '@/components/ui/Glow';
-import { SectionHeading } from '@/components/ui/SectionHeading';
+import { ChapterMark } from '@/components/ui/ChapterMark';
+import { PullQuote } from '@/components/ui/PullQuote';
+import { ReadingProgress } from '@/components/ui/ReadingProgress';
+import { Reveal } from '@/components/ui/Motion';
 import {
   BOOK,
   BOOK_COVER_SRCSET,
@@ -53,6 +56,7 @@ const Book = () => {
 
   return (
     <>
+      <ReadingProgress />
       <BookHero />
       <InsideThisBook />
       <OpeningFraming />
@@ -70,13 +74,13 @@ const Book = () => {
 export default Book;
 
 // -------------------------------------------------------------
-// Reusable: 3-format buttons (Hardcover · Paperback · Kindle)
+// Reusable: 3-format chips (Hardcover · Paperback · Kindle)
 // -------------------------------------------------------------
 
 const FormatButtons = ({ size = 'md' }: { size?: 'md' | 'lg' }) => {
-  const padding = size === 'lg' ? 'px-5 py-3' : 'px-4 py-2.5';
+  const padding = size === 'lg' ? 'px-5 py-3' : 'px-4 py-2';
   return (
-    <div className="flex flex-wrap items-center gap-3">
+    <div className="flex flex-wrap items-center gap-2.5">
       {BOOK_FORMATS.map((f, i) => (
         <a
           key={f.format}
@@ -84,14 +88,24 @@ const FormatButtons = ({ size = 'md' }: { size?: 'md' | 'lg' }) => {
           target="_blank"
           rel="noopener noreferrer"
           aria-label={`${f.format} on Amazon AU (opens in a new tab)`}
-          className={`inline-flex items-center gap-2 rounded-full text-sm font-medium transition-colors ${padding} ${
+          className={`group/format inline-flex items-center gap-1.5 rounded-full transition-colors ${padding} ${
             i === 0
               ? 'bg-white text-brand-bg hover:bg-white/90'
-              : 'glass text-white/80 hover:text-white hover:border-medical-teal/40'
+              : 'glass-thin text-white/75 hover:text-medical-teal'
           }`}
+          style={{
+            fontSize: 'var(--text-eyebrow)',
+            letterSpacing: '0.16em',
+            textTransform: 'uppercase',
+            fontWeight: 600,
+          }}
         >
           {f.format}
-          <ArrowUpRight aria-hidden="true" size={14} />
+          <ArrowUpRight
+            aria-hidden="true"
+            size={12}
+            className="transition-transform group-hover/format:translate-x-0.5 group-hover/format:-translate-y-0.5"
+          />
         </a>
       ))}
     </div>
@@ -99,404 +113,642 @@ const FormatButtons = ({ size = 'md' }: { size?: 'md' | 'lg' }) => {
 };
 
 // -------------------------------------------------------------
-// Sub-sections (module-private)
+// Book hero — cinematic moment.
+//
+// The cover is the page. As the visitor scrolls through the hero
+// section, the cover rotates -10° → 0° on its Y axis, scales 0.97
+// → 1.0, and lifts subtly. This is the page's largest motion — by
+// design, the book is the emotional peak of the visit.
 // -------------------------------------------------------------
 
-const BookHero = () => (
-  <section
-    aria-labelledby="book-hero"
-    className="relative overflow-hidden px-6 pt-32 pb-20 md:pt-40 md:pb-28"
-  >
-    <Glow className="-left-[10%] top-[5%]" color="teal" />
-    <Glow className="-right-[15%] bottom-[10%]" color="blue" />
+const BookHero = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const reduceMotion = useReducedMotion();
 
-    <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
-      <div className="space-y-7">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55 transition-colors hover:text-white"
-        >
-          <ArrowLeft aria-hidden="true" size={14} />
-          Back to the personal site
-        </Link>
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
 
-        <p className="eyebrow">A book by {BOOK.byline} · {BOOK.publishedDate}</p>
+  const rotateY = useTransform(scrollYProgress, [0, 1], [-10, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], [0.97, 1.0]);
+  const liftY = useTransform(scrollYProgress, [0, 1], [16, 0]);
 
-        <h1
-          id="book-hero"
-          className="text-balance font-display text-5xl font-bold leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-7xl"
-        >
-          {BOOK.title} <span className="text-white/40">{BOOK.subtitle}.</span>
-        </h1>
+  return (
+    <section
+      ref={sectionRef}
+      aria-labelledby="book-hero"
+      className="relative overflow-hidden px-6 pt-32 pb-20 md:pt-40 md:pb-28"
+    >
+      <Glow className="-left-[10%] top-[5%]" color="teal" />
+      <Glow className="-right-[15%] bottom-[10%]" color="blue" />
 
-        <p className="text-pretty font-display text-2xl font-semibold leading-snug text-medical-teal/85 sm:text-3xl">
-          {BOOK.tagline}
-        </p>
+      <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.15fr_1fr] lg:gap-20">
+        {/* Left column — the framing. */}
+        <div>
+          <Reveal>
+            <Link
+              to="/"
+              className="group/back inline-flex items-center gap-2 text-white/55 transition-colors hover:text-white"
+              style={{
+                fontSize: 'var(--text-eyebrow)',
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                fontWeight: 600,
+              }}
+            >
+              <ArrowLeft
+                aria-hidden="true"
+                size={13}
+                className="transition-transform group-hover/back:-translate-x-0.5"
+              />
+              Back to the personal site
+            </Link>
+          </Reveal>
 
-        <p className="text-pretty text-base leading-relaxed text-white/65 md:text-lg">
-          {BOOK.subtagline}
-        </p>
+          <Reveal delay={0.06}>
+            <p className="mt-10 eyebrow text-medical-teal/85 nums-tabular">
+              A book by {BOOK.byline}
+              <span aria-hidden="true" className="mx-2 text-white/30">·</span>
+              {BOOK.publishedDate}
+            </p>
+          </Reveal>
 
-        <blockquote className="border-l-2 border-medical-teal/50 pl-5 text-pretty text-lg leading-relaxed text-white/75 md:text-xl">
-          “{BOOK.heroQuote}”
-          <footer className="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
-            — {BOOK.heroQuoteSource}
-          </footer>
-        </blockquote>
+          <Reveal delay={0.1}>
+            <h1
+              id="book-hero"
+              className="mt-5 text-balance font-display font-medium"
+              style={{
+                fontSize: 'var(--text-hero)',
+                lineHeight: 0.95,
+                letterSpacing: '-0.025em',
+              }}
+            >
+              {BOOK.title}{' '}
+              <em
+                className="font-display italic font-normal text-white/55"
+                style={{ display: 'block', fontSize: '0.5em', lineHeight: 1, marginTop: '0.3em' }}
+              >
+                {BOOK.subtitle}.
+              </em>
+            </h1>
+          </Reveal>
 
-        <div className="pt-3">
-          <FormatButtons size="lg" />
+          <Reveal delay={0.16}>
+            <p
+              className="mt-8 max-w-xl text-pretty font-display italic text-medical-teal/90"
+              style={{ fontSize: 'var(--text-title)', letterSpacing: '-0.01em', lineHeight: 1.15 }}
+            >
+              {BOOK.tagline}
+            </p>
+          </Reveal>
+
+          <Reveal delay={0.2}>
+            <p
+              className="mt-7 max-w-xl text-pretty leading-relaxed text-white/65"
+              style={{ fontSize: 'var(--text-body)' }}
+            >
+              {BOOK.subtagline}
+            </p>
+          </Reveal>
+
+          <Reveal delay={0.26}>
+            <blockquote
+              className="mt-10 max-w-xl border-l border-medical-teal/40 pl-6 text-pretty font-display italic text-white/85"
+              style={{ fontSize: 'var(--text-lede)', lineHeight: 1.4 }}
+            >
+              &ldquo;{BOOK.heroQuote}&rdquo;
+              <footer className="mt-4 eyebrow text-white/45">
+                <span aria-hidden="true" className="mr-2">—</span>
+                {BOOK.heroQuoteSource}
+              </footer>
+            </blockquote>
+          </Reveal>
+
+          <Reveal delay={0.32}>
+            <div className="mt-10">
+              <FormatButtons size="lg" />
+            </div>
+          </Reveal>
+        </div>
+
+        {/* Right column — the cinematic cover. */}
+        <div className="relative" style={{ perspective: '1200px' }}>
+          <motion.div
+            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 32 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: reduceMotion ? 0.2 : 1.1,
+              ease: reduceMotion ? 'linear' : [0.22, 1, 0.36, 1],
+              delay: reduceMotion ? 0 : 0.08,
+            }}
+            style={{
+              rotateY: reduceMotion ? 0 : rotateY,
+              scale: reduceMotion ? 1 : scale,
+              y: reduceMotion ? 0 : liftY,
+              transformStyle: 'preserve-3d',
+              willChange: 'transform',
+            }}
+            className="mx-auto aspect-[2/3] w-full max-w-[22rem] origin-center"
+          >
+            <div
+              className="relative h-full w-full overflow-hidden rounded-3xl shadow-[0_30px_60px_-15px_rgba(0,0,0,0.75)]"
+              style={{
+                /* hairline edge highlight + subtle book "spine" gradient
+                   so the cover reads as a physical object */
+                boxShadow:
+                  '0 30px 60px -15px rgba(0,0,0,0.75), inset 0 1px 0 rgba(255,255,255,0.08), inset 2px 0 0 rgba(0,0,0,0.4)',
+              }}
+            >
+              <img
+                src={BOOK.coverImage}
+                srcSet={BOOK_COVER_SRCSET}
+                sizes="(min-width: 1024px) 352px, (min-width: 640px) 320px, 288px"
+                alt={BOOK.coverAlt}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+                className="h-full w-full object-cover"
+              />
+              {/* Subtle warm-light gradient on the right edge — adds depth
+                  when the cover rotates. */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 bg-linear-to-r from-transparent via-transparent to-white/[0.04]"
+              />
+            </div>
+          </motion.div>
         </div>
       </div>
+    </section>
+  );
+};
 
-      <BookCoverImage priority />
-    </div>
-  </section>
-);
-
-interface BookCoverImageProps {
-  /** When true, hint the browser this is the LCP element (eager + fetchpriority high). */
-  priority?: boolean;
-}
-
-const BookCoverImage = ({ priority = false }: BookCoverImageProps) => (
-  <div className="relative mx-auto aspect-[2/3] w-full max-w-[18rem] overflow-hidden rounded-2xl shadow-2xl shadow-black/60 sm:max-w-[20rem]">
-    <img
-      src={BOOK.coverImage}
-      srcSet={BOOK_COVER_SRCSET}
-      sizes="(min-width: 1024px) 320px, (min-width: 640px) 320px, 288px"
-      alt={BOOK.coverAlt}
-      loading={priority ? 'eager' : 'lazy'}
-      // fetchPriority is React 19+
-      fetchPriority={priority ? 'high' : 'auto'}
-      decoding="async"
-      className="h-full w-full object-cover"
-    />
-  </div>
-);
+// -------------------------------------------------------------
+// Inside this book — quiet typographic list.
+// -------------------------------------------------------------
 
 const InsideThisBook = () => (
   <section
     aria-labelledby="inside-heading"
-    className="border-t border-white/5 px-6 py-20 md:py-24"
+    className="border-t border-white/5 px-6 py-24 md:py-28"
   >
     <div className="mx-auto max-w-4xl">
-      <SectionHeading
-        id="inside-heading"
-        eyebrow="Inside this book"
-        title="What you’ll explore."
-        intro="A short orientation, lifted from the back jacket."
-        className="mb-10"
+      <ChapterMark
+        number="ORIENTATION"
+        title="What you'll explore."
+        subtitle="A short orientation, lifted from the back jacket."
       />
-
-      <ul className="space-y-3">
+      <ol className="mt-14 divide-y divide-white/5 border-t border-white/10">
         {BOOK_INSIDE.map((b, i) => (
-          <li
-            key={i}
-            className="flex items-start gap-4 rounded-2xl glass bg-white/[0.01] p-5"
-          >
-            <Sparkle
-              aria-hidden="true"
-              size={16}
-              strokeWidth={1.5}
-              className="mt-1 shrink-0 text-medical-teal"
-            />
-            <p className="text-[15px] leading-relaxed text-white/75">{b.text}</p>
+          <li key={i} className="grid grid-cols-[3rem_1fr] items-baseline gap-6 py-6 md:grid-cols-[4rem_1fr] md:gap-10">
+            <Reveal delay={i * 0.03}>
+              <span
+                className="font-display italic text-white/40 nums-tabular"
+                style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.04em' }}
+              >
+                {String(i + 1).padStart(2, '0')}
+              </span>
+            </Reveal>
+            <Reveal delay={i * 0.03 + 0.02}>
+              <p
+                className="text-pretty leading-relaxed text-white/85"
+                style={{ fontSize: 'var(--text-body)' }}
+              >
+                {b.text}
+              </p>
+            </Reveal>
           </li>
         ))}
-      </ul>
-      <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/40">
-        From the back cover
-      </p>
+      </ol>
+      <Reveal>
+        <p className="mt-8 eyebrow text-white/40">From the back cover</p>
+      </Reveal>
     </div>
   </section>
 );
+
+// -------------------------------------------------------------
+// Opening framing — the central move.
+// -------------------------------------------------------------
 
 const OpeningFraming = () => (
   <section
     aria-labelledby="opening-heading"
-    className="border-t border-white/5 px-6 py-20 md:py-24"
+    className="border-t border-white/5 px-6 py-24 md:py-32"
   >
     <div className="mx-auto max-w-4xl">
-      <SectionHeading
-        id="opening-heading"
-        eyebrow="Opening framing"
+      <ChapterMark
+        number="OPENING FRAMING"
         title="The central move."
-        intro="Lifespan is not a predetermined clock but a modifiable outcome. The book opens by asking why some lifeforms live so much longer than others — and what the levers are."
-        className="mb-12"
+        subtitle="Lifespan is not a predetermined clock but a modifiable outcome. The book opens by asking why some lifeforms live so much longer than others — and what the levers are."
       />
 
-      <blockquote className="rounded-3xl glass bg-white/[0.01] p-8 text-pretty text-xl leading-relaxed text-white/80 md:text-2xl">
-        “Just as a civilisation as mighty as the Roman Empire did not fail all at once, the death
-        of each organism occurs in different measurable stages.”
-        <footer className="mt-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
-          — Chaos to Creation, p. 14
-        </footer>
-      </blockquote>
+      <div className="mt-16 md:mt-20">
+        <PullQuote attribution="Chaos to Creation, p. 14" width="wide">
+          Just as a civilisation as mighty as the Roman Empire did not fail all at once, the death
+          of each organism occurs in different measurable stages.
+        </PullQuote>
+      </div>
 
-      <div className="mt-12">
-        <h3 className="mb-6 font-display text-xl font-semibold text-white">Four guiding questions</h3>
-        <ol className="space-y-4">
+      <div className="mt-20 border-t border-white/10 pt-12 md:mt-24">
+        <Reveal>
+          <p className="eyebrow">Four guiding questions</p>
+        </Reveal>
+        <ol className="mt-10 space-y-7">
           {FOUR_QUESTIONS.map((q, i) => (
             <li
               key={i}
-              className="flex gap-5 rounded-2xl glass bg-white/[0.01] p-5"
+              className="grid grid-cols-[2.5rem_1fr] items-baseline gap-6 md:grid-cols-[3.5rem_1fr] md:gap-8"
             >
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-medical-teal/15 font-display text-sm font-semibold text-medical-teal">
-                {i + 1}
-              </span>
-              <p className="text-[15px] leading-relaxed text-white/75">{q}</p>
+              <Reveal delay={i * 0.03}>
+                <span
+                  className="font-display italic text-medical-teal/85 nums-tabular"
+                  style={{ fontSize: 'var(--text-title)', letterSpacing: '-0.01em' }}
+                >
+                  {i + 1}.
+                </span>
+              </Reveal>
+              <Reveal delay={i * 0.03 + 0.02}>
+                <p
+                  className="text-pretty leading-relaxed text-white/85"
+                  style={{ fontSize: 'var(--text-body)' }}
+                >
+                  {q}
+                </p>
+              </Reveal>
             </li>
           ))}
         </ol>
-        <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/40">
-          Chaos to Creation, p. 15
-        </p>
+        <Reveal>
+          <p className="mt-8 eyebrow text-white/40">Chaos to Creation, p. 15</p>
+        </Reveal>
       </div>
     </div>
   </section>
 );
+
+// -------------------------------------------------------------
+// The Life Force Formula — the page's most striking typographic
+// moment. Keeps the existing formula display but quietens the
+// variables table.
+// -------------------------------------------------------------
 
 const LifeForceFormulaSection = () => (
   <section
     aria-labelledby="formula-heading"
-    className="border-y border-white/5 bg-brand-panel/30 px-6 py-20 md:py-24"
+    className="border-y border-white/5 px-6 py-24 md:py-32"
+    style={{ backgroundColor: 'var(--color-brand-panel)' }}
   >
     <div className="mx-auto max-w-5xl">
-      <SectionHeading
-        id="formula-heading"
-        eyebrow="The Life Force Formula"
-        title="Life Force = environment × (regeneration − damage) ÷ inertia, plus stem-cell input."
-        intro="The book’s Appendix is where Slater formally states his synthesis."
+      <ChapterMark
+        number="APPENDIX"
+        title="The Life Force Formula."
+        subtitle="The book's appendix is where Slater formally states his synthesis — a single expression for how regenerative capacity, damage, environment and inertia compose into a lifespan."
         align="center"
-        className="mb-12 md:mb-14"
       />
 
-      {/* Formula display */}
-      <div
-        role="img"
-        aria-label={`Life Force Formula: ${LIFE_FORCE.plain}`}
-        className="mx-auto flex w-fit max-w-full flex-wrap items-center justify-center gap-x-4 gap-y-2 rounded-3xl glass bg-white/[0.01] px-6 py-10 font-display text-3xl text-white sm:text-4xl md:px-12 md:text-5xl"
-      >
-        <span>
-          L<sup className="text-[0.55em]">F</sup>
-        </span>
-        <span className="text-white/45">=</span>
-        <span className="italic">Ē</span>
-        <span className="text-white/30 text-[1.4em] leading-none">(</span>
-        <span className="inline-flex flex-col items-center text-[0.78em] leading-tight">
-          <span>R − D</span>
-          <span aria-hidden="true" className="my-1 h-px w-full min-w-[3.5rem] bg-white/45" />
-          <span>I</span>
-        </span>
-        <span className="text-white/30 text-[1.4em] leading-none">)</span>
-        <span className="text-white/45">+</span>
-        <span>
-          S<sub className="text-[0.45em]">Addition</sub>
-        </span>
-      </div>
+      {/* Formula display — kept as the centrepiece. */}
+      <Reveal delay={0.16}>
+        <div
+          role="img"
+          aria-label={`Life Force Formula: ${LIFE_FORCE.plain}`}
+          className="mt-16 mx-auto flex w-fit max-w-full flex-wrap items-center justify-center gap-x-4 gap-y-2 rounded-3xl glass-thick px-6 py-12 font-display text-white sm:text-4xl md:px-14 md:text-5xl"
+          style={{ fontSize: 'clamp(1.75rem, 5vw, 3.5rem)' }}
+        >
+          <span>
+            L<sup className="text-[0.55em]">F</sup>
+          </span>
+          <span className="text-white/45">=</span>
+          <span className="italic">Ē</span>
+          <span className="text-white/30 text-[1.4em] leading-none">(</span>
+          <span className="inline-flex flex-col items-center text-[0.78em] leading-tight">
+            <span>R − D</span>
+            <span aria-hidden="true" className="my-1 h-px w-full min-w-[3.5rem] bg-white/45" />
+            <span>I</span>
+          </span>
+          <span className="text-white/30 text-[1.4em] leading-none">)</span>
+          <span className="text-white/45">+</span>
+          <span>
+            S<sub className="text-[0.45em]">Addition</sub>
+          </span>
+        </div>
+      </Reveal>
 
-      {/* Variables table */}
-      <ul className="mt-12 space-y-3">
-        {LIFE_FORCE.variables.map((v) => (
+      {/* Variables — quiet typographic table. */}
+      <ol className="mt-16 divide-y divide-white/5 border-t border-white/10">
+        {LIFE_FORCE.variables.map((v, i) => (
           <li
             key={v.symbolHtml}
-            className="grid grid-cols-[5rem_1fr] items-baseline gap-5 rounded-2xl glass bg-white/[0.01] px-6 py-4 sm:grid-cols-[7rem_1fr]"
+            className="grid grid-cols-[5rem_1fr] items-baseline gap-6 py-5 sm:grid-cols-[7rem_1fr] sm:gap-10"
           >
-            <span
-              className="font-display text-2xl font-semibold text-medical-teal"
-              dangerouslySetInnerHTML={{ __html: v.symbolHtml }}
-            />
-            <span className="text-[15px] leading-relaxed text-white/75">{v.meaning}</span>
+            <Reveal delay={i * 0.025}>
+              <span
+                className="font-display font-medium text-medical-teal"
+                style={{ fontSize: 'var(--text-title)' }}
+                dangerouslySetInnerHTML={{ __html: v.symbolHtml }}
+              />
+            </Reveal>
+            <Reveal delay={i * 0.025 + 0.02}>
+              <span
+                className="leading-relaxed text-white/80"
+                style={{ fontSize: 'var(--text-body)' }}
+              >
+                {v.meaning}
+              </span>
+            </Reveal>
           </li>
         ))}
-      </ul>
+      </ol>
 
-      <p className="mt-8 text-pretty text-center text-base leading-relaxed text-white/65">
-        <span className="text-white/45">Reading.</span> {LIFE_FORCE.reading}
-      </p>
-      <p className="mt-3 text-center text-[11px] font-semibold uppercase tracking-[0.18em] text-white/40">
-        {LIFE_FORCE.attribution}
-      </p>
+      <Reveal delay={0.18}>
+        <p
+          className="mt-12 max-w-3xl mx-auto text-pretty text-center font-display italic leading-relaxed text-white/75"
+          style={{ fontSize: 'var(--text-lede)' }}
+        >
+          <span className="not-italic text-white/45 mr-2">Reading.</span>
+          {LIFE_FORCE.reading}
+        </p>
+      </Reveal>
+      <Reveal delay={0.22}>
+        <p className="mt-6 eyebrow text-center text-white/40">{LIFE_FORCE.attribution}</p>
+      </Reveal>
     </div>
   </section>
 );
+
+// -------------------------------------------------------------
+// Three rules — three quiet typographic columns with a big number.
+// -------------------------------------------------------------
 
 const ThreeRules = () => (
-  <section aria-labelledby="rules-heading" className="px-6 py-20 md:py-24">
+  <section aria-labelledby="rules-heading" className="px-6 py-24 md:py-32">
     <div className="mx-auto max-w-7xl">
-      <SectionHeading
-        id="rules-heading"
-        eyebrow="Slater’s Three Rules"
+      <ChapterMark
+        number="THE THREE RULES"
         title="The three claims the rest of the book rests on."
-        intro="Stated verbatim from the book — the spine of the Life Force argument."
-        className="mb-12 md:mb-14"
+        subtitle="Stated verbatim — the spine of the Life Force argument."
       />
 
-      <ul className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        {BOOK_RULES.map((rule) => (
+      <ol className="mt-16 grid grid-cols-1 gap-12 lg:grid-cols-3 lg:gap-16 md:mt-20">
+        {BOOK_RULES.map((rule, i) => (
           <li key={rule.number}>
-            <Card className="flex h-full flex-col gap-6 bg-white/[0.01] p-9" glow>
-              <div className="flex items-center gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-medical-teal/15 font-display text-base font-semibold text-medical-teal">
-                  {rule.number}
-                </span>
-                <span className="eyebrow">Rule {rule.number}</span>
-              </div>
-              <h3 className="font-display text-lg font-semibold leading-tight text-white">
-                {rule.title}
-              </h3>
-              <blockquote className="text-[15px] leading-relaxed text-white/70">
-                “{rule.quote}”
-              </blockquote>
-              <p className="mt-auto text-[11px] font-semibold uppercase tracking-[0.18em] text-white/40">
-                {rule.attribution}
-              </p>
-            </Card>
+            <Reveal delay={i * 0.06}>
+              <article>
+                <p
+                  className="font-display italic text-medical-teal nums-tabular"
+                  style={{ fontSize: 'clamp(3rem, 6vw, 4.5rem)', lineHeight: 1, letterSpacing: '-0.02em' }}
+                >
+                  {String(rule.number).padStart(2, '0')}
+                </p>
+                <h3
+                  className="mt-6 font-display font-medium"
+                  style={{
+                    fontSize: 'var(--text-title)',
+                    lineHeight: 1.15,
+                    letterSpacing: '-0.012em',
+                  }}
+                >
+                  {rule.title}
+                </h3>
+                <blockquote
+                  className="mt-5 text-pretty font-display italic leading-relaxed text-white/75"
+                  style={{ fontSize: 'var(--text-body)' }}
+                >
+                  &ldquo;{rule.quote}&rdquo;
+                </blockquote>
+                <p className="mt-6 eyebrow text-white/40">{rule.attribution}</p>
+              </article>
+            </Reveal>
           </li>
         ))}
-      </ul>
+      </ol>
     </div>
   </section>
 );
+
+// -------------------------------------------------------------
+// Hypothesis callout — the big claim, framed as founder voice.
+// -------------------------------------------------------------
 
 const HypothesisCallout = () => (
   <section
     aria-labelledby="hypothesis-heading"
-    className="border-y border-white/5 bg-brand-panel/30 px-6 py-20 md:py-24"
+    className="border-y border-white/5 px-6 py-24 md:py-32"
+    style={{ backgroundColor: 'var(--color-brand-panel)' }}
   >
     <div className="mx-auto max-w-4xl">
-      <p className="eyebrow text-medical-teal/80">Chapter 9 · Beyond Mortality</p>
-      <h2
-        id="hypothesis-heading"
-        className="mt-4 text-balance font-display text-3xl font-semibold leading-[1.15] tracking-tight text-white sm:text-4xl"
-      >
-        A median healthy lifespan of <span className="text-medical-teal">150–200 years</span> is
-        achievable within this century — conditional on net regenerative capacity (R − D) staying
-        positive over time.
-      </h2>
+      <Reveal>
+        <p className="eyebrow text-medical-teal/85">Chapter 9 · Beyond Mortality</p>
+      </Reveal>
+      <Reveal delay={0.06}>
+        <h2
+          id="hypothesis-heading"
+          className="mt-5 text-balance font-display font-medium"
+          style={{
+            fontSize: 'var(--text-display)',
+            lineHeight: 1.05,
+            letterSpacing: '-0.015em',
+          }}
+        >
+          A median healthy lifespan of{' '}
+          <em className="font-display italic font-normal text-medical-teal">
+            150–200 years
+          </em>{' '}
+          is achievable within this century — conditional on net regenerative capacity (R − D)
+          staying positive over time.
+        </h2>
+      </Reveal>
 
-      <p className="mt-6 text-pretty text-lg leading-relaxed text-white/65">
-        The argument: senolytics, CRISPR, and epigenetic reprogramming have each shown 20–30%
-        lifespan extension in mice. <em>Combinatorially</em>, these could push human healthspan
-        toward 150–200 years — a 60–65% gain over Jeanne Calment&rsquo;s observed 122-year human
-        maximum.
-      </p>
-
-      <div className="mt-8 flex items-start gap-3 rounded-2xl glass bg-white/[0.02] p-5">
-        <span aria-hidden="true" className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-medical-teal" />
-        <p className="text-sm leading-relaxed text-white/65">
-          <span className="font-semibold text-white/80">This is founder-voice material.</span>{' '}
-          It is Slater&rsquo;s hypothesis — not a clinical claim, not a treatment promise.
+      <Reveal delay={0.12}>
+        <p
+          className="mt-8 text-pretty leading-relaxed text-white/65"
+          style={{ fontSize: 'var(--text-body)' }}
+        >
+          The argument: senolytics, CRISPR, and epigenetic reprogramming have each shown 20–30%
+          lifespan extension in mice. <em>Combinatorially</em>, these could push human healthspan
+          toward 150–200 years — a 60–65% gain over Jeanne Calment&rsquo;s observed 122-year human
+          maximum.
         </p>
-      </div>
-      <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/40">
-        Chaos to Creation, pp. 209–218
-      </p>
-    </div>
-  </section>
-);
+      </Reveal>
 
-const EpilogueExtract = () => (
-  <section aria-labelledby="epilogue-heading" className="px-6 py-20 md:py-24">
-    <div className="mx-auto max-w-4xl">
-      <SectionHeading
-        id="epilogue-heading"
-        eyebrow="Epilogue"
-        title="Be a participant, not a passenger."
-        intro="A short note from the author — out of the technical frame, into the so-what-now register."
-        className="mb-10"
-      />
-
-      <ul className="grid gap-4 md:grid-cols-2">
-        {EPILOGUE_POINTS.map((p) => (
-          <li key={p.title} className="rounded-2xl glass bg-white/[0.01] p-6">
-            <p className="font-display text-base font-semibold text-white">{p.title}</p>
-            <p className="mt-2 text-sm leading-relaxed text-white/65">{p.body}</p>
-          </li>
-        ))}
-      </ul>
-
-      <blockquote className="mt-10 flex items-start gap-4 rounded-3xl glass bg-white/[0.02] p-8">
-        <Quote aria-hidden="true" size={22} className="shrink-0 text-medical-teal" strokeWidth={1.5} />
-        <div>
-          <p className="text-pretty text-lg leading-relaxed text-white/80">
-            “Biology is too complex to be fully captured in one equation.”
-          </p>
-          <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/40">
-            — Chaos to Creation, p. 221
+      <Reveal delay={0.18}>
+        <div className="mt-10 flex items-start gap-3 border-l-2 border-medical-teal/40 pl-5">
+          <p
+            className="text-pretty leading-relaxed text-white/70"
+            style={{ fontSize: 'var(--text-meta)' }}
+          >
+            <span className="font-semibold text-white/90">This is founder-voice material.</span>{' '}
+            It is Slater&rsquo;s hypothesis — not a clinical claim, not a treatment promise.
           </p>
         </div>
-      </blockquote>
+      </Reveal>
+      <Reveal delay={0.22}>
+        <p className="mt-6 eyebrow text-white/40">Chaos to Creation, pp. 209–218</p>
+      </Reveal>
     </div>
   </section>
 );
+
+// -------------------------------------------------------------
+// Epilogue extract — the so-what-now register.
+// -------------------------------------------------------------
+
+const EpilogueExtract = () => (
+  <section aria-labelledby="epilogue-heading" className="px-6 py-24 md:py-32">
+    <div className="mx-auto max-w-4xl">
+      <ChapterMark
+        number="EPILOGUE"
+        title="Be a participant, not a passenger."
+        subtitle="A short note from the author — out of the technical frame, into the so-what-now register."
+      />
+
+      <ol className="mt-16 space-y-10 md:mt-20">
+        {EPILOGUE_POINTS.map((p, i) => (
+          <li
+            key={p.title}
+            className="grid grid-cols-[2.5rem_1fr] items-baseline gap-6 border-t border-white/5 pt-6 first:border-0 first:pt-0 md:grid-cols-[3.5rem_1fr] md:gap-8"
+          >
+            <Reveal delay={i * 0.04}>
+              <span
+                className="font-display italic text-white/40 nums-tabular"
+                style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.04em' }}
+              >
+                {String(i + 1).padStart(2, '0')}
+              </span>
+            </Reveal>
+            <Reveal delay={i * 0.04 + 0.02}>
+              <div>
+                <p
+                  className="font-display font-medium"
+                  style={{ fontSize: 'var(--text-title)', lineHeight: 1.15, letterSpacing: '-0.01em' }}
+                >
+                  {p.title}
+                </p>
+                <p
+                  className="mt-3 text-pretty leading-relaxed text-white/65"
+                  style={{ fontSize: 'var(--text-body)' }}
+                >
+                  {p.body}
+                </p>
+              </div>
+            </Reveal>
+          </li>
+        ))}
+      </ol>
+
+      <div className="mt-16 md:mt-20">
+        <PullQuote attribution="Chaos to Creation, p. 221" width="wide">
+          Biology is too complex to be fully captured in one equation.
+        </PullQuote>
+      </div>
+    </div>
+  </section>
+);
+
+// -------------------------------------------------------------
+// Clinical cases — two factual case panels.
+// -------------------------------------------------------------
 
 const ClinicalCases = () => (
   <section
     aria-labelledby="cases-heading"
-    className="border-t border-white/5 px-6 py-20 md:py-24"
+    className="border-t border-white/5 px-6 py-24 md:py-32"
   >
     <div className="mx-auto max-w-7xl">
-      <SectionHeading
-        id="cases-heading"
-        eyebrow="Two clinical cases"
+      <ChapterMark
+        number="CLINICAL CASES"
         title="Where the formula meets the bedside."
-        intro="Two factual case panels referenced in the book and the published literature."
-        className="mb-12 md:mb-14"
+        subtitle="Two factual case panels referenced in the book and the published literature."
       />
 
-      <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        {CASE_STUDIES.map((c) => (
+      <ol className="mt-16 grid grid-cols-1 gap-12 md:mt-20 md:grid-cols-2 md:gap-16">
+        {CASE_STUDIES.map((c, i) => (
           <li key={c.id}>
-            <Card className="flex h-full flex-col gap-4 bg-white/[0.01] p-9" glow>
-              <h3 className="font-display text-2xl font-semibold leading-tight text-white">
-                {c.title}
-              </h3>
-              <p className="text-[15px] leading-relaxed text-white/70">{c.body}</p>
-              <p className="mt-auto pt-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/40">
-                {c.attribution}
-              </p>
-            </Card>
+            <Reveal delay={i * 0.05}>
+              <article>
+                <p
+                  className="font-display italic text-medical-teal nums-tabular"
+                  style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', lineHeight: 1, letterSpacing: '-0.02em' }}
+                >
+                  {String(i + 1).padStart(2, '0')}
+                </p>
+                <h3
+                  className="mt-6 font-display font-medium"
+                  style={{
+                    fontSize: 'var(--text-title)',
+                    lineHeight: 1.15,
+                    letterSpacing: '-0.012em',
+                  }}
+                >
+                  {c.title}
+                </h3>
+                <p
+                  className="mt-5 text-pretty leading-relaxed text-white/75"
+                  style={{ fontSize: 'var(--text-body)' }}
+                >
+                  {c.body}
+                </p>
+                <p className="mt-6 eyebrow text-white/40">{c.attribution}</p>
+              </article>
+            </Reveal>
           </li>
         ))}
-      </ul>
+      </ol>
     </div>
   </section>
 );
+
+// -------------------------------------------------------------
+// Endorsements — refined glass cards (glass-thin), Fraunces titles.
+// -------------------------------------------------------------
 
 const EndorsementsSection = () => (
   <section
     aria-labelledby="endorsements-heading"
-    className="border-y border-white/5 bg-brand-panel/30 px-6 py-20 md:py-24"
+    className="border-y border-white/5 px-6 py-24 md:py-32"
+    style={{ backgroundColor: 'var(--color-brand-panel)' }}
   >
     <div className="mx-auto max-w-7xl">
-      <SectionHeading
-        id="endorsements-heading"
-        eyebrow="Praise for the book"
+      <ChapterMark
+        number="PRAISE FOR THE BOOK"
         title="From the book jacket."
-        intro="Reactions to Chaos to Creation from beyond the author’s own field."
-        className="mb-12 md:mb-14"
+        subtitle="Reactions to Chaos to Creation from beyond the author's own field."
       />
 
-      <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {BOOK_ENDORSEMENTS.map((e) => (
+      <ul className="mt-16 grid grid-cols-1 gap-6 md:mt-20 md:grid-cols-2 lg:grid-cols-3">
+        {BOOK_ENDORSEMENTS.map((e, i) => (
           <li key={e.by}>
-            <Card className="flex h-full flex-col gap-5 bg-white/[0.01] p-8" glow>
-              <Quote
-                aria-hidden="true"
-                size={22}
-                strokeWidth={1.5}
-                className="text-medical-teal/80"
-              />
-              <blockquote className="text-pretty text-base leading-relaxed text-white/80">
-                “{e.quote}”
-              </blockquote>
-              <footer className="mt-auto pt-2">
-                <p className="font-display text-base font-semibold text-white">{e.by}</p>
-                <p className="text-xs leading-relaxed text-white/55">{e.title}</p>
-              </footer>
-            </Card>
+            <Reveal delay={i * 0.05}>
+              <article className="flex h-full flex-col gap-6 rounded-3xl glass-thin p-8">
+                <Quote
+                  aria-hidden="true"
+                  size={20}
+                  strokeWidth={1.5}
+                  className="text-medical-teal/80"
+                />
+                <blockquote
+                  className="text-pretty font-display italic leading-relaxed text-white/85"
+                  style={{ fontSize: 'var(--text-body)' }}
+                >
+                  &ldquo;{e.quote}&rdquo;
+                </blockquote>
+                <footer className="mt-auto border-t border-white/5 pt-5">
+                  <p
+                    className="font-display font-medium text-white/95"
+                    style={{ fontSize: 'var(--text-body)' }}
+                  >
+                    {e.by}
+                  </p>
+                  <p
+                    className="mt-1 leading-relaxed text-white/55"
+                    style={{ fontSize: 'var(--text-meta)' }}
+                  >
+                    {e.title}
+                  </p>
+                </footer>
+              </article>
+            </Reveal>
           </li>
         ))}
       </ul>
@@ -504,32 +756,59 @@ const EndorsementsSection = () => (
   </section>
 );
 
+// -------------------------------------------------------------
+// Close — quiet exit, mirrors the opening hero in register.
+// -------------------------------------------------------------
+
 const BookCloseCTA = () => (
   <section
     aria-label="Close"
-    className="relative overflow-hidden px-6 py-20 md:py-24"
+    className="relative overflow-hidden px-6 py-28 md:py-36"
   >
     <Glow className="bottom-0 left-1/2 -translate-x-1/2" color="teal" />
 
     <div className="relative mx-auto max-w-3xl text-center">
-      <p className="eyebrow">{BOOK.title}</p>
-      <h2 className="mt-4 text-balance font-display text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl">
-        “Lifespan is an energy balance, not a clock.”
-      </h2>
-      <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/40">
-        Chaos to Creation, p. 221 — Rule 3
-      </p>
-
-      <div className="mt-10 flex flex-col items-center justify-center gap-5">
-        <FormatButtons size="lg" />
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55 transition-colors hover:text-white"
+      <Reveal>
+        <p className="eyebrow text-medical-teal/85">{BOOK.title}</p>
+      </Reveal>
+      <Reveal delay={0.05}>
+        <h2
+          className="mt-6 text-balance font-display italic font-medium"
+          style={{
+            fontSize: 'var(--text-display)',
+            lineHeight: 1.1,
+            letterSpacing: '-0.018em',
+          }}
         >
-          <ArrowLeft aria-hidden="true" size={13} />
-          Back to the personal site
-        </Link>
-      </div>
+          &ldquo;Lifespan is an energy balance, not a clock.&rdquo;
+        </h2>
+      </Reveal>
+      <Reveal delay={0.1}>
+        <p className="mt-6 eyebrow text-white/45">Chaos to Creation, p. 221 — Rule 3</p>
+      </Reveal>
+
+      <Reveal delay={0.16}>
+        <div className="mt-14 flex flex-col items-center justify-center gap-6">
+          <FormatButtons size="lg" />
+          <Link
+            to="/"
+            className="group/back mt-2 inline-flex items-center gap-2 text-white/55 transition-colors hover:text-white"
+            style={{
+              fontSize: 'var(--text-eyebrow)',
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              fontWeight: 600,
+            }}
+          >
+            <ArrowLeft
+              aria-hidden="true"
+              size={13}
+              className="transition-transform group-hover/back:-translate-x-0.5"
+            />
+            Back to the personal site
+          </Link>
+        </div>
+      </Reveal>
     </div>
   </section>
 );
