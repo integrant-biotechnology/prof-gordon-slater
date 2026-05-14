@@ -50,7 +50,10 @@ export const Connect = () => {
                   <a
                     href={social.url}
                     target="_blank"
-                    rel="noopener noreferrer"
+                    // rel="me" marks this as an authoritative profile of the
+                    // page subject (used by IndieAuth, Mastodon verification,
+                    // and search-engine entity linking).
+                    rel={isPlaceholder ? 'noopener noreferrer' : 'me noopener noreferrer'}
                     aria-label={`${social.label}${isPlaceholder ? ' (link coming soon)' : ' (opens in a new tab)'}`}
                     title={isPlaceholder ? `${social.label} — link coming soon` : social.label}
                     className="group inline-flex h-12 w-12 items-center justify-center rounded-full glass text-white/65 transition-colors hover:text-medical-teal"
