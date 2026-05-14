@@ -114,12 +114,16 @@ export const Navbar = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className={cn(
-          'pointer-events-auto flex items-center gap-5 rounded-full transition-all md:gap-7',
+          // Single source of truth: Tailwind drives everything. Transitions
+          // are declared once via the arbitrary-value ease + duration so
+          // they don't conflict with inline style.
+          'pointer-events-auto flex items-center gap-5 rounded-full',
+          'transition-[padding,background-color,box-shadow] duration-[360ms] ease-[cubic-bezier(0.22,1,0.36,1)]',
+          'md:gap-7',
           isScrolled
             ? 'glass-thick px-4 py-2.5 shadow-2xl shadow-black/40 md:px-7 md:py-3'
             : 'glass-thin px-3 py-2 md:px-5 md:py-2.5',
         )}
-        style={{ transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)', transitionDuration: '360ms' }}
       >
         <Link
           to="/"
