@@ -75,8 +75,10 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    /* Anchor sections clear of the floating Navbar pill. */
-    scroll-padding-top: 6rem;
+    /* Anchor sections clear of the floating Navbar pill — calibrated
+       to the scrolled glass-thick state (max height ~3.5rem inner
+       pill + 1rem container py + 1rem breathing offset = 5.5rem). */
+    scroll-padding-top: 5.5rem;
   }
 
   body {
@@ -252,4 +254,87 @@
 ::view-transition-new(root) {
   animation-duration: 360ms;
   animation-timing-function: var(--ease-apple);
+}
+
+/* -------------------------------------------------------------
+ * Print — calibrated for /book.
+ *
+ * The site is dark by default, but a printed page lives on white
+ * paper. Override the dark surfaces, drop the glass + scroll
+ * affordances, and let Fraunces / Inter carry the page as a real
+ * printed document.
+ *
+ * Apple-grade: researchers and journalists printing /book get a
+ * clean PDF that respects typography and page breaks.
+ * ----------------------------------------------------------- */
+@media print {
+  /* Reset surfaces — black ink on white paper. */
+  body,
+  html,
+  section,
+  article,
+  header,
+  footer,
+  main,
+  nav,
+  div {
+    background: #fff !important;
+    color: #111 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  body {
+    font-size: 11pt;
+    line-height: 1.5;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    color: #000 !important;
+    page-break-after: avoid;
+  }
+  a,
+  a:link,
+  a:visited {
+    color: #111 !important;
+    text-decoration: underline;
+  }
+  /* Drop glass + scroll + cursor affordances. */
+  .glass,
+  .glass-thin,
+  .glass-thick {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-color: rgba(0, 0, 0, 0.15) !important;
+    box-shadow: none !important;
+  }
+  nav[aria-label="Primary"],
+  .page-enter-hairline,
+  [data-cursor-companion] {
+    display: none !important;
+  }
+  /* Keep printed page widths sane on Letter / A4. */
+  .max-w-7xl,
+  .max-w-5xl,
+  .max-w-4xl,
+  .max-w-3xl,
+  .max-w-2xl,
+  .max-w-xl {
+    max-width: 100% !important;
+  }
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+  blockquote,
+  figure,
+  pre {
+    page-break-inside: avoid;
+  }
+  /* Show outbound URLs in print so the document is self-contained. */
+  a[href^="http"]:after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #555 !important;
+    word-break: break-all;
+  }
 }
