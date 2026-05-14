@@ -79,6 +79,54 @@
       }
     </script>
 
+    <!-- Giving — supported events JSON-LD (ItemList of three Sydney charity events) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Sydney charity events supported by Prof Gordon Slater",
+        "url": "https://profgordonslater.com.au/giving",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "item": {
+              "@type": "Event",
+              "name": "The Pink Luncheon",
+              "description": "Chandon Ladies' Day at Royal Randwick raising funds for breast cancer research.",
+              "url": "https://www.australianturfclub.com.au/hospitality/pink-fashion-lunch/",
+              "location": { "@type": "Place", "name": "Royal Randwick Racecourse, Sydney" },
+              "organizer": { "@type": "Organization", "name": "Australian Turf Club", "url": "https://www.australianturfclub.com.au/" }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "item": {
+              "@type": "Event",
+              "name": "The Ingham Charity Raceday",
+              "description": "A signature Sydney race day raising funds for the Ingham Institute for Applied Medical Research.",
+              "url": "https://theingham.com.au/",
+              "location": { "@type": "Place", "name": "Sydney" },
+              "organizer": { "@type": "Organization", "name": "Ingham Institute for Applied Medical Research", "url": "https://www.inghaminstitute.org.au/" }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "item": {
+              "@type": "Event",
+              "name": "The Black & White End of Summer Luncheon",
+              "description": "A long-running fundraising luncheon by The Black & White Committee in support of Vision Australia.",
+              "url": "https://blackandwhite.org.au/",
+              "location": { "@type": "Place", "name": "Sydney" },
+              "organizer": { "@type": "Organization", "name": "The Black & White Committee", "url": "https://blackandwhite.org.au/" }
+            }
+          }
+        ]
+      }
+    </script>
+
     <!-- Book JSON-LD: Chaos to Creation -->
     <script type="application/ld+json">
       {
