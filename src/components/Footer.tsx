@@ -1,6 +1,13 @@
 import { Link, useLocation } from 'react-router-dom';
 import { ArrowUp, ArrowUpRight } from 'lucide-react';
-import { DOCTOR_NAME, DOCTOR_TITLE, FOOTER_DISCLAIMER, PRACTICE_URL } from '@/constants';
+import { ICONS } from '@/lib/icons';
+import {
+  DOCTOR_NAME,
+  DOCTOR_TITLE,
+  FOOTER_DISCLAIMER,
+  PRACTICE_URL,
+  SOCIAL_LINKS,
+} from '@/constants';
 
 interface FooterLink {
   label: string;
@@ -21,15 +28,15 @@ const FOOTER_SECTIONS: { title: string; links: FooterLink[] }[] = [
       { label: 'Home', hash: 'home' },
       { label: 'About', hash: 'about' },
       { label: 'Background', hash: 'background' },
+      { label: 'Body of work', hash: 'work' },
     ],
   },
   {
     title: 'Work',
     links: [
       { label: 'The book', href: '/book', route: true },
-      { label: 'Body of work', hash: 'work' },
-      { label: 'Community & vision', hash: 'community' },
       { label: 'Giving back', href: '/giving', route: true },
+      { label: 'Community & vision', hash: 'community' },
       { label: 'Writing', hash: 'writing' },
     ],
   },
@@ -46,113 +53,230 @@ const LEGAL_LINKS = ['Privacy', 'Disclaimer', 'Accessibility'];
 
 const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
+/**
+ * Footer — Apple-grade quiet exit.
+ *
+ * Refinements vs. the previous version:
+ *  - Identity column shows DOCTOR_NAME in Fraunces at title-size + the
+ *    professional summary in meta type. Smaller, calmer.
+ *  - Three navigation columns of typographic links — no glass card on
+ *    the back-to-top button (it's now a typographic hairline)
+ *  - Verified social profiles surface as a quiet row in the bottom
+ *    strip, mirroring the Connect section's social treatment
+ *  - The disclaimer + qualification meta sit at the bottom in a clean
+ *    grid with the legal links and copyright in a single hairline-
+ *    divided row
+ *  - All links use the new design tokens and the calibrated hover
+ *    treatment from the rest of the site
+ */
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
   const { pathname } = useLocation();
   const onHome = pathname === '/';
 
   return (
-    <footer className="relative z-10 border-t border-white/5 bg-brand-bg px-6 pb-16 pt-24">
+    <footer className="relative z-10 border-t border-white/5 bg-brand-bg px-6 pb-14 pt-24 md:pt-28">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-20 grid grid-cols-2 gap-12 md:grid-cols-4 lg:grid-cols-5">
-          <div className="col-span-2 space-y-8 lg:col-span-2">
-            <div className="space-y-3">
-              <p className="font-display text-2xl font-bold tracking-tight text-white">{DOCTOR_NAME}</p>
-              <p className="eyebrow max-w-xs leading-relaxed">{DOCTOR_TITLE}</p>
+        {/* Top — identity + navigation. */}
+        <div className="grid grid-cols-1 gap-14 md:grid-cols-12 md:gap-10">
+          {/* Identity column — 4/12. */}
+          <div className="space-y-7 md:col-span-4">
+            <div>
+              <p
+                className="font-display font-medium"
+                style={{
+                  fontSize: 'var(--text-title)',
+                  letterSpacing: '-0.012em',
+                  lineHeight: 1.1,
+                }}
+              >
+                {DOCTOR_NAME}
+              </p>
+              <p
+                className="mt-2 max-w-xs leading-relaxed text-white/55"
+                style={{ fontSize: 'var(--text-meta)' }}
+              >
+                {DOCTOR_TITLE}
+              </p>
             </div>
             <button
               type="button"
               onClick={scrollToTop}
               aria-label="Back to top"
-              className="group flex h-12 w-12 items-center justify-center rounded-2xl glass text-white/55 transition-colors hover:border-medical-teal/30 hover:text-medical-teal"
+              className="group/top inline-flex items-center gap-2 text-white/55 transition-colors hover:text-medical-teal"
+              style={{
+                fontSize: 'var(--text-eyebrow)',
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                fontWeight: 600,
+              }}
             >
-              <ArrowUp aria-hidden="true" size={20} strokeWidth={1.5} className="transition-transform group-hover:-translate-y-0.5" />
+              <ArrowUp
+                aria-hidden="true"
+                size={13}
+                className="transition-transform group-hover/top:-translate-y-0.5"
+              />
+              Back to top
             </button>
           </div>
 
-          {FOOTER_SECTIONS.map((section) => (
-            <nav key={section.title} aria-label={section.title} className="space-y-6">
-              <h2 className="eyebrow">{section.title}</h2>
-              <ul className="space-y-3.5">
-                {section.links.map((link) => {
-                  const className = 'text-sm text-white/60 transition-colors hover:text-white';
-                  if (link.external) {
+          {/* Navigation columns — 8/12, split into three. */}
+          <div className="grid grid-cols-2 gap-x-10 gap-y-12 md:col-span-8 md:grid-cols-3">
+            {FOOTER_SECTIONS.map((section) => (
+              <nav key={section.title} aria-label={section.title}>
+                <p className="eyebrow">{section.title}</p>
+                <ul className="mt-6 space-y-3">
+                  {section.links.map((link) => {
+                    const className =
+                      'inline-flex items-center gap-1 leading-snug text-white/65 transition-colors hover:text-white';
+                    const style = { fontSize: 'var(--text-meta)' };
+                    if (link.external) {
+                      return (
+                        <li key={link.label}>
+                          <a
+                            href={link.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={className}
+                            style={style}
+                          >
+                            {link.label}
+                            <ArrowUpRight aria-hidden="true" size={11} />
+                          </a>
+                        </li>
+                      );
+                    }
+                    if (link.route) {
+                      return (
+                        <li key={link.label}>
+                          <Link to={link.href!} className={className} style={style}>
+                            {link.label}
+                          </Link>
+                        </li>
+                      );
+                    }
+                    const id = link.hash!;
+                    if (onHome) {
+                      return (
+                        <li key={link.label}>
+                          <a href={`#${id}`} className={className} style={style}>
+                            {link.label}
+                          </a>
+                        </li>
+                      );
+                    }
                     return (
                       <li key={link.label}>
-                        <a
-                          href={link.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`${className} inline-flex items-center gap-1`}
-                        >
-                          {link.label}
-                          <ArrowUpRight aria-hidden="true" size={12} />
-                        </a>
-                      </li>
-                    );
-                  }
-                  if (link.route) {
-                    return (
-                      <li key={link.label}>
-                        <Link to={link.href!} className={className}>
+                        <Link to={{ pathname: '/', hash: `#${id}` }} className={className} style={style}>
                           {link.label}
                         </Link>
                       </li>
                     );
-                  }
-                  // hash anchor — same-page on / , router nav with hash from /book
-                  const id = link.hash!;
-                  if (onHome) {
-                    return (
-                      <li key={link.label}>
-                        <a href={`#${id}`} className={className}>
-                          {link.label}
-                        </a>
-                      </li>
-                    );
-                  }
+                  })}
+                </ul>
+              </nav>
+            ))}
+          </div>
+        </div>
+
+        {/* Middle — social row + disclaimer + qualifications. */}
+        <div className="mt-20 border-t border-white/10 pt-12 md:mt-24">
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
+            {/* Social profiles — left 6/12. */}
+            <div className="lg:col-span-6">
+              <p className="eyebrow">Follow</p>
+              <ul className="mt-5 flex flex-wrap items-center gap-2.5">
+                {SOCIAL_LINKS.map((social) => {
+                  const Icon = ICONS[social.icon];
+                  const isPlaceholder = social.placeholder || social.url === '#';
                   return (
-                    <li key={link.label}>
-                      <Link to={{ pathname: '/', hash: `#${id}` }} className={className}>
-                        {link.label}
-                      </Link>
+                    <li key={social.label}>
+                      <a
+                        href={social.url}
+                        target="_blank"
+                        rel={isPlaceholder ? 'noopener noreferrer' : 'me noopener noreferrer'}
+                        aria-label={`${social.label}${isPlaceholder ? ' (link coming soon)' : ' (opens in a new tab)'}`}
+                        className="inline-flex h-10 w-10 items-center justify-center rounded-full glass-thin text-white/65 transition-colors hover:text-medical-teal"
+                      >
+                        <Icon aria-hidden="true" size={15} strokeWidth={1.5} />
+                        <span className="sr-only">{social.label}</span>
+                      </a>
                     </li>
                   );
                 })}
               </ul>
-            </nav>
-          ))}
+            </div>
+
+            {/* Qualifications meta — right 6/12. */}
+            <dl className="grid grid-cols-2 gap-x-10 gap-y-4 self-start lg:col-span-6 lg:justify-self-end">
+              <div>
+                <dt className="eyebrow">Qualification</dt>
+                <dd
+                  className="mt-2 font-medium text-white/65"
+                  style={{
+                    fontSize: 'var(--text-eyebrow)',
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  FRACS (Orth)
+                </dd>
+              </div>
+              <div>
+                <dt className="eyebrow">Registration</dt>
+                <dd
+                  className="mt-2 font-medium text-white/65"
+                  style={{
+                    fontSize: 'var(--text-eyebrow)',
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  AHPRA specialist
+                </dd>
+              </div>
+            </dl>
+          </div>
+
+          <p
+            className="mt-12 max-w-3xl text-pretty leading-relaxed text-white/55"
+            style={{ fontSize: 'var(--text-meta)' }}
+          >
+            {FOOTER_DISCLAIMER}
+          </p>
         </div>
 
-        <div className="space-y-12 border-t border-white/5 pt-12">
-          <div className="grid gap-10 lg:grid-cols-12">
-            <p className="text-sm leading-relaxed text-white/55 lg:col-span-8">{FOOTER_DISCLAIMER}</p>
-            <div className="flex gap-10 lg:col-span-4 lg:justify-end">
-              <div className="space-y-1.5">
-                <p className="eyebrow">Qualification</p>
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-white/55">FRACS (Orth)</p>
-              </div>
-              <div className="space-y-1.5">
-                <p className="eyebrow">Registration</p>
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-white/55">AHPRA specialist</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
-            <ul className="flex flex-wrap justify-center gap-x-8 gap-y-3">
-              {LEGAL_LINKS.map((item) => (
-                <li key={item}>
-                  <a href="#" className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45 transition-colors hover:text-white/75">
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
-              © {currentYear} {DOCTOR_NAME}
-            </p>
-          </div>
+        {/* Bottom — legal + copyright. */}
+        <div className="mt-12 flex flex-col items-start justify-between gap-5 border-t border-white/5 pt-8 md:flex-row md:items-center">
+          <ul className="flex flex-wrap gap-x-7 gap-y-3">
+            {LEGAL_LINKS.map((item) => (
+              <li key={item}>
+                <a
+                  href="#"
+                  className="text-white/45 transition-colors hover:text-white/85"
+                  style={{
+                    fontSize: 'var(--text-eyebrow)',
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                    fontWeight: 600,
+                  }}
+                >
+                  {item}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <p
+            className="text-white/45 nums-tabular"
+            style={{
+              fontSize: 'var(--text-eyebrow)',
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              fontWeight: 600,
+            }}
+          >
+            © {currentYear} {DOCTOR_NAME}
+          </p>
         </div>
       </div>
     </footer>
