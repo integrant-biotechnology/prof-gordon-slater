@@ -23,6 +23,20 @@ const NAV_LINKS: NavLink[] = [
   { name: 'Connect', hash: 'connect' },
 ];
 
+/**
+ * Navbar — floating glass pill.
+ *
+ * Apple-grade refinements:
+ *  - At top of page: uses `glass-thin` material (almost transparent)
+ *    so the hero is the moment, not the chrome.
+ *  - On scroll: pill transitions to `glass-thick` with a calibrated
+ *    drop shadow and slightly larger padding — it "settles" into a
+ *    more visible state once the hero has been read.
+ *  - Active-route indicator: a 4px teal dot sits beneath the link
+ *    of the current route (Book / Giving). Subtle, calibrated.
+ *  - Monogram uses Fraunces italic to match the new favicon.
+ *  - All hover transitions calibrated through --ease-apple.
+ */
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -31,11 +45,16 @@ export const Navbar = () => {
   const onHome = pathname === '/';
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    const handleScroll = () => setIsScrolled(window.scrollY > 60);
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Close mobile menu on route change.
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
 
   const goConnect = () => {
     if (onHome) {
@@ -45,11 +64,28 @@ export const Navbar = () => {
     }
   };
 
+  const isActiveRoute = (link: NavLink): boolean => {
+    if (link.route) return pathname === link.route;
+    return false;
+  };
+
   const renderLink = (link: NavLink, className: string, onClick?: () => void) => {
+    const active = isActiveRoute(link);
     if (link.route) {
       return (
-        <Link to={link.route} className={className} onClick={onClick}>
+        <Link
+          to={link.route}
+          className={className}
+          onClick={onClick}
+          aria-current={active ? 'page' : undefined}
+        >
           {link.name}
+          {active && (
+            <span
+              aria-hidden="true"
+              className="ml-1.5 inline-block h-1 w-1 translate-y-[-2px] rounded-full bg-medical-teal"
+            />
+          )}
         </Link>
       );
     }
@@ -71,16 +107,19 @@ export const Navbar = () => {
   return (
     <nav
       aria-label="Primary"
-      className="pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center px-4 py-5 sm:px-6"
+      className="pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center px-4 py-4 sm:px-6 sm:py-5"
     >
       <motion.div
         initial={{ y: -16, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.4, ease: 'easeOut' }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className={cn(
-          'pointer-events-auto flex items-center gap-5 rounded-full glass px-3 py-2.5 transition-shadow duration-500 md:gap-7 md:px-6',
-          isScrolled ? 'shadow-2xl shadow-black/60 ring-1 ring-white/10' : 'ring-1 ring-white/5',
+          'pointer-events-auto flex items-center gap-5 rounded-full transition-all md:gap-7',
+          isScrolled
+            ? 'glass-thick px-4 py-2.5 shadow-2xl shadow-black/40 md:px-7 md:py-3'
+            : 'glass-thin px-3 py-2 md:px-5 md:py-2.5',
         )}
+        style={{ transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)', transitionDuration: '360ms' }}
       >
         <Link
           to="/"
@@ -89,11 +128,19 @@ export const Navbar = () => {
         >
           <span
             aria-hidden="true"
-            className="flex h-7 w-7 items-center justify-center rounded-full bg-medical-teal text-[10px] font-bold text-brand-bg transition-transform group-hover:scale-110"
+            className="flex h-7 w-7 items-center justify-center rounded-full bg-medical-teal text-[12px] font-medium italic transition-transform duration-[220ms] ease-out group-hover:scale-105"
+            style={{
+              fontFamily: 'var(--font-display)',
+              color: 'var(--color-brand-bg)',
+              letterSpacing: '-0.02em',
+            }}
           >
             GS
           </span>
-          <span className="hidden font-display text-sm font-semibold tracking-tight text-white lg:block">
+          <span
+            className="hidden font-display font-medium tracking-tight text-white lg:block"
+            style={{ fontSize: 'var(--text-meta)', letterSpacing: '-0.005em' }}
+          >
             {DOCTOR_NAME}
           </span>
         </Link>
@@ -103,7 +150,7 @@ export const Navbar = () => {
             <li key={link.name}>
               {renderLink(
                 link,
-                'text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55 transition-colors hover:text-white',
+                'inline-flex items-center text-white/55 transition-colors duration-[220ms] ease-out hover:text-white',
               )}
             </li>
           ))}
@@ -113,7 +160,7 @@ export const Navbar = () => {
           <Button
             variant="secondary"
             size="sm"
-            className="hidden h-9 px-5 text-xs sm:inline-flex"
+            className="hidden h-9 px-5 sm:inline-flex"
             onClick={goConnect}
           >
             Get in touch
@@ -124,7 +171,7 @@ export const Navbar = () => {
             aria-expanded={isOpen}
             aria-controls="mobile-nav"
             onClick={() => setIsOpen((open) => !open)}
-            className="rounded-full p-2 text-white/65 transition-colors hover:text-white md:hidden"
+            className="rounded-full p-2 text-white/65 transition-colors duration-[220ms] ease-out hover:text-white md:hidden"
           >
             {isOpen ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
           </button>
@@ -138,15 +185,15 @@ export const Navbar = () => {
             initial={{ opacity: 0, y: -8, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.98 }}
-            transition={{ duration: 0.2 }}
-            className="pointer-events-auto fixed inset-x-4 top-24 rounded-3xl glass p-8 shadow-2xl shadow-black/60 md:hidden"
+            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            className="pointer-events-auto fixed inset-x-4 top-24 rounded-3xl glass-thick p-8 shadow-2xl shadow-black/60 md:hidden"
           >
             <ul className="flex flex-col gap-5">
               {NAV_LINKS.map((link) => (
                 <li key={link.name}>
                   {renderLink(
                     link,
-                    'font-display text-xl font-medium text-white/65 transition-colors hover:text-white',
+                    'inline-flex items-center font-display text-xl font-medium text-white/65 transition-colors hover:text-white',
                     () => setIsOpen(false),
                   )}
                 </li>
@@ -155,7 +202,7 @@ export const Navbar = () => {
             <div className="my-5 h-px w-full bg-white/10" />
             <Button
               variant="secondary"
-              className="w-full py-3.5 text-sm"
+              className="w-full py-3.5"
               onClick={() => {
                 setIsOpen(false);
                 goConnect();
