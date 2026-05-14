@@ -1,39 +1,75 @@
-import { motion, useReducedMotion } from 'motion/react';
-import { ArrowUpRight, Award, FlaskConical, GraduationCap, Target } from 'lucide-react';
-import { Card } from '@/components/ui/Card';
+import { ArrowUpRight } from 'lucide-react';
+import { Reveal } from '@/components/ui/Motion';
+import { EditorialImage } from '@/components/ui/EditorialImage';
 import { DOCTOR_CREDENTIALS, DOCTOR_NAME, PRACTICE_URL } from '@/constants';
 
-const CREDENTIALS = [
-  { icon: GraduationCap, text: 'Professor, University of Technology Sydney' },
-  { icon: Target, text: 'Foot & ankle fellowship — Hospital for Special Surgery, New York' },
-  { icon: Award, text: 'Fellow, Royal Australasian College of Surgeons (Orthopaedics)' },
-  { icon: FlaskConical, text: 'Associate Editor, Foot & Ankle International' },
+const TAGS = [
+  'Professor, UTS',
+  'Foot & ankle fellowship — Hospital for Special Surgery, New York',
+  'Fellow, Royal Australasian College of Surgeons (Orthopaedics)',
+  'Associate Editor, Foot & Ankle International',
 ];
 
-export const About = () => {
-  const reduceMotion = useReducedMotion();
-  const reveal = {
-    initial: reduceMotion ? false : { opacity: 0, y: 16 },
-    whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true },
-    transition: { duration: 0.5, ease: 'easeOut' } as const,
-  };
+/**
+ * About — magazine spread.
+ *
+ * Reimagined per the Apple-grade brief:
+ *  - Two-column editorial layout: large environmental photo on the
+ *    left (3:4), body copy on the right.
+ *  - First paragraph carries a CSS `::first-letter` drop cap in
+ *    Fraunces at ~4× body height — the magazine signature.
+ *  - Credentials list collapses from a vertical icon list into a
+ *    quiet inline meta row at the bottom. No card.
+ *  - The right-column "metadata card" is removed entirely. The
+ *    photograph carries the identity; the type does the rest.
+ */
+export const About = () => (
+  <section
+    id="about"
+    aria-labelledby="about-heading"
+    className="overflow-hidden px-6 py-24 md:py-32"
+  >
+    <div className="mx-auto grid max-w-7xl items-start gap-16 lg:grid-cols-[5fr_7fr] lg:gap-20">
+      {/* Photograph column — sticky on desktop so the eye stays
+          anchored as the body copy scrolls past. */}
+      <div className="lg:sticky lg:top-28">
+        <Reveal>
+          <EditorialImage
+            fallbackSrc="/portrait-gordon-slater.webp?v=2"
+            alt={`${DOCTOR_NAME}, foot and ankle orthopaedic surgeon`}
+            aspect="3/4"
+            sizes="(min-width: 1024px) 40vw, 100vw"
+            caption={DOCTOR_NAME}
+            attribution={DOCTOR_CREDENTIALS}
+          />
+        </Reveal>
+      </div>
 
-  return (
-    <section id="about" aria-labelledby="about-heading" className="overflow-hidden px-6 py-24 md:py-28">
-      <div className="mx-auto grid max-w-7xl items-start gap-16 lg:grid-cols-2 lg:gap-24">
-        <div className="space-y-12">
-          <motion.h2
-            {...reveal}
+      {/* Body column — the magazine page. */}
+      <div>
+        <Reveal>
+          <p className="eyebrow">About</p>
+        </Reveal>
+        <Reveal delay={0.05}>
+          <h2
             id="about-heading"
-            className="text-balance font-display text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl"
+            className="mt-5 text-balance font-display font-medium"
+            style={{
+              fontSize: 'var(--text-display)',
+              lineHeight: 1.05,
+              letterSpacing: '-0.015em',
+            }}
           >
-            About <br />
-            <span className="text-white/40">{DOCTOR_NAME}.</span>
-          </motion.h2>
+            A surgeon&rsquo;s record.{' '}
+            <em className="font-display italic font-normal text-white/55">
+              A scientist&rsquo;s questions.
+            </em>
+          </h2>
+        </Reveal>
 
-          <motion.div {...reveal} className="space-y-6 text-pretty text-lg leading-relaxed text-white/65">
-            <p>
+        <Reveal delay={0.12}>
+          <div className="mt-10 space-y-6 text-pretty leading-relaxed text-white/75" style={{ fontSize: 'var(--text-body)' }}>
+            <p className="drop-cap">
               {DOCTOR_NAME} is an Australian orthopaedic surgeon with a thirty-year clinical record
               in foot &amp; ankle surgery, a growing body of peer-reviewed research, and active
               work in medical-device development. He was among the first surgeons in Australia to
@@ -56,67 +92,39 @@ export const About = () => {
               the long-form synthesis of that work, drawing on more than fifty peer-reviewed
               publications and multiple medical-technology patents.
             </p>
-            <p className="text-base text-white/55">
-              For clinical care or to arrange an appointment, please see the practice site —{' '}
-              <a
-                href={PRACTICE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-baseline gap-1 text-medical-teal underline-offset-4 transition-colors hover:underline"
-              >
-                orthopaedic-surgeon.com.au
-                <ArrowUpRight aria-hidden="true" size={12} className="self-center" />
-              </a>
-              .
-            </p>
-          </motion.div>
+          </div>
+        </Reveal>
 
-          <ul className="space-y-5 border-t border-white/5 pt-8">
-            {CREDENTIALS.map(({ icon: Icon, text }) => (
-              <li key={text} className="group flex items-center gap-4">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full glass text-white/45 transition-colors group-hover:text-medical-teal">
-                  <Icon aria-hidden="true" size={16} strokeWidth={1.5} />
-                </span>
-                <span className="text-sm font-medium text-white/70">{text}</span>
+        <Reveal delay={0.18}>
+          <p className="mt-8 text-pretty text-white/55" style={{ fontSize: 'var(--text-meta)' }}>
+            For clinical care or to arrange an appointment, please see the practice site —{' '}
+            <a
+              href={PRACTICE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-baseline gap-1 text-medical-teal underline-offset-4 transition-colors hover:underline"
+            >
+              orthopaedic-surgeon.com.au
+              <ArrowUpRight aria-hidden="true" size={11} className="self-center" />
+            </a>
+            .
+          </p>
+        </Reveal>
+
+        <Reveal delay={0.22}>
+          <ul className="mt-12 flex flex-wrap gap-x-3 gap-y-2 border-t border-white/5 pt-8">
+            {TAGS.map((tag) => (
+              <li
+                key={tag}
+                className="rounded-full glass-thin px-3.5 py-1.5 text-white/65"
+                style={{ fontSize: 'var(--text-meta)' }}
+              >
+                {tag}
               </li>
             ))}
           </ul>
-        </div>
-
-        <motion.div {...reveal} className="lg:sticky lg:top-28">
-          <Card className="flex flex-col overflow-hidden bg-brand-panel p-0">
-            <div className="relative aspect-[3/2] w-full overflow-hidden bg-brand-bg">
-              <img
-                src="/portrait-gordon-slater.webp?v=2"
-                alt={`${DOCTOR_NAME}, foot and ankle orthopaedic surgeon`}
-                loading="lazy"
-                decoding="async"
-                className="h-full w-full object-cover object-center"
-              />
-            </div>
-            <div className="space-y-6 border-t border-white/10 bg-brand-panel/70 p-8 backdrop-blur-2xl md:p-10">
-              <div className="space-y-2 text-center">
-                <p className="font-display text-2xl font-semibold tracking-tight text-white md:text-3xl">
-                  {DOCTOR_NAME}
-                </p>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-medical-teal">
-                  {DOCTOR_CREDENTIALS}
-                </p>
-              </div>
-              <dl className="flex justify-center gap-10 border-t border-white/5 pt-6">
-                <div className="text-center">
-                  <dt className="eyebrow mb-1">Focus</dt>
-                  <dd className="text-sm font-medium text-white/75">Foot &amp; ankle</dd>
-                </div>
-                <div className="text-center">
-                  <dt className="eyebrow mb-1">Experience</dt>
-                  <dd className="text-sm font-medium text-white/75">30+ years</dd>
-                </div>
-              </dl>
-            </div>
-          </Card>
-        </motion.div>
+        </Reveal>
       </div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);
