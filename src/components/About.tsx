@@ -89,8 +89,14 @@ export const About = () => (
               <em>EC Orthopaedics</em>, and chairs Foot &amp; Ankle for the Asia Pacific
               Orthopaedic Association. His book{' '}
               <em>Chaos to Creation: Longevity and Regeneration Frontiers</em> (9 April 2026) is
-              the long-form synthesis of that work, drawing on more than fifty peer-reviewed
-              publications and multiple medical-technology patents.
+              the long-form synthesis of that work, drawing on sixty peer-reviewed publications
+              and multiple medical-technology patents.
+            </p>
+            <p>
+              The research workstream collaborates with UNSW&rsquo;s Ramaciotti Centre for
+              Genomics, the UTS Biologics Innovation Facility, the Garvan Institute, and the
+              Westmead Institute for Medical Research on the biomarker, methylation and
+              biologics work that underpins the longevity and regeneration research agenda.
             </p>
           </div>
         </Reveal>
