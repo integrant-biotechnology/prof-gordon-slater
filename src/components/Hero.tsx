@@ -119,7 +119,7 @@ export const Hero = () => {
               className="relative overflow-hidden rounded-3xl"
             >
               <EditorialImage
-                fallbackSrc="/portrait-gordon-slater.webp?v=3"
+                fallbackSrc="/portrait-gordon-slater-hero.webp?v=4"
                 alt={`${DOCTOR_NAME} — portrait`}
                 aspect="3/4"
                 priority
