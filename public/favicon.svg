@@ -1,15 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Prof Gordon Slater">
-  <rect width="64" height="64" rx="16" fill="#14b8a6" />
+  <!-- Calibrated near-black background matching the site's --color-brand-bg. -->
+  <rect width="64" height="64" rx="14" fill="#0a0a0c" />
+  <!-- Hairline inner highlight — catches light at the top edge,
+       the same gesture the site's glass surfaces use. -->
+  <rect x="0.5" y="0.5" width="63" height="63" rx="13.5" fill="none" stroke="rgba(245,245,247,0.06)" />
+  <!-- "GS" monogram in Fraunces italic. opsz axis 30 calibrates the
+       form for small-format display (favicons, app icons). -->
   <text
     x="50%"
-    y="50%"
-    dy="0.02em"
+    y="51%"
     text-anchor="middle"
     dominant-baseline="central"
-    font-family="'Outfit', 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
-    font-size="30"
-    font-weight="700"
-    letter-spacing="-1"
-    fill="#050505"
+    font-family="'Fraunces', 'Outfit', Georgia, ui-serif, system-ui, sans-serif"
+    font-size="32"
+    font-weight="500"
+    font-style="italic"
+    font-variation-settings="'opsz' 30"
+    letter-spacing="-1.5"
+    fill="#14b8a6"
   >GS</text>
 </svg>
