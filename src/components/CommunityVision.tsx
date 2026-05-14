@@ -69,7 +69,7 @@ export const CommunityVision = () => {
                         <h3
                           className="font-display font-medium text-white/90"
                           style={{
-                            fontSize: '1.25rem',
+                            fontSize: 'var(--text-title)',
                             lineHeight: 1.15,
                             letterSpacing: '-0.008em',
                           }}

@@ -56,27 +56,44 @@ const GivingHero = () => (
     <div className="relative z-10 mx-auto max-w-4xl">
       <Link
         to="/"
-        className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55 transition-colors hover:text-white"
+        className="group/back eyebrow inline-flex items-center gap-2 transition-colors hover:text-white"
       >
-        <ArrowLeft aria-hidden="true" size={14} />
+        <ArrowLeft
+          aria-hidden="true"
+          size={13}
+          className="transition-transform group-hover/back:-translate-x-0.5"
+        />
         Back to the personal site
       </Link>
 
-      <p className="mt-7 eyebrow">Giving back</p>
+      <p className="mt-10 eyebrow">Giving back</p>
 
       <h1
         id="giving-hero"
-        className="mt-4 text-balance font-display text-5xl font-bold leading-[1.05] tracking-tight text-white sm:text-6xl"
+        className="mt-5 text-balance font-display font-medium"
+        style={{
+          fontSize: 'var(--text-display)',
+          lineHeight: 1.05,
+          letterSpacing: '-0.015em',
+        }}
       >
         Supporting Australian{' '}
-        <span className="text-white/40">medical research.</span>
+        <em className="font-display italic font-normal text-white/55">
+          medical research.
+        </em>
       </h1>
 
-      <p className="mt-7 text-pretty text-lg leading-relaxed text-white/70 md:text-xl">
+      <p
+        className="mt-7 text-pretty leading-relaxed text-white/70"
+        style={{ fontSize: 'var(--text-lede)' }}
+      >
         {GIVING_INTRO}
       </p>
 
-      <p className="mt-5 text-pretty text-base italic leading-relaxed text-white/55">
+      <p
+        className="mt-5 text-pretty font-display italic leading-relaxed text-white/55"
+        style={{ fontSize: 'var(--text-meta)' }}
+      >
         {GIVING_PLEDGE}
       </p>
     </div>
@@ -150,7 +167,7 @@ const EventCard = ({ event: e }: { event: GivingEvent }) => {
   const Icon = accent.icon;
 
   return (
-    <Card className="flex h-full flex-col overflow-hidden bg-white/[0.01] p-0" glow>
+    <Card className="flex h-full flex-col overflow-hidden bg-white/[0.01] p-0">
       <EventHero event={e} />
 
       <div className="flex flex-1 flex-col gap-5 p-7 md:p-8">
@@ -163,26 +180,50 @@ const EventCard = ({ event: e }: { event: GivingEvent }) => {
           </span>
           <span aria-hidden="true" className={`h-1.5 w-1.5 rounded-full ${accent.dot}`} />
           {e.since && (
-            <span className="ml-auto text-[10px] uppercase tracking-[0.2em] text-white/35">
+            <span
+              className="ml-auto nums-tabular text-white/35"
+              style={{
+                fontSize: 'var(--text-eyebrow)',
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                fontWeight: 600,
+              }}
+            >
               Since {e.since}
             </span>
           )}
         </div>
 
         <div>
-          <h3 className="font-display text-2xl font-semibold leading-tight text-white">
+          <h3
+            className="font-display font-medium leading-tight text-white"
+            style={{ fontSize: 'var(--text-title)', letterSpacing: '-0.012em' }}
+          >
             {e.name}
           </h3>
-          <p className="mt-2 text-sm leading-relaxed text-white/55">{e.host}</p>
+          <p
+            className="mt-2 leading-relaxed text-white/55"
+            style={{ fontSize: 'var(--text-meta)' }}
+          >
+            {e.host}
+          </p>
           {e.blurb && (
-            <p className="mt-3 text-pretty text-sm leading-relaxed text-white/65">{e.blurb}</p>
+            <p
+              className="mt-3 text-pretty leading-relaxed text-white/65"
+              style={{ fontSize: 'var(--text-meta)' }}
+            >
+              {e.blurb}
+            </p>
           )}
         </div>
 
         <dl className="mt-auto space-y-3 border-t border-white/5 pt-5">
           <div>
             <dt className="eyebrow">Supporting</dt>
-            <dd className="mt-1 text-sm leading-relaxed text-white/80">
+            <dd
+              className="mt-1 leading-relaxed text-white/80"
+              style={{ fontSize: 'var(--text-meta)' }}
+            >
               {e.cause}
               {e.beneficiary && (
                 <>
@@ -195,7 +236,12 @@ const EventCard = ({ event: e }: { event: GivingEvent }) => {
           </div>
           <div>
             <dt className="eyebrow">Contribution</dt>
-            <dd className="mt-1 text-sm leading-relaxed text-white/80">{e.contribution}</dd>
+            <dd
+              className="mt-1 leading-relaxed text-white/80"
+              style={{ fontSize: 'var(--text-meta)' }}
+            >
+              {e.contribution}
+            </dd>
           </div>
         </dl>
 
@@ -204,10 +250,20 @@ const EventCard = ({ event: e }: { event: GivingEvent }) => {
             href={e.eventUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className={`inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] ${accent.chipText} transition-colors hover:text-white`}
+            className={`group/learn inline-flex items-center gap-1.5 ${accent.chipText} transition-colors hover:text-white`}
+            style={{
+              fontSize: 'var(--text-eyebrow)',
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              fontWeight: 600,
+            }}
           >
             Learn more
-            <ArrowUpRight aria-hidden="true" size={12} />
+            <ArrowUpRight
+              aria-hidden="true"
+              size={12}
+              className="transition-transform group-hover/learn:translate-x-0.5 group-hover/learn:-translate-y-0.5"
+            />
           </a>
         )}
       </div>
@@ -265,11 +321,24 @@ const EventHero = ({ event: e }: { event: GivingEvent }) => {
       />
       <div className="relative flex h-full w-full flex-col items-center justify-center gap-3">
         <span
-          className={`font-display text-6xl font-bold tracking-[0.12em] ${accent.chipText} md:text-7xl`}
+          className={`font-display font-medium italic ${accent.chipText}`}
+          style={{
+            fontSize: 'clamp(3rem, 7vw, 4.5rem)',
+            letterSpacing: '0.08em',
+            lineHeight: 1,
+          }}
         >
           {e.hostMark ?? e.host.slice(0, 3).toUpperCase()}
         </span>
-        <span className="text-[10px] uppercase tracking-[0.28em] text-white/45">
+        <span
+          className="text-white/45"
+          style={{
+            fontSize: 'var(--text-eyebrow)',
+            letterSpacing: '0.24em',
+            textTransform: 'uppercase',
+            fontWeight: 600,
+          }}
+        >
           {e.host}
         </span>
       </div>
@@ -322,12 +391,27 @@ const GivingCloseSection = () => (
   >
     <Glow className="bottom-0 left-1/2 -translate-x-1/2" color="teal" />
     <div className="relative mx-auto max-w-3xl text-center">
-      <p className="text-pretty text-lg leading-relaxed text-white/75 md:text-xl">{GIVING_CLOSE}</p>
+      <p
+        className="text-pretty leading-relaxed text-white/75"
+        style={{ fontSize: 'var(--text-lede)' }}
+      >
+        {GIVING_CLOSE}
+      </p>
       <Link
         to="/"
-        className="mt-10 inline-flex items-center gap-2 rounded-full glass px-6 py-3 text-sm font-medium text-white/80 transition-colors hover:text-white"
+        className="group/back mt-12 inline-flex items-center gap-2 text-white/55 transition-colors hover:text-white"
+        style={{
+          fontSize: 'var(--text-eyebrow)',
+          letterSpacing: '0.18em',
+          textTransform: 'uppercase',
+          fontWeight: 600,
+        }}
       >
-        <ArrowLeft aria-hidden="true" size={14} />
+        <ArrowLeft
+          aria-hidden="true"
+          size={13}
+          className="transition-transform group-hover/back:-translate-x-0.5"
+        />
         Back to the personal site
       </Link>
     </div>
