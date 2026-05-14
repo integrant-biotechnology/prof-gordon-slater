@@ -82,7 +82,8 @@ src/
   components/ui/                # primitives: Button · Card · Glow · Motif · SectionHeading
 public/
   favicon.svg
-  portrait-gordon-slater.webp        # real headshot
+  portrait-gordon-slater-hero.webp   # blazer portrait — Hero + OG/Twitter/JSON-LD
+  portrait-gordon-slater-about.webp  # scrubs arms-crossed portrait — About spread
   book-cover-chaos-to-creation.webp  # real book cover (also -480/-800/-1200 + .jpg fallback)
   giving/                            # partner logos + event hero images for /giving
   robots.txt · sitemap.xml
