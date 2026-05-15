@@ -4,5 +4,7 @@ dist/
 coverage/
 .DS_Store
 *.log
+# Local agent/tooling scratch file; not part of the product repo.
+AGENTS.md
 .env*
 !.env.example

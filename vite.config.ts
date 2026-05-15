@@ -2,8 +2,9 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { writeFileSync } from 'node:fs';
-import { defineConfig, type Plugin } from 'vite';
+import { defineConfig, loadEnv, type Plugin } from 'vite';
 import { SITE_ROUTES } from './src/data/site';
+import { DEFAULT_SITE_URL, normalizeSiteOrigin } from './src/lib/site-origin';
 
 /**
  * Inline sitemap plugin — generates public/sitemap.xml from
@@ -12,11 +13,10 @@ import { SITE_ROUTES } from './src/data/site';
  * (paths containing ':') are skipped today; when /writing/:slug
  * entries get bodies, the script can enumerate them.
  */
-const generateSitemap = (): Plugin => ({
+const generateSitemap = (origin: string): Plugin => ({
   name: 'generate-sitemap',
   buildStart() {
     const today = new Date().toISOString().slice(0, 10);
-    const origin = 'https://profgordonslater.com.au';
 
     const priorityFor = (routePath: string): string => {
       if (routePath === '/') return '1.0';
@@ -39,11 +39,24 @@ const generateSitemap = (): Plugin => ({
   },
 });
 
-export default defineConfig({
-  plugins: [react(), tailwindcss(), generateSitemap()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'src'),
-    },
+const injectSiteOrigin = (origin: string): Plugin => ({
+  name: 'inject-site-origin',
+  transformIndexHtml(html) {
+    return html.replace(/%VITE_SITE_URL%/g, origin);
   },
+});
+
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+  const siteOrigin = normalizeSiteOrigin(env.VITE_SITE_URL || DEFAULT_SITE_URL);
+  process.env.VITE_SITE_URL = siteOrigin;
+
+  return {
+    plugins: [react(), tailwindcss(), injectSiteOrigin(siteOrigin), generateSitemap(siteOrigin)],
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, 'src'),
+      },
+    },
+  };
 });

@@ -94,6 +94,3 @@ export const FULL_PUBLICATIONS: Publication[] = [
   { year: '2025', title: 'HBOT and concussion', theme: 'hyperbaric-oxygen' },
   { year: '2026', title: 'Age-related decline of mesenchymal stem cells', theme: 'aging-biology' },
 ];
-
-/** Placeholder until a curated Google Scholar / ORCID / PubMed profile URL is supplied. */
-export const PUBLICATIONS_INDEX_URL = '#';

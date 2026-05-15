@@ -8,6 +8,7 @@ import { PullQuote } from '@/components/ui/PullQuote';
 import { ReadingProgress } from '@/components/ui/ReadingProgress';
 import { Reveal } from '@/components/ui/Motion';
 import { JsonLd } from '@/templates/JsonLd';
+import { siteUrl } from '@/lib/site-origin';
 import {
   BOOK,
   BOOK_COVER_SRCSET,
@@ -28,13 +29,13 @@ const BOOK_LD = {
   author: {
     '@type': 'Person',
     name: 'Professor Gordon Slater',
-    url: 'https://profgordonslater.com.au',
+    url: siteUrl(''),
   },
   datePublished: '2026-04-09',
   inLanguage: 'en-AU',
-  image: 'https://profgordonslater.com.au/book-cover-chaos-to-creation.webp',
+  image: siteUrl('/book-cover-chaos-to-creation.webp'),
   bookFormat: ['Hardcover', 'Paperback', 'EBook'],
-  url: 'https://profgordonslater.com.au/book',
+  url: siteUrl('/book'),
   sameAs: [
     'https://www.amazon.com.au/Chaos-Creation-Prof-Gordon-Slater/dp/B0GWTSZN7M',
     'https://www.amazon.com.au/Chaos-Creation-Prof-Gordon-Slater/dp/B0GWTQFMSP',

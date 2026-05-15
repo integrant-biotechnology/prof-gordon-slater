@@ -8,6 +8,7 @@ import { Glow } from '@/components/ui/Glow';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { StatStrip } from '@/components/ui/StatStrip';
 import { JsonLd } from '@/templates/JsonLd';
+import { siteUrl } from '@/lib/site-origin';
 import {
   DOCTOR_NAME,
   GIVING_CLOSE,
@@ -21,7 +22,7 @@ const GIVING_LD = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
   name: 'Sydney charity events supported by Prof Gordon Slater',
-  url: 'https://profgordonslater.com.au/giving',
+  url: siteUrl('/giving'),
   itemListElement: GIVING_EVENTS.map((event, i) => ({
     '@type': 'ListItem',
     position: i + 1,
