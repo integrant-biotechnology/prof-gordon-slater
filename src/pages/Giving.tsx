@@ -7,6 +7,7 @@ import { Card } from '@/components/ui/Card';
 import { Glow } from '@/components/ui/Glow';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { StatStrip } from '@/components/ui/StatStrip';
+import { JsonLd } from '@/templates/JsonLd';
 import {
   DOCTOR_NAME,
   GIVING_CLOSE,
@@ -15,6 +16,27 @@ import {
   GIVING_PLEDGE,
   GIVING_STATS,
 } from '@/constants';
+
+const GIVING_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Sydney charity events supported by Prof Gordon Slater',
+  url: 'https://profgordonslater.com.au/giving',
+  itemListElement: GIVING_EVENTS.map((event, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'Event',
+      name: event.name,
+      description: event.blurb,
+      url: event.eventUrl,
+      location: { '@type': 'Place', name: 'Sydney' },
+      ...(event.beneficiary && {
+        organizer: { '@type': 'Organization', name: event.beneficiary },
+      }),
+    },
+  })),
+};
 
 const Giving = () => {
   useEffect(() => {
@@ -26,6 +48,7 @@ const Giving = () => {
 
   return (
     <>
+      <JsonLd data={GIVING_LD} id="ld-giving" />
       <GivingHero />
       <StatStrip
         stats={GIVING_STATS}
@@ -54,7 +77,7 @@ const GivingHero = () => (
     <Glow className="-right-[10%] bottom-[10%]" color="blue" />
 
     <div className="relative z-10 mx-auto max-w-4xl">
-      <Link
+      <Link viewTransition
         to="/"
         className="group/back eyebrow inline-flex items-center gap-2 transition-colors hover:text-white"
       >
@@ -397,7 +420,7 @@ const GivingCloseSection = () => (
       >
         {GIVING_CLOSE}
       </p>
-      <Link
+      <Link viewTransition
         to="/"
         className="group/back mt-12 inline-flex items-center gap-2 text-white/55 transition-colors hover:text-white"
         style={{

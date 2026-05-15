@@ -31,7 +31,7 @@ export const ClosingConnect = () => (
         </h2>
       </Reveal>
       <Reveal delay={0.08}>
-        <Link
+        <Link viewTransition
           to="/contact"
           className="group/link mt-10 inline-flex items-center gap-2 rounded-full glass-thick px-6 py-3 text-white transition-colors hover:text-medical-teal"
           style={{

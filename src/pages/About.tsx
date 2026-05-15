@@ -284,7 +284,7 @@ const About = () => {
                           {item.description}
                         </p>
                         {isGiving && (
-                          <Link
+                          <Link viewTransition
                             to="/giving"
                             className="group/link mt-4 inline-flex items-center gap-1.5 text-medical-teal/85 transition-colors hover:text-medical-teal"
                             style={{

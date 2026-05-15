@@ -148,7 +148,7 @@ export const Footer = () => {
                     if (link.route) {
                       return (
                         <li key={link.label}>
-                          <Link to={link.href!} className={className} style={style}>
+                          <Link to={link.href!} viewTransition className={className} style={style}>
                             {link.label}
                           </Link>
                         </li>
@@ -166,7 +166,12 @@ export const Footer = () => {
                     }
                     return (
                       <li key={link.label}>
-                        <Link to={{ pathname: '/', hash: `#${id}` }} className={className} style={style}>
+                        <Link
+                          to={{ pathname: '/', hash: `#${id}` }}
+                          viewTransition
+                          className={className}
+                          style={style}
+                        >
                           {link.label}
                         </Link>
                       </li>
