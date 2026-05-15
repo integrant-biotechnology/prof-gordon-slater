@@ -65,7 +65,28 @@ export const SITE_ROUTES: SiteRoute[] = [
       'Bio, training, editorial roles, and research collaborators of Prof Gordon Slater — foot & ankle orthopaedic surgeon and Professor at UTS.',
     inTopNav: true,
     inFooter: false,
-    related: ['/book', '/contact'],
+    related: ['/research', '/book', '/contact'],
+  },
+  {
+    path: '/research',
+    label: 'Research',
+    title: 'Research | Prof Gordon Slater',
+    description:
+      'Six research themes spanning foot & ankle surgery, orthobiologics, stem cells & regenerative medicine, HBOT, aging biology, and AI in medicine.',
+    inTopNav: true,
+    inFooter: false,
+    related: ['/research/publications', '/book', '/about'],
+  },
+  {
+    path: '/research/publications',
+    label: 'Publications',
+    title: 'Publications | Prof Gordon Slater',
+    description:
+      'Selected peer-reviewed publications by Prof Gordon Slater (2003–2026) across surgery, orthobiologics, HBOT, regenerative medicine, and AI in medicine.',
+    inTopNav: false,
+    inFooter: false,
+    parent: '/research',
+    related: ['/research', '/book', '/about'],
   },
   {
     path: '/book',
@@ -75,7 +96,29 @@ export const SITE_ROUTES: SiteRoute[] = [
       'Chaos to Creation: Longevity and Regeneration Frontiers (9 April 2026) — Prof Gordon Slater’s book on lifespan as a modifiable outcome.',
     inTopNav: true,
     inFooter: false,
-    related: ['/about', '/contact'],
+    related: ['/book/three-rules', '/book/case-studies', '/research'],
+  },
+  {
+    path: '/book/three-rules',
+    label: 'Three Rules',
+    title: 'The Three Rules | Chaos to Creation',
+    description:
+      'The three claims the book rests on — life drifts toward degeneration; biologic inertia must be overcome; lifespan is an energy balance, not a clock.',
+    inTopNav: false,
+    inFooter: false,
+    parent: '/book',
+    related: ['/book', '/book/case-studies', '/research'],
+  },
+  {
+    path: '/book/case-studies',
+    label: 'Case studies',
+    title: 'Case Studies | Chaos to Creation',
+    description:
+      'Two factual clinical-case panels referenced in Chaos to Creation — talus reconstitution via autologous stem cells, and HBOT-assisted healing of a Brooker-4 diabetic ulcer.',
+    inTopNav: false,
+    inFooter: false,
+    parent: '/book',
+    related: ['/book', '/book/three-rules', '/research'],
   },
   {
     path: '/contact',
