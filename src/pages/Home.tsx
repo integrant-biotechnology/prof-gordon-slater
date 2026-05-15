@@ -3,8 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { Hero } from '@/components/Hero';
 import { AboutSpotlight } from '@/components/AboutSpotlight';
 import { CuratedTrio } from '@/components/CuratedTrio';
-import { CommunityVision } from '@/components/CommunityVision';
-import { Writing } from '@/components/Writing';
+import { LatestEssay } from '@/components/LatestEssay';
 import { ClosingConnect } from '@/components/ClosingConnect';
 import { PullQuote } from '@/components/ui/PullQuote';
 import { BOOK, DOCTOR_NAME, DOCTOR_TITLE } from '@/constants';
@@ -12,17 +11,22 @@ import { BOOK, DOCTOR_NAME, DOCTOR_TITLE } from '@/constants';
 /**
  * Home — curated entry, not the encyclopedia.
  *
- * PR-4 swaps BookPreview + BodyOfWork (two heavy sections) for a
- * single <CuratedTrio /> editorial row — three typographic panels
- * pointing at /about, /research, /book. Net: −1 section, much
- * lighter visual weight.
+ * PR-6 reaches the Apple-bar target: 5 named sections.
+ * <Writing /> → /writing index; <LatestEssay /> teaser takes its
+ * slot. <CommunityVision /> is folded into /about as a "Beyond the
+ * operating theatre" section — its content fits a bio page; on home
+ * it was a hold-over from the encyclopedic era.
  *
- * Final reduction lands in PR-6: <Writing /> → /writing index;
- * <LatestEssay /> teaser takes its slot.
+ * End state achieved:
+ *   1. Hero
+ *   2. AboutSpotlight
+ *   3. PullQuote interstitial (book central claim)
+ *   4. CuratedTrio (About · Research · Book panels)
+ *   5. LatestEssay
+ *   6. ClosingConnect
  *
- * Target end state (after PR-6): 5 named sections (Hero,
- * AboutSpotlight, CuratedTrio, LatestEssay, ClosingConnect) plus
- * a PullQuote interstitial — see plan §C.
+ * Five named sections + one editorial interstitial + one closing
+ * CTA — the curated entry the plan describes in §C.
  */
 const Home = () => {
   const { hash, pathname } = useLocation();
@@ -66,8 +70,7 @@ const Home = () => {
         </PullQuote>
       </section>
       <CuratedTrio />
-      <CommunityVision />
-      <Writing />
+      <LatestEssay />
       <ClosingConnect />
     </>
   );
