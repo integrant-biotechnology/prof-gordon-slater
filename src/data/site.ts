@@ -146,9 +146,9 @@ export const SITE_ROUTES: SiteRoute[] = [
     title: 'Giving | Prof Gordon Slater',
     description:
       'Three Sydney charity events Prof Gordon Slater supports — funding breast-cancer, cardiovascular, and vision research through in-kind donations.',
-    inTopNav: false,
+    inTopNav: true,
     inFooter: true,
-    related: ['/about', '/book'],
+    related: ['/about', '/book', '/contact'],
   },
   {
     path: '/privacy',
