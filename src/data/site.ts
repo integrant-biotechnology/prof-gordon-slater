@@ -1,0 +1,82 @@
+// -------------------------------------------------------------
+// SITE_ROUTES — canonical route table.
+//
+// Single source of truth consumed by:
+//   - Navbar (top-nav rendering, active-route highlighting)
+//   - Footer (resources column rendering)
+//   - <Breadcrumbs> (parent chain for sub-pages)
+//   - <SeeAlsoFooter> (per-page related links block)
+//   - useDocumentTitle (per-page <title> + meta description)
+//   - scripts/generate-sitemap.mjs (sitemap.xml at build time)
+//   - <JsonLd> (per-page structured data)
+//
+// Touched in every PR from PR-2 onwards as new pages register.
+// -------------------------------------------------------------
+
+export interface SiteRoute {
+  /** Path. Dynamic segments use react-router syntax, e.g. '/writing/:slug'. */
+  path: string;
+  /** Short label used by navbar + breadcrumb segments. */
+  label: string;
+  /** <title> tag — e.g. "About | Prof Gordon Slater". */
+  title: string;
+  /** <meta name="description"> content. */
+  description: string;
+  /** Show in the top navigation pill. */
+  inTopNav: boolean;
+  /** Show in the footer "Resources" column. */
+  inFooter: boolean;
+  /** Parent path for breadcrumb hierarchy (e.g. '/research'). */
+  parent?: string;
+  /** Paths shown in the per-page "See also" block. 2–3 recommended. */
+  related?: string[];
+  /** Per-route OG image; falls back to the home portrait when omitted. */
+  ogImage?: string;
+}
+
+/**
+ * SITE_ROUTES — PR-1 seed.
+ *
+ * Only the four currently-shipping routes are registered today.
+ * PR-2 adds /about; PR-3 adds /contact; PR-4 adds /research +
+ * /research/publications; PR-5 adds /book sub-pages; PR-6 adds
+ * /writing + /writing/:slug. PR-7 wires the table into Navbar +
+ * Footer + Breadcrumbs + sitemap generation.
+ *
+ * Descriptions are kept ≤155 characters so search engines render
+ * them in full without truncation.
+ */
+export const SITE_ROUTES: SiteRoute[] = [
+  {
+    path: '/',
+    label: 'Home',
+    title: 'Prof Gordon Slater | Personal site',
+    description:
+      'The personal site of Prof Gordon Slater — foot & ankle orthopaedic surgeon, Professor at UTS, and author of Chaos to Creation. A factual record.',
+    inTopNav: true,
+    inFooter: false,
+  },
+  {
+    path: '/book',
+    label: 'Book',
+    title: 'Chaos to Creation | Prof Gordon Slater',
+    description:
+      'Chaos to Creation: Longevity and Regeneration Frontiers (9 April 2026) — Prof Gordon Slater’s book on lifespan as a modifiable outcome.',
+    inTopNav: true,
+    inFooter: false,
+  },
+  {
+    path: '/giving',
+    label: 'Giving',
+    title: 'Giving | Prof Gordon Slater',
+    description:
+      'Three Sydney charity events Prof Gordon Slater supports — funding breast-cancer, cardiovascular, and vision research through in-kind donations.',
+    inTopNav: false,
+    inFooter: true,
+  },
+];
+
+/** Quick lookup helper — re-exported from src/lib/site.ts as findRoute(). */
+export const SITE_ROUTES_BY_PATH: Record<string, SiteRoute> = Object.fromEntries(
+  SITE_ROUTES.map((r) => [r.path, r]),
+);
