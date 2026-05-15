@@ -121,6 +121,16 @@ export const SITE_ROUTES: SiteRoute[] = [
     related: ['/book', '/book/three-rules', '/research'],
   },
   {
+    path: '/writing',
+    label: 'Writing',
+    title: 'Writing | Prof Gordon Slater',
+    description:
+      'Essays and commentary by Prof Gordon Slater — long-form pieces on foot & ankle surgery, regenerative orthopaedics, HBOT, and the research behind current practice.',
+    inTopNav: true,
+    inFooter: false,
+    related: ['/research', '/book', '/about'],
+  },
+  {
     path: '/contact',
     label: 'Contact',
     title: 'Contact | Prof Gordon Slater',
