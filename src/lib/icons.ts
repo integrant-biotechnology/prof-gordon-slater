@@ -1,4 +1,5 @@
 import {
+  Activity,
   Award,
   BookOpen,
   Cpu,
@@ -8,8 +9,10 @@ import {
   Lightbulb,
   Linkedin,
   Microscope,
+  Sparkles,
   Stethoscope,
   Twitter,
+  Wind,
   Youtube,
   type LucideIcon,
 } from 'lucide-react';
@@ -19,6 +22,7 @@ import {
  * Keys are the Lucide component names so the mapping reads 1:1.
  */
 export const ICONS = {
+  Activity,
   Award,
   BookOpen,
   Cpu,
@@ -28,8 +32,10 @@ export const ICONS = {
   Lightbulb,
   Linkedin,
   Microscope,
+  Sparkles,
   Stethoscope,
   Twitter,
+  Wind,
   Youtube,
 } satisfies Record<string, LucideIcon>;
 
