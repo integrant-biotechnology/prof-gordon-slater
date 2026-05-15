@@ -18,6 +18,10 @@ interface PageHeroProps {
   photo?: { src: string; alt: string };
   /** Optional kicker line above the eyebrow (e.g. "Research / Publications"). */
   kicker?: string;
+  /** Body content rendered in the text column below the lede. For
+   *  photo-led + editorial variants it stays inside the same grid so the
+   *  sticky photo (if any) anchors throughout the body. */
+  children?: ReactNode;
 }
 
 /**
@@ -38,13 +42,16 @@ export const PageHero = ({
   lede,
   photo,
   kicker,
+  children,
 }: PageHeroProps) => {
-  // Photo-led: portrait left, body right (5/7 split).
+  // Photo-led: portrait left (sticky on desktop), body right (5/7 split).
+  // Children render inside the right column so the sticky photo anchors
+  // for the duration of the body, not just the lede.
   if (variant === 'photo-led' && photo) {
     return (
       <section className="overflow-hidden px-6 pt-32 pb-16 md:pt-40 md:pb-24">
         <div className="mx-auto grid max-w-7xl items-start gap-12 lg:grid-cols-[5fr_7fr] lg:gap-20">
-          <div className="lg:sticky lg:top-28">
+          <div className="md:sticky md:top-28">
             <Reveal>
               <EditorialImage
                 fallbackSrc={photo.src}
@@ -62,6 +69,7 @@ export const PageHero = ({
               title={title}
               lede={lede}
             />
+            {children && <div className="mt-12">{children}</div>}
           </div>
         </div>
       </section>
@@ -85,6 +93,7 @@ export const PageHero = ({
               title={title}
               lede={lede}
             />
+            {children && <div className="mt-12">{children}</div>}
           </div>
           {photo && (
             <div>
@@ -113,6 +122,7 @@ export const PageHero = ({
           title={title}
           lede={lede}
         />
+        {children && <div className="mt-12">{children}</div>}
       </div>
     </section>
   );
