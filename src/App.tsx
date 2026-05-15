@@ -13,6 +13,7 @@ const Home = lazy(() => import('@/pages/Home'));
 const About = lazy(() => import('@/pages/About'));
 const Book = lazy(() => import('@/pages/Book'));
 const Giving = lazy(() => import('@/pages/Giving'));
+const Contact = lazy(() => import('@/pages/Contact'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 
 export default function App() {
@@ -36,6 +37,7 @@ export default function App() {
                 <Route path="/about" element={<About />} />
                 <Route path="/book" element={<Book />} />
                 <Route path="/giving" element={<Giving />} />
+                <Route path="/contact" element={<Contact />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>

@@ -42,7 +42,7 @@ const FOOTER_SECTIONS: { title: string; links: FooterLink[] }[] = [
   {
     title: 'Connect',
     links: [
-      { label: 'Get in touch', hash: 'connect' },
+      { label: 'Get in touch', href: '/contact', route: true },
       { label: 'Practice site', href: PRACTICE_URL, external: true },
     ],
   },
