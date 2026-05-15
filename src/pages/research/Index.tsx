@@ -170,7 +170,7 @@ const Research = () => {
                   Latest five.
                 </h3>
               </div>
-              <Link
+              <Link viewTransition
                 to="/research/publications"
                 className="group/link inline-flex items-center gap-1.5 text-white/65 transition-colors hover:text-medical-teal"
                 style={{

@@ -230,14 +230,40 @@
   }
 }
 
-/* View Transitions API — calibrated cross-fade on route change. */
+/* -------------------------------------------------------------
+ * View Transitions API — designed cross-route motion register.
+ *
+ * Plan §D.1 defines three transition registers:
+ *   - within-area: drawer slide (/research → /research/publications)
+ *   - cross-area: cross-fade through hairline (/book → /writing)
+ *   - article entry: slower fade for long-form reading mounts
+ *
+ * Today the root transition is the cross-area register — a 360ms
+ * cross-fade calibrated through --ease-apple. Per-name registers
+ * (named via view-transition-name on per-route wrappers) are a
+ * follow-up polish; the root fade ships first because the rest
+ * needs the React Router v7 navigation API to assign names per
+ * area, which is a separate piece of work.
+ *
+ * Triggered automatically on every <Link> that carries the
+ * `viewTransition` prop (PR-7 wired this site-wide).
+ * ----------------------------------------------------------- */
 @view-transition {
   navigation: auto;
 }
+
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 360ms;
   animation-timing-function: var(--ease-apple);
+}
+
+/* Reduced-motion: collapse the cross-fade to an instant swap. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
 }
 
 /* -------------------------------------------------------------

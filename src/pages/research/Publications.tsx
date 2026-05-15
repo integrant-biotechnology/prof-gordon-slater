@@ -1,12 +1,32 @@
 import { useMemo, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import { Breadcrumbs } from '@/templates/Breadcrumbs';
 import { PageShell } from '@/templates/PageShell';
 import { PageHero } from '@/templates/PageHero';
 import { ListTemplate, type ListFilter } from '@/templates/ListTemplate';
+import { JsonLd } from '@/templates/JsonLd';
 import { findRoute } from '@/lib/site';
 import { FULL_PUBLICATIONS, RESEARCH_THEMES } from '@/constants';
 import type { Publication } from '@/types';
+
+const PUBLICATIONS_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Selected peer-reviewed publications by Prof Gordon Slater',
+  url: 'https://profgordonslater.com.au/research/publications',
+  itemListElement: FULL_PUBLICATIONS.slice()
+    .reverse()
+    .map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'ScholarlyArticle',
+        headline: p.title,
+        ...(p.venue && { publisher: p.venue }),
+        ...(p.year && { datePublished: p.year }),
+        author: { '@type': 'Person', name: 'Prof Gordon Slater' },
+      },
+    })),
+};
 
 /**
  * /research/publications — full publications listing.
@@ -46,8 +66,7 @@ const Publications = () => {
 
   return (
     <PageShell route={route}>
-      <Breadcrumbs route={route} />
-
+      <JsonLd data={PUBLICATIONS_LD} id="ld-publications" />
       <PageHero
         variant="type-only"
         kicker="Research / Publications"

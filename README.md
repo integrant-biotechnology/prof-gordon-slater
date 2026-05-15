@@ -15,10 +15,10 @@ legible contrast; all looping motion is disabled for visitors who prefer reduced
 ## Tech stack
 
 - **React 19** + **TypeScript**
-- **Vite 6**
-- **react-router-dom v7** — two routes: `/` (Home) and `/book` (the dedicated *From Chaos to Creation* page)
+- **Vite 6** — with an inline plugin that regenerates `public/sitemap.xml` from `SITE_ROUTES` on every build (see `vite.config.ts`)
+- **react-router-dom v7** — ten substantive routes (see "Information architecture" below); every internal `<Link>` opts into the **View Transitions API** for cross-route cross-fades
 - **Tailwind CSS v4** (`@tailwindcss/vite`, theme tokens in `src/index.css`)
-- **Motion** (`motion/react`) — subtle reveal and ambient animations
+- **Motion** (`motion/react`) — subtle reveal and ambient animations; every primitive respects `prefers-reduced-motion`
 - **Lucide React** — iconography (registry in `src/lib/icons.ts`)
 - **ESLint** (flat config) — `npm run lint`
 
@@ -49,51 +49,126 @@ refresh — and long-cache headers for hashed assets).
 
 Or from the CLI: `npm i -g vercel && vercel` (preview) / `vercel --prod` (production).
 
-## Page composition
+## Information architecture
 
-Two routes, both wrapped in the same `<Navbar/>` and `<Footer/>`:
+Ten substantive routes plus a designed `404`. Top nav surfaces six; the rest live behind their
+parents. `SITE_ROUTES` in `src/data/site.ts` is the single source of truth — it drives Navbar,
+Breadcrumbs, the per-page See-also footer, page `<title>` + meta description, and the auto-
+generated `sitemap.xml`.
 
 ```text
-/         Home   :  Hero → WhatHeDoes → About → Background → BookPreview
-                    → BodyOfWork → CommunityVision → Writing → Connect
-/book     Book   :  BookHero → OpeningFraming → LifeForceFormula
-                    → ThreeRules → HypothesisCallout → EpilogueExtract
-                    → ClinicalCases → BookCloseCTA
+TOP NAV (6)
+  /                      Home              — Hero · AboutSpotlight · PullQuote · CuratedTrio
+                                             · LatestEssay · ClosingConnect (5 sections)
+  /about                 About             — portrait-led editorial spread; training timeline;
+                                             "beyond the operating theatre" community + vision
+  /research              Research          — 6 numbered themes (ChapterMark register);
+                                             publications strip; innovations strip
+  /book                  Book              — cinematic; the marquee
+  /writing               Writing           — magazine TOC; hosted essays + external links
+  /contact               Contact           — clinical care · press · speaking inquiries
+
+SUB-PAGES (3 substantive, breadcrumbed back to their parents)
+  /research/publications List of all peer-reviewed papers + search + theme filter chips
+  /book/three-rules      Three Rules editorial deep-dive
+  /book/case-studies     Case-study editorial cards
+  /writing/:slug         Long-form article template (dynamic; NotFound until bodies populated)
+
+FOOTER-LINKED
+  /giving                Three Sydney charity events (HBOT + Integrant in-kind support)
+  /*                     Designed NotFound (404)
 ```
+
+Every route is code-split via `React.lazy`, so the first paint on `/` doesn't ship the other
+routes' JS. Each route is wrapped in its own `<ErrorBoundary>` so a crash inside (say) `/book`
+no longer collapses Navbar, Footer, or any other route.
+
+## Source tree
 
 ```text
 src/
-  App.tsx                       # router shell + skip link
-  index.css                     # Tailwind import, theme tokens, base styles, reduced-motion
-  constants.ts                  # all editable copy & data — see "What you need to supply" below
-  types.ts                      # shared content types
-  lib/icons.ts                  # Lucide icon registry (string-key → component)
-  lib/utils.ts                  # cn() class merge helper
+  App.tsx                                # router shell + skip link + per-route ErrorBoundary
+  index.css                              # Tailwind import, theme tokens, View Transitions API,
+                                          # reduced-motion + print stylesheets
+  constants.ts                           # barrel re-export of src/data/*
+  types.ts                               # shared content types
+  data/
+    site.ts                              # SITE_ROUTES — canonical route table
+    identity.ts                          # DOCTOR_NAME, contact constants
+    background.ts                        # TRAINING, LEADERSHIP_ROLES, CAPABILITIES
+    book.ts                              # BOOK + BOOK_RULES + LIFE_FORCE + CASE_STUDIES
+    research/
+      themes.ts                          # 6 typed ResearchTheme objects
+      publications.ts                    # SELECTED_PUBLICATIONS + FULL_PUBLICATIONS (24 seed)
+      innovations.ts                     # patents · named devices · named techniques
+      body-of-work.ts                    # BODY_OF_WORK (legacy support)
+    writing.ts                           # ARTICLES
+    community.ts                         # COMMUNITY items + VISION_STATEMENT
+    giving.ts                            # GIVING_EVENTS + stats + copy
+    social.ts                            # SOCIAL_LINKS + FOOTER_DISCLAIMER
+  lib/
+    icons.ts                             # Lucide icon registry
+    utils.ts                             # cn() class merge helper
+    seo.ts                               # useDocumentTitle hook
+    site.ts                              # findRoute / parentOf / childrenOf / relatedRoutes
+                                          # / topNavRoutes / footerRoutes / breadcrumbsFor
+  templates/
+    PageShell.tsx                        # auto-wires title, breadcrumbs, see-also footer
+    PageHero.tsx                         # 3 variants — editorial / photo-led / type-only
+    Breadcrumbs.tsx                      # desktop chain · mobile back-chevron
+    SeeAlsoFooter.tsx                    # per-page "Continue" block from route.related[]
+    ListTemplate.tsx                     # typographic list + search + filter chips
+    ArticleTemplate.tsx                  # long-form reading flow with typed ArticleBlock[]
+    JsonLd.tsx                           # per-route structured-data injection
   pages/
-    Home.tsx                    # the / route
-    Book.tsx                    # the /book route — dedicated to From Chaos to Creation
-  pages/
-    Home · Book · Giving · NotFound      # code-split routes (React.lazy)
+    Home.tsx                             # /
+    About.tsx                            # /about
+    Book.tsx                             # /book — cinematic
+    Giving.tsx                           # /giving
+    Contact.tsx                          # /contact
+    NotFound.tsx                         # /*
+    research/
+      Index.tsx                          # /research
+      Publications.tsx                   # /research/publications
+    book/
+      ThreeRules.tsx                     # /book/three-rules
+      CaseStudies.tsx                    # /book/case-studies
+    writing/
+      Index.tsx                          # /writing
+      Article.tsx                        # /writing/:slug
   components/
-    Hero · WhatHeDoes · About · Background · BookPreview
-    BodyOfWork · CommunityVision · Writing · Connect
+    Hero · AboutSpotlight · CuratedTrio · LatestEssay · ClosingConnect   (home slots)
     Navbar · Footer
     ErrorBoundary · ScrollToTop · RouteFallback
-  components/ui/                # primitives: Button · Card · Glow · Motif · SectionHeading
+  components/ui/                         # primitives: Button · Card · Glow · Motion (Reveal)
+                                          # · EditorialImage · PullQuote · ChapterMark
+                                          # · ReadingProgress · StatStrip · Lede · Material
+                                          # · SectionHeading · PageEnterHairline
+                                          # · CursorCompanion
 public/
   favicon.svg
-  portrait-gordon-slater-hero.webp   # blazer portrait — Hero + OG/Twitter/JSON-LD
-  portrait-gordon-slater-about.webp  # scrubs arms-crossed portrait — About spread
-  book-cover-chaos-to-creation.webp  # real book cover (also -480/-800/-1200 + .jpg fallback)
-  giving/                            # partner logos + event hero images for /giving
-  robots.txt · sitemap.xml
+  portrait-gordon-slater-hero.webp        # blazer portrait — Hero
+  portrait-gordon-slater-about.webp       # scrubs arms-crossed portrait — About spread
+  book-cover-chaos-to-creation.webp       # real book cover (-480/-800/-1200 + .jpg fallback)
+  giving/                                 # partner logos + event hero images for /giving
+  robots.txt
+  sitemap.xml                             # auto-generated from SITE_ROUTES on every build
 docs/
-  voice-source-v0_1.md          # canonical content KB this site is built from (see "Content sourcing" below)
+  voice-source-v0_1.md                    # canonical content KB this site is built from
 ```
 
-Three routes: **`/`** (home), **`/book`** (the dedicated book page for *Chaos to Creation*),
-**`/giving`** (philanthropic activity). Each is code-split via `React.lazy`, so the first paint
-on `/` doesn't ship the other routes' JS. A real `404` lives at `*`.
+### Adding a new top-nav route
+
+Single field flip on a `SITE_ROUTES` entry:
+
+```ts
+{ path: '/new-page', label: 'New page', title: '...', description: '...',
+  inTopNav: true, inFooter: false, related: ['/about', '/book'] }
+```
+
+Then register the route in `App.tsx` (lazy-import + `<Route>`). Navbar, breadcrumbs (if
+`parent` is set), see-also (if `related` is set), `<title>`, meta, and `sitemap.xml` all
+update on the next build.
 
 ## What you need to supply (placeholder checklist)
 
