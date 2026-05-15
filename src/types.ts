@@ -34,6 +34,44 @@ export interface Publication {
   year?: string;
   href?: string;
   placeholder?: boolean;
+  /** Theme slug for /research/publications filtering. */
+  theme?: ThemeSlug;
+}
+
+/** Slugs for the six research themes — used as filter values + route slugs. */
+export type ThemeSlug =
+  | 'foot-ankle-surgery'
+  | 'orthobiologics'
+  | 'stem-cells-regenerative'
+  | 'hyperbaric-oxygen'
+  | 'aging-biology'
+  | 'ai-in-medicine';
+
+/** A research theme — one of the six pillars of the body of work. */
+export interface ResearchTheme {
+  slug: ThemeSlug;
+  /** Display title shown in the /research hub. */
+  title: string;
+  /** 2-sentence definition for the hub section. */
+  summary: string;
+  /** Lucide icon name used in the hub section header. */
+  icon: IconName;
+}
+
+/** A patent, named device, or named surgical technique. */
+export interface Innovation {
+  id: string;
+  /** "Patent", "Named device", or "Named technique". */
+  kind: 'patent' | 'device' | 'technique';
+  title: string;
+  /** Identifier where applicable (e.g. patent number). */
+  identifier?: string;
+  /** First-published / first-filed year. */
+  year: string;
+  /** One- to two-sentence description, public-facing only. */
+  body: string;
+  /** Optional outbound URL (patent registry, journal article, etc). */
+  href?: string;
 }
 
 export interface CommunityItem {

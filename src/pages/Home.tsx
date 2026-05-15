@@ -2,8 +2,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Hero } from '@/components/Hero';
 import { AboutSpotlight } from '@/components/AboutSpotlight';
-import { BookPreview } from '@/components/BookPreview';
-import { BodyOfWork } from '@/components/BodyOfWork';
+import { CuratedTrio } from '@/components/CuratedTrio';
 import { CommunityVision } from '@/components/CommunityVision';
 import { Writing } from '@/components/Writing';
 import { ClosingConnect } from '@/components/ClosingConnect';
@@ -13,16 +12,17 @@ import { BOOK, DOCTOR_NAME, DOCTOR_TITLE } from '@/constants';
 /**
  * Home — curated entry, not the encyclopedia.
  *
- * PR-3 reduces home from 7 sections to 6: Connect migrated to /contact;
- * the home slot at the end becomes a quiet <ClosingConnect /> — one
- * sentence and a button.
+ * PR-4 swaps BookPreview + BodyOfWork (two heavy sections) for a
+ * single <CuratedTrio /> editorial row — three typographic panels
+ * pointing at /about, /research, /book. Net: −1 section, much
+ * lighter visual weight.
  *
- * Subsequent PRs continue the reduction:
- *   PR-4 → BodyOfWork → /research (CuratedTrio replaces BodyOfWork)
- *   PR-6 → Writing → /writing (LatestEssay replaces Writing)
+ * Final reduction lands in PR-6: <Writing /> → /writing index;
+ * <LatestEssay /> teaser takes its slot.
  *
- * Target end state: 5 sections (Hero, CuratedTrio, PullQuote,
- * LatestEssay, ClosingConnect) — see plan §C.
+ * Target end state (after PR-6): 5 named sections (Hero,
+ * AboutSpotlight, CuratedTrio, LatestEssay, ClosingConnect) plus
+ * a PullQuote interstitial — see plan §C.
  */
 const Home = () => {
   const { hash, pathname } = useLocation();
@@ -65,8 +65,7 @@ const Home = () => {
           {BOOK.heroQuote}
         </PullQuote>
       </section>
-      <BookPreview />
-      <BodyOfWork />
+      <CuratedTrio />
       <CommunityVision />
       <Writing />
       <ClosingConnect />

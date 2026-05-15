@@ -11,6 +11,8 @@ import { CursorCompanion } from '@/components/ui/CursorCompanion';
 // Code-split routes — first paint on / no longer ships /book or /giving JS.
 const Home = lazy(() => import('@/pages/Home'));
 const About = lazy(() => import('@/pages/About'));
+const Research = lazy(() => import('@/pages/research/Index'));
+const Publications = lazy(() => import('@/pages/research/Publications'));
 const Book = lazy(() => import('@/pages/Book'));
 const Giving = lazy(() => import('@/pages/Giving'));
 const Contact = lazy(() => import('@/pages/Contact'));
@@ -35,6 +37,8 @@ export default function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/about" element={<About />} />
+                <Route path="/research" element={<Research />} />
+                <Route path="/research/publications" element={<Publications />} />
                 <Route path="/book" element={<Book />} />
                 <Route path="/giving" element={<Giving />} />
                 <Route path="/contact" element={<Contact />} />

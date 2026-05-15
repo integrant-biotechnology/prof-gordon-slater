@@ -65,7 +65,28 @@ export const SITE_ROUTES: SiteRoute[] = [
       'Bio, training, editorial roles, and research collaborators of Prof Gordon Slater — foot & ankle orthopaedic surgeon and Professor at UTS.',
     inTopNav: true,
     inFooter: false,
-    related: ['/book', '/contact'],
+    related: ['/research', '/book', '/contact'],
+  },
+  {
+    path: '/research',
+    label: 'Research',
+    title: 'Research | Prof Gordon Slater',
+    description:
+      'Six research themes spanning foot & ankle surgery, orthobiologics, stem cells & regenerative medicine, HBOT, aging biology, and AI in medicine.',
+    inTopNav: true,
+    inFooter: false,
+    related: ['/research/publications', '/book', '/about'],
+  },
+  {
+    path: '/research/publications',
+    label: 'Publications',
+    title: 'Publications | Prof Gordon Slater',
+    description:
+      'Selected peer-reviewed publications by Prof Gordon Slater (2003–2026) across surgery, orthobiologics, HBOT, regenerative medicine, and AI in medicine.',
+    inTopNav: false,
+    inFooter: false,
+    parent: '/research',
+    related: ['/research', '/book', '/about'],
   },
   {
     path: '/book',
@@ -75,7 +96,7 @@ export const SITE_ROUTES: SiteRoute[] = [
       'Chaos to Creation: Longevity and Regeneration Frontiers (9 April 2026) — Prof Gordon Slater’s book on lifespan as a modifiable outcome.',
     inTopNav: true,
     inFooter: false,
-    related: ['/about', '/contact'],
+    related: ['/research', '/about', '/contact'],
   },
   {
     path: '/contact',
