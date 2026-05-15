@@ -6,23 +6,20 @@ import { BookPreview } from '@/components/BookPreview';
 import { BodyOfWork } from '@/components/BodyOfWork';
 import { CommunityVision } from '@/components/CommunityVision';
 import { Writing } from '@/components/Writing';
-import { Connect } from '@/components/Connect';
+import { ClosingConnect } from '@/components/ClosingConnect';
 import { PullQuote } from '@/components/ui/PullQuote';
 import { BOOK, DOCTOR_NAME, DOCTOR_TITLE } from '@/constants';
 
 /**
  * Home — curated entry, not the encyclopedia.
  *
- * PR-2 reduces home from 9 component sections (Hero + WhatHeDoes +
- * About + Background + BookPreview + BodyOfWork + CommunityVision +
- * Writing + Connect) plus a PullQuote interstitial down to 7 sections.
- * <About> + <Background> + <WhatHeDoes> migrated to /about; their slot
- * is now <AboutSpotlight />.
+ * PR-3 reduces home from 7 sections to 6: Connect migrated to /contact;
+ * the home slot at the end becomes a quiet <ClosingConnect /> — one
+ * sentence and a button.
  *
  * Subsequent PRs continue the reduction:
- *   PR-3 → Connect → /contact
- *   PR-4 → BodyOfWork → /research
- *   PR-6 → Writing → /writing
+ *   PR-4 → BodyOfWork → /research (CuratedTrio replaces BodyOfWork)
+ *   PR-6 → Writing → /writing (LatestEssay replaces Writing)
  *
  * Target end state: 5 sections (Hero, CuratedTrio, PullQuote,
  * LatestEssay, ClosingConnect) — see plan §C.
@@ -72,7 +69,7 @@ const Home = () => {
       <BodyOfWork />
       <CommunityVision />
       <Writing />
-      <Connect />
+      <ClosingConnect />
     </>
   );
 };

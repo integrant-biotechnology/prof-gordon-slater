@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { DOCTOR_NAME } from '@/constants';
@@ -20,7 +20,7 @@ const NAV_LINKS: NavLink[] = [
   { name: 'Work', hash: 'work' },
   { name: 'Book', route: '/book' },
   { name: 'Giving', route: '/giving' },
-  { name: 'Connect', hash: 'connect' },
+  { name: 'Contact', route: '/contact' },
 ];
 
 /**
@@ -41,7 +41,6 @@ export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { pathname } = useLocation();
-  const navigate = useNavigate();
   const onHome = pathname === '/';
 
   useEffect(() => {
@@ -55,14 +54,6 @@ export const Navbar = () => {
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
-
-  const goConnect = () => {
-    if (onHome) {
-      document.getElementById('connect')?.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      navigate({ pathname: '/', hash: '#connect' });
-    }
-  };
 
   const isActiveRoute = (link: NavLink): boolean => {
     if (link.route) return pathname === link.route;
@@ -161,14 +152,15 @@ export const Navbar = () => {
         </ul>
 
         <div className="flex items-center gap-2">
-          <Button
-            variant="secondary"
-            size="sm"
-            className="hidden h-9 px-5 sm:inline-flex"
-            onClick={goConnect}
+          <Link
+            to="/contact"
+            className="hidden sm:inline-flex"
+            aria-label="Get in touch — contact page"
           >
-            Get in touch
-          </Button>
+            <Button variant="secondary" size="sm" className="h-9 px-5">
+              Get in touch
+            </Button>
+          </Link>
           <button
             type="button"
             aria-label={isOpen ? 'Close menu' : 'Open menu'}
@@ -204,16 +196,15 @@ export const Navbar = () => {
               ))}
             </ul>
             <div className="my-5 h-px w-full bg-white/10" />
-            <Button
-              variant="secondary"
-              className="w-full py-3.5"
-              onClick={() => {
-                setIsOpen(false);
-                goConnect();
-              }}
+            <Link
+              to="/contact"
+              onClick={() => setIsOpen(false)}
+              aria-label="Get in touch — contact page"
             >
-              Get in touch
-            </Button>
+              <Button variant="secondary" className="w-full py-3.5">
+                Get in touch
+              </Button>
+            </Link>
           </motion.div>
         )}
       </AnimatePresence>
