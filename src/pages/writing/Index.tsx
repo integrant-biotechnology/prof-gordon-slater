@@ -55,7 +55,7 @@ const WritingIndex = () => {
               {hosted.map((article, i) => (
                 <li key={article.id}>
                   <Reveal delay={i * 0.04}>
-                    <Link
+                    <Link viewTransition
                       to={`/writing/${article.slug}`}
                       className="group/row flex flex-col gap-3 py-7 transition-colors hover:bg-white/[0.015] md:flex-row md:items-baseline md:justify-between md:gap-10"
                     >

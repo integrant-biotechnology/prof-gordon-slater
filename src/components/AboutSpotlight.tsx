@@ -66,7 +66,7 @@ export const AboutSpotlight = () => (
       </Reveal>
 
       <Reveal delay={0.24}>
-        <Link
+        <Link viewTransition
           to="/about"
           className="group/link mt-10 inline-flex items-center gap-1.5 text-white/65 transition-colors hover:text-medical-teal"
           style={{

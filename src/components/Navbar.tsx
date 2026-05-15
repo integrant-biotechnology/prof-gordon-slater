@@ -4,44 +4,30 @@ import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { DOCTOR_NAME } from '@/constants';
+import { topNavRoutes } from '@/lib/site';
 import { cn } from '@/lib/utils';
 
-interface NavLink {
-  name: string;
-  /** Hash anchor on the home route (e.g. 'about'). Mutually exclusive with `route`. */
-  hash?: string;
-  /** Internal router path (e.g. '/book'). */
-  route?: string;
-}
-
-const NAV_LINKS: NavLink[] = [
-  { name: 'Home', hash: 'home' },
-  { name: 'About', route: '/about' },
-  { name: 'Research', route: '/research' },
-  { name: 'Book', route: '/book' },
-  { name: 'Writing', route: '/writing' },
-  { name: 'Contact', route: '/contact' },
-];
-
 /**
- * Navbar — floating glass pill.
+ * Navbar — SITE_ROUTES-driven floating glass pill (PR-7).
  *
- * Apple-grade refinements:
- *  - At top of page: uses `glass-thin` material (almost transparent)
- *    so the hero is the moment, not the chrome.
- *  - On scroll: pill transitions to `glass-thick` with a calibrated
- *    drop shadow and slightly larger padding — it "settles" into a
- *    more visible state once the hero has been read.
- *  - Active-route indicator: a 4px teal dot sits beneath the link
- *    of the current route (Book / Giving). Subtle, calibrated.
- *  - Monogram uses Fraunces italic to match the new favicon.
- *  - All hover transitions calibrated through --ease-apple.
+ * Every top-nav entry comes from SITE_ROUTES.filter(r => r.inTopNav).
+ * No hardcoded list, no hash anchors. To add a route to the top
+ * navigation, set `inTopNav: true` on its SITE_ROUTES entry. The
+ * pill itself stays unchanged — only the link source is centralised.
+ *
+ * Behaviour preserved:
+ *  - glass-thin at top-of-page, glass-thick on scroll
+ *  - 4px teal dot under the active route
+ *  - mobile menu collapses on route change
+ *  - View Transitions API engages on every <Link> for cross-fade
+ *    + slide registers (see index.css)
  */
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { pathname } = useLocation();
-  const onHome = pathname === '/';
+
+  const links = topNavRoutes();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 60);
@@ -55,46 +41,6 @@ export const Navbar = () => {
     setIsOpen(false);
   }, [pathname]);
 
-  const isActiveRoute = (link: NavLink): boolean => {
-    if (link.route) return pathname === link.route;
-    return false;
-  };
-
-  const renderLink = (link: NavLink, className: string, onClick?: () => void) => {
-    const active = isActiveRoute(link);
-    if (link.route) {
-      return (
-        <Link
-          to={link.route}
-          className={className}
-          onClick={onClick}
-          aria-current={active ? 'page' : undefined}
-        >
-          {link.name}
-          {active && (
-            <span
-              aria-hidden="true"
-              className="ml-1.5 inline-block h-1 w-1 translate-y-[-2px] rounded-full bg-medical-teal"
-            />
-          )}
-        </Link>
-      );
-    }
-    const id = link.hash!;
-    if (onHome) {
-      return (
-        <a href={`#${id}`} className={className} onClick={onClick}>
-          {link.name}
-        </a>
-      );
-    }
-    return (
-      <Link to={{ pathname: '/', hash: `#${id}` }} className={className} onClick={onClick}>
-        {link.name}
-      </Link>
-    );
-  };
-
   return (
     <nav
       aria-label="Primary"
@@ -105,9 +51,6 @@ export const Navbar = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className={cn(
-          // Single source of truth: Tailwind drives everything. Transitions
-          // are declared once via the arbitrary-value ease + duration so
-          // they don't conflict with inline style.
           'pointer-events-auto flex items-center gap-5 rounded-full',
           'transition-[padding,background-color,box-shadow] duration-[360ms] ease-[cubic-bezier(0.22,1,0.36,1)]',
           'md:gap-7',
@@ -118,6 +61,7 @@ export const Navbar = () => {
       >
         <Link
           to="/"
+          viewTransition
           aria-label={`${DOCTOR_NAME} — home`}
           className="group flex items-center gap-3 border-r border-white/10 pr-4"
         >
@@ -141,19 +85,35 @@ export const Navbar = () => {
         </Link>
 
         <ul className="hidden items-center gap-6 md:flex">
-          {NAV_LINKS.map((link) => (
-            <li key={link.name}>
-              {renderLink(
-                link,
-                'inline-flex items-center text-white/55 transition-colors duration-[220ms] ease-out hover:text-white',
-              )}
-            </li>
-          ))}
+          {links
+            .filter((r) => r.path !== '/')
+            .map((route) => {
+              const active = pathname === route.path;
+              return (
+                <li key={route.path}>
+                  <Link
+                    to={route.path}
+                    viewTransition
+                    aria-current={active ? 'page' : undefined}
+                    className="inline-flex items-center text-white/55 transition-colors duration-[220ms] ease-out hover:text-white"
+                  >
+                    {route.label}
+                    {active && (
+                      <span
+                        aria-hidden="true"
+                        className="ml-1.5 inline-block h-1 w-1 translate-y-[-2px] rounded-full bg-medical-teal"
+                      />
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
         </ul>
 
         <div className="flex items-center gap-2">
           <Link
             to="/contact"
+            viewTransition
             className="hidden sm:inline-flex"
             aria-label="Get in touch — contact page"
           >
@@ -185,19 +145,33 @@ export const Navbar = () => {
             className="pointer-events-auto fixed inset-x-4 top-24 rounded-3xl glass-thick p-8 shadow-2xl shadow-black/60 md:hidden"
           >
             <ul className="flex flex-col gap-5">
-              {NAV_LINKS.map((link) => (
-                <li key={link.name}>
-                  {renderLink(
-                    link,
-                    'inline-flex items-center font-display text-xl font-medium text-white/65 transition-colors hover:text-white',
-                    () => setIsOpen(false),
-                  )}
-                </li>
-              ))}
+              {links.map((route) => {
+                const active = pathname === route.path;
+                return (
+                  <li key={route.path}>
+                    <Link
+                      to={route.path}
+                      viewTransition
+                      onClick={() => setIsOpen(false)}
+                      aria-current={active ? 'page' : undefined}
+                      className="inline-flex items-center font-display text-xl font-medium text-white/65 transition-colors hover:text-white"
+                    >
+                      {route.label}
+                      {active && (
+                        <span
+                          aria-hidden="true"
+                          className="ml-2 inline-block h-1.5 w-1.5 translate-y-[-3px] rounded-full bg-medical-teal"
+                        />
+                      )}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
             <div className="my-5 h-px w-full bg-white/10" />
             <Link
               to="/contact"
+              viewTransition
               onClick={() => setIsOpen(false)}
               aria-label="Get in touch — contact page"
             >
