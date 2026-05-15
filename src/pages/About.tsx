@@ -1,15 +1,18 @@
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { PageShell } from '@/templates/PageShell';
 import { PageHero } from '@/templates/PageHero';
 import { Reveal } from '@/components/ui/Motion';
 import { PullQuote } from '@/components/ui/PullQuote';
 import { findRoute } from '@/lib/site';
 import {
+  COMMUNITY,
   DOCTOR_CREDENTIALS,
   DOCTOR_NAME,
   LEADERSHIP_ROLES,
   PRACTICE_URL,
   TRAINING,
+  VISION_STATEMENT,
 } from '@/constants';
 
 const TAGS = [
@@ -213,6 +216,98 @@ const About = () => {
                 Presents at international surgical conferences. {DOCTOR_CREDENTIALS}.
               </p>
             </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* Beyond the clinic — community contribution + vision.
+          Folded in from the former <CommunityVision /> home section
+          per the plan §C reduction. */}
+      <section
+        id="beyond-the-clinic"
+        aria-labelledby="beyond-heading"
+        className="border-t border-white/10 px-6 py-24 md:py-32"
+        style={{ backgroundColor: 'var(--color-brand-panel)' }}
+      >
+        <div className="mx-auto max-w-5xl">
+          <Reveal>
+            <p className="eyebrow">Beyond the operating theatre</p>
+          </Reveal>
+          <Reveal delay={0.05}>
+            <h2
+              id="beyond-heading"
+              className="mt-5 max-w-3xl text-balance font-display font-medium"
+              style={{
+                fontSize: 'var(--text-display)',
+                lineHeight: 1.05,
+                letterSpacing: '-0.015em',
+              }}
+            >
+              Community &amp;{' '}
+              <em className="font-display italic font-normal text-white/55">vision.</em>
+            </h2>
+          </Reveal>
+
+          {/* Vision — first sentence as a quiet pull-quote. */}
+          <div className="mt-14 md:mt-16">
+            <PullQuote attribution="Anchored on Slater, Sambo & Hannan (2019) and the FDA–EMA Joint Guiding Principles of Good AI Practice (Jan 2026)">
+              {VISION_STATEMENT.split('.')[0]! + '.'}
+            </PullQuote>
+          </div>
+
+          {/* Community contribution — flat typographic list. */}
+          <div className="mt-16 border-t border-white/10 pt-12 md:mt-20">
+            <Reveal>
+              <p className="eyebrow">Community contribution</p>
+            </Reveal>
+            <ul className="mt-10 grid grid-cols-1 gap-y-10 md:grid-cols-2 md:gap-x-16 md:gap-y-12">
+              {COMMUNITY.map((item, i) => {
+                const isGiving = item.title === 'Supporting medical research';
+                return (
+                  <li key={item.title}>
+                    <Reveal delay={i * 0.03}>
+                      <article>
+                        <h3
+                          className="font-display font-medium text-white/90"
+                          style={{
+                            fontSize: 'var(--text-title)',
+                            lineHeight: 1.15,
+                            letterSpacing: '-0.008em',
+                          }}
+                        >
+                          {item.title}
+                        </h3>
+                        <p
+                          className="mt-3 text-pretty leading-relaxed text-white/60"
+                          style={{ fontSize: 'var(--text-body)' }}
+                        >
+                          {item.description}
+                        </p>
+                        {isGiving && (
+                          <Link
+                            to="/giving"
+                            className="group/link mt-4 inline-flex items-center gap-1.5 text-medical-teal/85 transition-colors hover:text-medical-teal"
+                            style={{
+                              fontSize: 'var(--text-eyebrow)',
+                              letterSpacing: '0.16em',
+                              textTransform: 'uppercase',
+                              fontWeight: 600,
+                            }}
+                          >
+                            See more
+                            <ArrowRight
+                              aria-hidden="true"
+                              size={13}
+                              className="transition-transform group-hover/link:translate-x-0.5"
+                            />
+                          </Link>
+                        )}
+                      </article>
+                    </Reveal>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         </div>
       </section>

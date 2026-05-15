@@ -4,8 +4,14 @@ export interface Article {
   id: string;
   title: string;
   category: string;
-  /** External URL to the published article. */
+  /** External URL to the published article (used when not hosted on this site). */
   href: string;
+  /** Slug for /writing/:slug. Reserved for hosted essays. */
+  slug?: string;
+  /** Optional lede paragraph rendered in the magazine TOC. */
+  lede?: string;
+  /** ISO date string, e.g. "2026-04-15". Used for sort order. */
+  publishedAt?: string;
 }
 
 export interface Capability {
