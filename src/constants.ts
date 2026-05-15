@@ -17,6 +17,7 @@ export * from './data/book';
 export * from './data/research/themes';
 export * from './data/research/publications';
 export * from './data/research/body-of-work';
+export * from './data/research/innovations';
 export * from './data/writing';
 export * from './data/community';
 export * from './data/giving';

@@ -27,7 +27,8 @@ const FOOTER_SECTIONS: { title: string; links: FooterLink[] }[] = [
     links: [
       { label: 'Home', hash: 'home' },
       { label: 'About', href: '/about', route: true },
-      { label: 'Body of work', hash: 'work' },
+      { label: 'Research', href: '/research', route: true },
+      { label: 'Publications', href: '/research/publications', route: true },
     ],
   },
   {
