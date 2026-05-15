@@ -55,6 +55,17 @@ export const SITE_ROUTES: SiteRoute[] = [
       'The personal site of Prof Gordon Slater — foot & ankle orthopaedic surgeon, Professor at UTS, and author of Chaos to Creation. A factual record.',
     inTopNav: true,
     inFooter: false,
+    related: ['/about', '/book', '/giving'],
+  },
+  {
+    path: '/about',
+    label: 'About',
+    title: 'About | Prof Gordon Slater',
+    description:
+      'Bio, training, editorial roles, and research collaborators of Prof Gordon Slater — foot & ankle orthopaedic surgeon and Professor at UTS.',
+    inTopNav: true,
+    inFooter: false,
+    related: ['/book', '/giving'],
   },
   {
     path: '/book',
@@ -64,6 +75,7 @@ export const SITE_ROUTES: SiteRoute[] = [
       'Chaos to Creation: Longevity and Regeneration Frontiers (9 April 2026) — Prof Gordon Slater’s book on lifespan as a modifiable outcome.',
     inTopNav: true,
     inFooter: false,
+    related: ['/about', '/giving'],
   },
   {
     path: '/giving',
@@ -73,6 +85,7 @@ export const SITE_ROUTES: SiteRoute[] = [
       'Three Sydney charity events Prof Gordon Slater supports — funding breast-cancer, cardiovascular, and vision research through in-kind donations.',
     inTopNav: false,
     inFooter: true,
+    related: ['/about', '/book'],
   },
 ];
 

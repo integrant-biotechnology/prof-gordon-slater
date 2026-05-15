@@ -16,7 +16,7 @@ interface NavLink {
 
 const NAV_LINKS: NavLink[] = [
   { name: 'Home', hash: 'home' },
-  { name: 'About', hash: 'about' },
+  { name: 'About', route: '/about' },
   { name: 'Work', hash: 'work' },
   { name: 'Book', route: '/book' },
   { name: 'Giving', route: '/giving' },
