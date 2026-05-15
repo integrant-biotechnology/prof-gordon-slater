@@ -14,6 +14,8 @@ const About = lazy(() => import('@/pages/About'));
 const Research = lazy(() => import('@/pages/research/Index'));
 const Publications = lazy(() => import('@/pages/research/Publications'));
 const Book = lazy(() => import('@/pages/Book'));
+const ThreeRules = lazy(() => import('@/pages/book/ThreeRules'));
+const CaseStudies = lazy(() => import('@/pages/book/CaseStudies'));
 const Giving = lazy(() => import('@/pages/Giving'));
 const Contact = lazy(() => import('@/pages/Contact'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
@@ -40,6 +42,8 @@ export default function App() {
                 <Route path="/research" element={<Research />} />
                 <Route path="/research/publications" element={<Publications />} />
                 <Route path="/book" element={<Book />} />
+                <Route path="/book/three-rules" element={<ThreeRules />} />
+                <Route path="/book/case-studies" element={<CaseStudies />} />
                 <Route path="/giving" element={<Giving />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="*" element={<NotFound />} />

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ArrowUpRight, Quote } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ArrowUpRight, Quote } from 'lucide-react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
 import { Glow } from '@/components/ui/Glow';
 import { ChapterMark } from '@/components/ui/ChapterMark';
@@ -523,6 +523,28 @@ const ThreeRules = () => (
           </li>
         ))}
       </ol>
+
+      <Reveal delay={0.24}>
+        <div className="mt-16 flex justify-center md:mt-20">
+          <Link
+            to="/book/three-rules"
+            className="group/link inline-flex items-center gap-2 text-white/65 transition-colors hover:text-medical-teal"
+            style={{
+              fontSize: 'var(--text-eyebrow)',
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              fontWeight: 600,
+            }}
+          >
+            Read the Three Rules in full
+            <ArrowRight
+              aria-hidden="true"
+              size={13}
+              className="transition-transform group-hover/link:translate-x-0.5"
+            />
+          </Link>
+        </div>
+      </Reveal>
     </div>
   </section>
 );
@@ -695,6 +717,28 @@ const ClinicalCases = () => (
           </li>
         ))}
       </ol>
+
+      <Reveal delay={0.18}>
+        <div className="mt-16 flex justify-center md:mt-20">
+          <Link
+            to="/book/case-studies"
+            className="group/link inline-flex items-center gap-2 text-white/65 transition-colors hover:text-medical-teal"
+            style={{
+              fontSize: 'var(--text-eyebrow)',
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              fontWeight: 600,
+            }}
+          >
+            Read the case studies in full
+            <ArrowRight
+              aria-hidden="true"
+              size={13}
+              className="transition-transform group-hover/link:translate-x-0.5"
+            />
+          </Link>
+        </div>
+      </Reveal>
     </div>
   </section>
 );
