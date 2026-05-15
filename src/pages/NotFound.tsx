@@ -65,7 +65,7 @@ const NotFound = () => {
         </Reveal>
 
         <Reveal delay={0.2}>
-          <Link
+          <Link viewTransition
             to="/"
             className="group/back mt-12 inline-flex items-center gap-2 text-white/65 transition-colors hover:text-white"
             style={{

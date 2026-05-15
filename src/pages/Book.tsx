@@ -7,6 +7,7 @@ import { ChapterMark } from '@/components/ui/ChapterMark';
 import { PullQuote } from '@/components/ui/PullQuote';
 import { ReadingProgress } from '@/components/ui/ReadingProgress';
 import { Reveal } from '@/components/ui/Motion';
+import { JsonLd } from '@/templates/JsonLd';
 import {
   BOOK,
   BOOK_COVER_SRCSET,
@@ -18,6 +19,28 @@ import {
   DOCTOR_NAME,
   LIFE_FORCE,
 } from '@/constants';
+
+const BOOK_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'Book',
+  name: 'Chaos to Creation',
+  alternateName: 'Longevity and Regeneration Frontiers',
+  author: {
+    '@type': 'Person',
+    name: 'Professor Gordon Slater',
+    url: 'https://profgordonslater.com.au',
+  },
+  datePublished: '2026-04-09',
+  inLanguage: 'en-AU',
+  image: 'https://profgordonslater.com.au/book-cover-chaos-to-creation.webp',
+  bookFormat: ['Hardcover', 'Paperback', 'EBook'],
+  url: 'https://profgordonslater.com.au/book',
+  sameAs: [
+    'https://www.amazon.com.au/Chaos-Creation-Prof-Gordon-Slater/dp/B0GWTSZN7M',
+    'https://www.amazon.com.au/Chaos-Creation-Prof-Gordon-Slater/dp/B0GWTQFMSP',
+    'https://www.amazon.com.au/Chaos-Creation-Prof-Gordon-Slater-ebook/dp/B0GWTGTHBN',
+  ],
+};
 
 const FOUR_QUESTIONS = [
   'What can we address with the data at hand?',
@@ -56,6 +79,7 @@ const Book = () => {
 
   return (
     <>
+      <JsonLd data={BOOK_LD} id="ld-book" />
       <ReadingProgress />
       <BookHero />
       <InsideThisBook />
@@ -147,7 +171,7 @@ const BookHero = () => {
         {/* Left column — the framing. */}
         <div>
           <Reveal>
-            <Link
+            <Link viewTransition
               to="/"
               className="group/back inline-flex items-center gap-2 text-white/55 transition-colors hover:text-white"
               style={{
@@ -526,7 +550,7 @@ const ThreeRules = () => (
 
       <Reveal delay={0.24}>
         <div className="mt-16 flex justify-center md:mt-20">
-          <Link
+          <Link viewTransition
             to="/book/three-rules"
             className="group/link inline-flex items-center gap-2 text-white/65 transition-colors hover:text-medical-teal"
             style={{
@@ -720,7 +744,7 @@ const ClinicalCases = () => (
 
       <Reveal delay={0.18}>
         <div className="mt-16 flex justify-center md:mt-20">
-          <Link
+          <Link viewTransition
             to="/book/case-studies"
             className="group/link inline-flex items-center gap-2 text-white/65 transition-colors hover:text-medical-teal"
             style={{
@@ -834,7 +858,7 @@ const BookCloseCTA = () => (
       <Reveal delay={0.16}>
         <div className="mt-14 flex flex-col items-center justify-center gap-6">
           <FormatButtons size="lg" />
-          <Link
+          <Link viewTransition
             to="/"
             className="group/back mt-2 inline-flex items-center gap-2 text-white/55 transition-colors hover:text-white"
             style={{

@@ -81,7 +81,7 @@ export const CuratedTrio = () => (
         {PANELS.map((panel, i) => (
           <li key={panel.to}>
             <Reveal delay={i * 0.06}>
-              <Link
+              <Link viewTransition
                 to={panel.to}
                 aria-label={`${panel.cta} — ${panel.kicker}`}
                 className="group/panel block border-t border-white/10 pt-8 transition-colors hover:border-medical-teal/40"

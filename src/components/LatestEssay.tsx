@@ -60,7 +60,7 @@ export const LatestEssay = () => {
         <Reveal delay={0.18}>
           <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
             {isHosted ? (
-              <Link
+              <Link viewTransition
                 to={`/writing/${latest.slug}`}
                 className="group/link inline-flex items-center gap-1.5 text-white/85 transition-colors hover:text-medical-teal"
                 style={{
@@ -99,7 +99,7 @@ export const LatestEssay = () => {
                 />
               </a>
             )}
-            <Link
+            <Link viewTransition
               to="/writing"
               className="group/link inline-flex items-center gap-1.5 text-white/55 transition-colors hover:text-white/85"
               style={{

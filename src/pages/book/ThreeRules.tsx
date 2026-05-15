@@ -1,6 +1,5 @@
 import { Reveal } from '@/components/ui/Motion';
 import { PullQuote } from '@/components/ui/PullQuote';
-import { Breadcrumbs } from '@/templates/Breadcrumbs';
 import { PageShell } from '@/templates/PageShell';
 import { PageHero } from '@/templates/PageHero';
 import { findRoute } from '@/lib/site';
@@ -22,8 +21,6 @@ const ThreeRules = () => {
 
   return (
     <PageShell route={route}>
-      <Breadcrumbs route={route} />
-
       <PageHero
         variant="type-only"
         kicker="The Book / Three Rules"
