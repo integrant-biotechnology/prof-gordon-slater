@@ -5,21 +5,32 @@ import {
   Cpu,
   FlaskConical,
   Globe,
-  Instagram,
   Lightbulb,
-  Linkedin,
   Microscope,
   Sparkles,
   Stethoscope,
-  Twitter,
   Wind,
-  Youtube,
-  type LucideIcon,
 } from 'lucide-react';
+import type { ComponentType, SVGProps } from 'react';
+import {
+  InstagramIcon,
+  LinkedInIcon,
+  XIcon,
+  YouTubeIcon,
+} from './social-icons';
+
+export interface IconProps extends SVGProps<SVGSVGElement> {
+  size?: string | number;
+  strokeWidth?: string | number;
+  title?: string;
+}
+
+export type IconComponent = ComponentType<IconProps>;
 
 /**
- * Central registry of icons used in `constants.ts` data.
- * Keys are the Lucide component names so the mapping reads 1:1.
+ * Central registry of icons used in typed content modules.
+ * Generic UI glyphs stay on Lucide; brand/social marks are local SVGs
+ * so dependency bumps cannot break the site on renamed exports.
  */
 export const ICONS = {
   Activity,
@@ -28,15 +39,15 @@ export const ICONS = {
   Cpu,
   FlaskConical,
   Globe,
-  Instagram,
+  Instagram: InstagramIcon,
   Lightbulb,
-  Linkedin,
+  Linkedin: LinkedInIcon,
   Microscope,
   Sparkles,
   Stethoscope,
-  Twitter,
+  Twitter: XIcon,
   Wind,
-  Youtube,
-} satisfies Record<string, LucideIcon>;
+  Youtube: YouTubeIcon,
+} satisfies Record<string, IconComponent>;
 
 export type IconName = keyof typeof ICONS;

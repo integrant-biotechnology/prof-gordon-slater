@@ -43,9 +43,9 @@ refresh — and long-cache headers for hashed assets).
 1. Push this repo to GitHub.
 2. In Vercel, **Add New… → Project**, import `prof-gordon-slater`, and deploy. The defaults
    (Framework: *Vite*, Build: `npm run build`, Output: `dist`) are picked up automatically.
-3. There are no required environment variables. Add the production domain under **Settings →
-   Domains**, then update the canonical / Open Graph / JSON-LD URLs in `index.html` (currently
-   `https://profgordonslater.com.au`).
+3. Set `VITE_SITE_URL` to the production origin (for example
+   `https://profgordonslater.com.au`) so canonical / Open Graph / JSON-LD URLs resolve from one
+   place.
 
 Or from the CLI: `npm i -g vercel && vercel` (preview) / `vercel --prod` (production).
 
@@ -185,19 +185,18 @@ them in `src/constants.ts` (and rebuild) — no component edits needed:
       knowledge-graph entity linking. No public research profile (Scholar / ORCID / ResearchGate
       / PubMed) is wired yet — drop one into `SOCIAL_LINKS` and `sameAs` when ready.
 - [ ] **Selected publications links** — `SELECTED_PUBLICATIONS` entries currently have no
-      `href` (titles render as plain text). Add `href` per entry; populate
-      `PUBLICATIONS_INDEX_URL` with the master Google Scholar / ORCID profile so the
-      *"Full list"* affordance becomes a real link.
-- [ ] **Personal contact email** — `CONTACT_EMAIL` is `marketing@drgordonslater.com.au`
-      (Adelaide Slater handles, per the KB). Swap if a different general address is preferred.
+      `href` (titles render as plain text). Add `href` per entry so more titles resolve directly
+      to journal or reference pages.
+- [x] ~~Personal contact email~~ — `CONTACT_EMAIL` remains
+      `marketing@drgordonslater.com.au` (Adelaide Slater handles, per the KB).
 - [ ] **Real OG image** — `og:image`/`twitter:image` currently point at the portrait as a
       stopgap; a purpose-built 1200×630 image is preferred. Per-route OG (e.g. cover image on
       `/book`) needs a pre-rendering plugin — flagged as a TODO in `index.html`.
 - [ ] **Favicon** — `public/favicon.svg` is a "GS" monogram — replace if a brand mark exists.
-- [ ] **Domain & canonical** — `index.html` canonical / OG / JSON-LD URLs use
-      `https://profgordonslater.com.au`; update if the production domain differs.
-- [ ] **Legal pages** — footer *Privacy / Disclaimer / Accessibility* links currently `#`;
-      build real pages or remove.
+- [ ] **Domain & canonical** — set `VITE_SITE_URL` if the production domain differs from
+      `https://profgordonslater.com.au`.
+- [x] ~~Legal pages~~ — footer *Privacy / Disclaimer / Accessibility* links now resolve to real
+      internal pages.
 
 ### Cross-site work — not in this repo
 

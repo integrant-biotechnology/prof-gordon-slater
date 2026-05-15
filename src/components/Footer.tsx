@@ -48,7 +48,11 @@ const FOOTER_SECTIONS: { title: string; links: FooterLink[] }[] = [
   },
 ];
 
-const LEGAL_LINKS = ['Privacy', 'Disclaimer', 'Accessibility'];
+const LEGAL_LINKS: FooterLink[] = [
+  { label: 'Privacy', href: '/privacy', route: true },
+  { label: 'Disclaimer', href: '/disclaimer', route: true },
+  { label: 'Accessibility', href: '/accessibility', route: true },
+];
 
 const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -253,10 +257,11 @@ export const Footer = () => {
         {/* Bottom — legal + copyright. */}
         <div className="mt-12 flex flex-col items-start justify-between gap-5 border-t border-white/5 pt-8 md:flex-row md:items-center">
           <ul className="flex flex-wrap gap-x-7 gap-y-3">
-            {LEGAL_LINKS.map((item) => (
-              <li key={item}>
-                <a
-                  href="#"
+            {LEGAL_LINKS.map((link) => (
+              <li key={link.label}>
+                <Link
+                  to={link.href!}
+                  viewTransition
                   className="text-white/45 transition-colors hover:text-white/85"
                   style={{
                     fontSize: 'var(--text-eyebrow)',
@@ -265,8 +270,8 @@ export const Footer = () => {
                     fontWeight: 600,
                   }}
                 >
-                  {item}
-                </a>
+                  {link.label}
+                </Link>
               </li>
             ))}
           </ul>

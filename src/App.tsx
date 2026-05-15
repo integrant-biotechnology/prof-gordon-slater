@@ -20,6 +20,9 @@ const Writing = lazy(() => import('@/pages/writing/Index'));
 const Article = lazy(() => import('@/pages/writing/Article'));
 const Giving = lazy(() => import('@/pages/Giving'));
 const Contact = lazy(() => import('@/pages/Contact'));
+const Privacy = lazy(() => import('@/pages/Privacy'));
+const Disclaimer = lazy(() => import('@/pages/Disclaimer'));
+const Accessibility = lazy(() => import('@/pages/Accessibility'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 
 /**
@@ -65,6 +68,9 @@ export default function App() {
               <Route path="/writing/:slug" element={guard(Article)} />
               <Route path="/giving" element={guard(Giving)} />
               <Route path="/contact" element={guard(Contact)} />
+              <Route path="/privacy" element={guard(Privacy)} />
+              <Route path="/disclaimer" element={guard(Disclaimer)} />
+              <Route path="/accessibility" element={guard(Accessibility)} />
               <Route path="*" element={guard(NotFound)} />
             </Routes>
           </Suspense>

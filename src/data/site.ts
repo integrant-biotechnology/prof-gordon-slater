@@ -30,7 +30,7 @@ export interface SiteRoute {
   parent?: string;
   /** Paths shown in the per-page "See also" block. 2–3 recommended. */
   related?: string[];
-  /** Per-route OG image; falls back to the home portrait when omitted. */
+  /** Per-route OG image. Reserved for a later route-level metadata pass. */
   ogImage?: string;
 }
 
@@ -149,6 +149,36 @@ export const SITE_ROUTES: SiteRoute[] = [
     inTopNav: false,
     inFooter: true,
     related: ['/about', '/book'],
+  },
+  {
+    path: '/privacy',
+    label: 'Privacy',
+    title: 'Privacy | Prof Gordon Slater',
+    description:
+      'Privacy information for Prof Gordon Slater’s personal website — no forms, no analytics, and no collection of personal information today.',
+    inTopNav: false,
+    inFooter: false,
+    related: ['/contact', '/disclaimer', '/accessibility'],
+  },
+  {
+    path: '/disclaimer',
+    label: 'Disclaimer',
+    title: 'Disclaimer | Prof Gordon Slater',
+    description:
+      'General-information disclaimer for Prof Gordon Slater’s personal website, including the separation from clinical care and the practice site.',
+    inTopNav: false,
+    inFooter: false,
+    related: ['/privacy', '/contact', '/accessibility'],
+  },
+  {
+    path: '/accessibility',
+    label: 'Accessibility',
+    title: 'Accessibility | Prof Gordon Slater',
+    description:
+      'Accessibility statement for Prof Gordon Slater’s personal website, including motion, readability, and feedback paths for access barriers.',
+    inTopNav: false,
+    inFooter: false,
+    related: ['/privacy', '/contact', '/disclaimer'],
   },
 ];
 

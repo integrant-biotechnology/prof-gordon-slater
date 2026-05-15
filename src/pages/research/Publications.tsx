@@ -5,6 +5,7 @@ import { PageHero } from '@/templates/PageHero';
 import { ListTemplate, type ListFilter } from '@/templates/ListTemplate';
 import { JsonLd } from '@/templates/JsonLd';
 import { findRoute } from '@/lib/site';
+import { siteUrl } from '@/lib/site-origin';
 import { FULL_PUBLICATIONS, RESEARCH_THEMES } from '@/constants';
 import type { Publication } from '@/types';
 
@@ -12,7 +13,7 @@ const PUBLICATIONS_LD = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
   name: 'Selected peer-reviewed publications by Prof Gordon Slater',
-  url: 'https://profgordonslater.com.au/research/publications',
+  url: siteUrl('/research/publications'),
   itemListElement: FULL_PUBLICATIONS.slice()
     .reverse()
     .map((p, i) => ({
