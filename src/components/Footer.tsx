@@ -95,10 +95,7 @@ export const Footer = () => {
               >
                 {DOCTOR_NAME}
               </p>
-              <p
-                className="mt-2 max-w-xs leading-relaxed text-white/55"
-                style={{ fontSize: 'var(--text-meta)' }}
-              >
+              <p className="mt-3 max-w-xs text-[0.9375rem] leading-relaxed text-white/75">
                 {DOCTOR_TITLE}
               </p>
             </div>
@@ -106,17 +103,11 @@ export const Footer = () => {
               type="button"
               onClick={scrollToTop}
               aria-label="Back to top"
-              className="group/top inline-flex items-center gap-2 text-white/55 transition-colors hover:text-medical-teal"
-              style={{
-                fontSize: 'var(--text-eyebrow)',
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                fontWeight: 600,
-              }}
+              className="group/top inline-flex min-h-11 items-center gap-2.5 rounded-full border border-white/15 px-5 text-[0.8125rem] font-semibold uppercase tracking-[0.18em] text-white/80 transition-colors hover:border-medical-teal/60 hover:text-medical-teal"
             >
               <ArrowUp
                 aria-hidden="true"
-                size={13}
+                size={16}
                 className="transition-transform group-hover/top:-translate-y-0.5"
               />
               Back to top
@@ -128,11 +119,11 @@ export const Footer = () => {
             {FOOTER_SECTIONS.map((section) => (
               <nav key={section.title} aria-label={section.title}>
                 <p className="eyebrow">{section.title}</p>
-                <ul className="mt-6 space-y-3">
+                <ul className="mt-5 space-y-1.5">
                   {section.links.map((link) => {
                     const className =
-                      'inline-flex items-center gap-1 leading-snug text-white/65 transition-colors hover:text-white';
-                    const style = { fontSize: 'var(--text-meta)' };
+                      'inline-flex min-h-10 items-center gap-1.5 rounded-md leading-snug text-white/85 transition-colors hover:text-white hover:underline hover:underline-offset-4 hover:decoration-medical-teal/70';
+                    const style = { fontSize: 'var(--text-body)' };
                     if (link.external) {
                       return (
                         <li key={link.label}>
@@ -144,7 +135,7 @@ export const Footer = () => {
                             style={style}
                           >
                             {link.label}
-                            <ArrowUpRight aria-hidden="true" size={11} />
+                            <ArrowUpRight aria-hidden="true" size={14} />
                           </a>
                         </li>
                       );
@@ -204,9 +195,9 @@ export const Footer = () => {
                         target="_blank"
                         rel={isPlaceholder ? 'noopener noreferrer' : 'me noopener noreferrer'}
                         aria-label={`${social.label}${isPlaceholder ? ' (link coming soon)' : ' (opens in a new tab)'}`}
-                        className="inline-flex h-10 w-10 items-center justify-center rounded-full glass-thin text-white/65 transition-colors hover:text-medical-teal"
+                        className="inline-flex h-12 w-12 items-center justify-center rounded-full glass-thin text-white/80 transition-colors hover:text-medical-teal"
                       >
-                        <Icon aria-hidden="true" size={15} strokeWidth={1.5} />
+                        <Icon aria-hidden="true" size={19} strokeWidth={1.5} />
                         <span className="sr-only">{social.label}</span>
                       </a>
                     </li>
@@ -220,7 +211,7 @@ export const Footer = () => {
               <div>
                 <dt className="eyebrow">Qualification</dt>
                 <dd
-                  className="mt-2 font-medium text-white/65"
+                  className="mt-2 font-medium text-white/80"
                   style={{
                     fontSize: 'var(--text-eyebrow)',
                     letterSpacing: '0.18em',
@@ -233,7 +224,7 @@ export const Footer = () => {
               <div>
                 <dt className="eyebrow">Registration</dt>
                 <dd
-                  className="mt-2 font-medium text-white/65"
+                  className="mt-2 font-medium text-white/80"
                   style={{
                     fontSize: 'var(--text-eyebrow)',
                     letterSpacing: '0.18em',
@@ -246,10 +237,7 @@ export const Footer = () => {
             </dl>
           </div>
 
-          <p
-            className="mt-12 max-w-3xl text-pretty leading-relaxed text-white/55"
-            style={{ fontSize: 'var(--text-meta)' }}
-          >
+          <p className="mt-12 max-w-3xl text-pretty text-[0.9375rem] leading-relaxed text-white/70">
             {FOOTER_DISCLAIMER}
           </p>
         </div>
@@ -262,9 +250,9 @@ export const Footer = () => {
                 <Link
                   to={link.href!}
                   viewTransition
-                  className="text-white/45 transition-colors hover:text-white/85"
+                  className="inline-flex min-h-10 items-center text-white/70 transition-colors hover:text-white"
                   style={{
-                    fontSize: 'var(--text-eyebrow)',
+                    fontSize: '0.8125rem',
                     letterSpacing: '0.18em',
                     textTransform: 'uppercase',
                     fontWeight: 600,
@@ -276,9 +264,9 @@ export const Footer = () => {
             ))}
           </ul>
           <p
-            className="text-white/45 nums-tabular"
+            className="text-white/70 nums-tabular"
             style={{
-              fontSize: 'var(--text-eyebrow)',
+              fontSize: '0.8125rem',
               letterSpacing: '0.18em',
               textTransform: 'uppercase',
               fontWeight: 600,
