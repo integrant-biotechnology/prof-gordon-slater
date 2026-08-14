@@ -59,9 +59,8 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    /* Anchor sections clear of the floating Navbar pill — calibrated
-       to the scrolled glass-thick state (max height ~3.5rem inner
-       pill + 1rem container py + 1rem breathing offset = 5.5rem). */
+    /* Anchor sections clear of the fixed full-width Navbar — calibrated
+       to the scrolled condensed state (~4.25rem bar + breathing offset). */
     scroll-padding-top: 5.5rem;
   }
 
