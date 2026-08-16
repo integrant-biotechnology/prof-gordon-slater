@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 import { PageShell } from '@/templates/PageShell';
 import { PageHero } from '@/templates/PageHero';
@@ -39,7 +40,13 @@ const PUBLICATIONS_LD = {
  */
 const Publications = () => {
   const route = findRoute('/research/publications');
-  const [filter, setFilter] = useState<string>('all');
+  const [searchParams] = useSearchParams();
+  // Deep-links from /research theme sections preselect their filter
+  // via ?theme=<slug>; unknown slugs fall back to "all".
+  const themeParam = searchParams.get('theme');
+  const initialFilter =
+    themeParam && RESEARCH_THEMES.some((t) => t.slug === themeParam) ? themeParam : 'all';
+  const [filter, setFilter] = useState<string>(initialFilter);
   const [query, setQuery] = useState<string>('');
 
   const filters: ListFilter[] = useMemo(
@@ -75,7 +82,7 @@ const Publications = () => {
         title={
           <>
             Sixty peer-reviewed papers ·{' '}
-            <em className="font-display italic font-normal text-white/55">
+            <em className="font-display italic font-normal text-white/70">
               2003–2026.
             </em>
           </>
@@ -121,7 +128,7 @@ const Publications = () => {
                 </p>
                 {p.venue && (
                   <p
-                    className="mt-1 italic text-white/45"
+                    className="mt-1 italic text-white/60"
                     style={{ fontSize: 'var(--text-meta)' }}
                   >
                     {p.venue}
@@ -129,7 +136,7 @@ const Publications = () => {
                 )}
               </div>
               <p
-                className="shrink-0 italic text-white/45 nums-tabular"
+                className="shrink-0 italic text-white/60 nums-tabular"
                 style={{ fontSize: 'var(--text-meta)' }}
                 aria-label={`Year ${p.year}, entry ${i + 1}`}
               >

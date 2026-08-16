@@ -140,7 +140,7 @@ const PageHeroText = ({ eyebrow, kicker, title, lede }: PageHeroTextProps) => (
     {kicker && (
       <Reveal>
         <p
-          className="text-white/45"
+          className="text-white/60"
           style={{
             fontSize: 'var(--text-eyebrow)',
             letterSpacing: '0.18em',

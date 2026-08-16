@@ -1,7 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, ArrowUpRight, Quote } from 'lucide-react';
-import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
+import { BookCover } from '@/components/ui/BookCover';
 import { Glow } from '@/components/ui/Glow';
 import { ChapterMark } from '@/components/ui/ChapterMark';
 import { PullQuote } from '@/components/ui/PullQuote';
@@ -11,7 +11,6 @@ import { JsonLd } from '@/templates/JsonLd';
 import { siteUrl } from '@/lib/site-origin';
 import {
   BOOK,
-  BOOK_COVER_SRCSET,
   BOOK_ENDORSEMENTS,
   BOOK_FORMATS,
   BOOK_INSIDE,
@@ -147,21 +146,8 @@ const FormatButtons = ({ size = 'md' }: { size?: 'md' | 'lg' }) => {
 // -------------------------------------------------------------
 
 const BookHero = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const reduceMotion = useReducedMotion();
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end start'],
-  });
-
-  const rotateY = useTransform(scrollYProgress, [0, 1], [-10, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], [0.97, 1.0]);
-  const liftY = useTransform(scrollYProgress, [0, 1], [16, 0]);
-
   return (
     <section
-      ref={sectionRef}
       aria-labelledby="book-hero"
       className="relative overflow-hidden px-6 pt-32 pb-20 md:pt-40 md:pb-28"
     >
@@ -174,7 +160,7 @@ const BookHero = () => {
           <Reveal>
             <Link viewTransition
               to="/"
-              className="group/back inline-flex items-center gap-2 text-white/55 transition-colors hover:text-white"
+              className="group/back inline-flex items-center gap-2 text-white/70 transition-colors hover:text-white"
               style={{
                 fontSize: 'var(--text-eyebrow)',
                 letterSpacing: '0.18em',
@@ -211,7 +197,7 @@ const BookHero = () => {
             >
               {BOOK.title}{' '}
               <em
-                className="font-display italic font-normal text-white/55"
+                className="font-display italic font-normal text-white/70"
                 style={{ display: 'block', fontSize: '0.5em', lineHeight: 1, marginTop: '0.3em' }}
               >
                 {BOOK.subtitle}.
@@ -230,7 +216,7 @@ const BookHero = () => {
 
           <Reveal delay={0.2}>
             <p
-              className="mt-7 max-w-xl text-pretty leading-relaxed text-white/65"
+              className="mt-7 max-w-xl text-pretty leading-relaxed text-white/75"
               style={{ fontSize: 'var(--text-body)' }}
             >
               {BOOK.subtagline}
@@ -243,7 +229,7 @@ const BookHero = () => {
               style={{ fontSize: 'var(--text-lede)', lineHeight: 1.4 }}
             >
               &ldquo;{BOOK.heroQuote}&rdquo;
-              <footer className="mt-4 eyebrow text-white/45">
+              <footer className="mt-4 eyebrow text-white/60">
                 <span aria-hidden="true" className="mr-2">—</span>
                 {BOOK.heroQuoteSource}
               </footer>
@@ -258,52 +244,7 @@ const BookHero = () => {
         </div>
 
         {/* Right column — the cinematic cover. */}
-        <div className="relative" style={{ perspective: '1200px' }}>
-          <motion.div
-            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 32 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: reduceMotion ? 0.2 : 1.1,
-              ease: reduceMotion ? 'linear' : [0.22, 1, 0.36, 1],
-              delay: reduceMotion ? 0 : 0.08,
-            }}
-            style={{
-              rotateY: reduceMotion ? 0 : rotateY,
-              scale: reduceMotion ? 1 : scale,
-              y: reduceMotion ? 0 : liftY,
-              transformStyle: 'preserve-3d',
-              willChange: 'transform',
-            }}
-            className="mx-auto aspect-[2/3] w-full max-w-[22rem] origin-center"
-          >
-            <div
-              className="relative h-full w-full overflow-hidden rounded-3xl shadow-[0_30px_60px_-15px_rgba(0,0,0,0.75)]"
-              style={{
-                /* hairline edge highlight + subtle book "spine" gradient
-                   so the cover reads as a physical object */
-                boxShadow:
-                  '0 30px 60px -15px rgba(0,0,0,0.75), inset 0 1px 0 rgba(255,255,255,0.08), inset 2px 0 0 rgba(0,0,0,0.4)',
-              }}
-            >
-              <img
-                src={BOOK.coverImage}
-                srcSet={BOOK_COVER_SRCSET}
-                sizes="(min-width: 1024px) 352px, (min-width: 640px) 320px, 288px"
-                alt={BOOK.coverAlt}
-                loading="eager"
-                fetchPriority="high"
-                decoding="async"
-                className="h-full w-full object-cover"
-              />
-              {/* Subtle warm-light gradient on the right edge — adds depth
-                  when the cover rotates. */}
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 bg-linear-to-r from-transparent via-transparent to-white/[0.04]"
-              />
-            </div>
-          </motion.div>
-        </div>
+        <BookCover size="lg" tilt priority />
       </div>
     </section>
   );
@@ -329,7 +270,7 @@ const InsideThisBook = () => (
           <li key={i} className="grid grid-cols-[3rem_1fr] items-baseline gap-6 py-6 md:grid-cols-[4rem_1fr] md:gap-10">
             <Reveal delay={i * 0.03}>
               <span
-                className="font-display italic text-white/40 nums-tabular"
+                className="font-display italic text-white/60 nums-tabular"
                 style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.04em' }}
               >
                 {String(i + 1).padStart(2, '0')}
@@ -347,7 +288,7 @@ const InsideThisBook = () => (
         ))}
       </ol>
       <Reveal>
-        <p className="mt-8 eyebrow text-white/40">From the back cover</p>
+        <p className="mt-8 eyebrow text-white/60">From the back cover</p>
       </Reveal>
     </div>
   </section>
@@ -406,7 +347,7 @@ const OpeningFraming = () => (
           ))}
         </ol>
         <Reveal>
-          <p className="mt-8 eyebrow text-white/40">Chaos to Creation, p. 15</p>
+          <p className="mt-8 eyebrow text-white/60">Chaos to Creation, p. 15</p>
         </Reveal>
       </div>
     </div>
@@ -444,7 +385,7 @@ const LifeForceFormulaSection = () => (
           <span>
             L<sup className="text-[0.55em]">F</sup>
           </span>
-          <span className="text-white/45">=</span>
+          <span className="text-white/60">=</span>
           <span className="italic">Ē</span>
           <span className="text-white/30 text-[1.4em] leading-none">(</span>
           <span className="inline-flex flex-col items-center text-[0.78em] leading-tight">
@@ -453,7 +394,7 @@ const LifeForceFormulaSection = () => (
             <span>I</span>
           </span>
           <span className="text-white/30 text-[1.4em] leading-none">)</span>
-          <span className="text-white/45">+</span>
+          <span className="text-white/60">+</span>
           <span>
             S<sub className="text-[0.45em]">Addition</sub>
           </span>
@@ -491,12 +432,12 @@ const LifeForceFormulaSection = () => (
           className="mt-12 max-w-3xl mx-auto text-pretty text-center font-display italic leading-relaxed text-white/75"
           style={{ fontSize: 'var(--text-lede)' }}
         >
-          <span className="not-italic text-white/45 mr-2">Reading.</span>
+          <span className="not-italic text-white/60 mr-2">Reading.</span>
           {LIFE_FORCE.reading}
         </p>
       </Reveal>
       <Reveal delay={0.22}>
-        <p className="mt-6 eyebrow text-center text-white/40">{LIFE_FORCE.attribution}</p>
+        <p className="mt-6 eyebrow text-center text-white/60">{LIFE_FORCE.attribution}</p>
       </Reveal>
     </div>
   </section>
@@ -542,7 +483,7 @@ const ThreeRules = () => (
                 >
                   &ldquo;{rule.quote}&rdquo;
                 </blockquote>
-                <p className="mt-6 eyebrow text-white/40">{rule.attribution}</p>
+                <p className="mt-6 eyebrow text-white/60">{rule.attribution}</p>
               </article>
             </Reveal>
           </li>
@@ -553,7 +494,7 @@ const ThreeRules = () => (
         <div className="mt-16 flex justify-center md:mt-20">
           <Link viewTransition
             to="/book/three-rules"
-            className="group/link inline-flex items-center gap-2 text-white/65 transition-colors hover:text-medical-teal"
+            className="group/link inline-flex items-center gap-2 text-white/75 transition-colors hover:text-medical-teal"
             style={{
               fontSize: 'var(--text-eyebrow)',
               letterSpacing: '0.18em',
@@ -609,7 +550,7 @@ const HypothesisCallout = () => (
 
       <Reveal delay={0.12}>
         <p
-          className="mt-8 text-pretty leading-relaxed text-white/65"
+          className="mt-8 text-pretty leading-relaxed text-white/75"
           style={{ fontSize: 'var(--text-body)' }}
         >
           The argument: senolytics, CRISPR, and epigenetic reprogramming have each shown 20–30%
@@ -631,7 +572,7 @@ const HypothesisCallout = () => (
         </div>
       </Reveal>
       <Reveal delay={0.22}>
-        <p className="mt-6 eyebrow text-white/40">Chaos to Creation, pp. 209–218</p>
+        <p className="mt-6 eyebrow text-white/60">Chaos to Creation, pp. 209–218</p>
       </Reveal>
     </div>
   </section>
@@ -658,7 +599,7 @@ const EpilogueExtract = () => (
           >
             <Reveal delay={i * 0.04}>
               <span
-                className="font-display italic text-white/40 nums-tabular"
+                className="font-display italic text-white/60 nums-tabular"
                 style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.04em' }}
               >
                 {String(i + 1).padStart(2, '0')}
@@ -673,7 +614,7 @@ const EpilogueExtract = () => (
                   {p.title}
                 </p>
                 <p
-                  className="mt-3 text-pretty leading-relaxed text-white/65"
+                  className="mt-3 text-pretty leading-relaxed text-white/75"
                   style={{ fontSize: 'var(--text-body)' }}
                 >
                   {p.body}
@@ -736,7 +677,7 @@ const ClinicalCases = () => (
                 >
                   {c.body}
                 </p>
-                <p className="mt-6 eyebrow text-white/40">{c.attribution}</p>
+                <p className="mt-6 eyebrow text-white/60">{c.attribution}</p>
               </article>
             </Reveal>
           </li>
@@ -747,7 +688,7 @@ const ClinicalCases = () => (
         <div className="mt-16 flex justify-center md:mt-20">
           <Link viewTransition
             to="/book/case-studies"
-            className="group/link inline-flex items-center gap-2 text-white/65 transition-colors hover:text-medical-teal"
+            className="group/link inline-flex items-center gap-2 text-white/75 transition-colors hover:text-medical-teal"
             style={{
               fontSize: 'var(--text-eyebrow)',
               letterSpacing: '0.18em',
@@ -810,7 +751,7 @@ const EndorsementsSection = () => (
                     {e.by}
                   </p>
                   <p
-                    className="mt-1 leading-relaxed text-white/55"
+                    className="mt-1 leading-relaxed text-white/70"
                     style={{ fontSize: 'var(--text-meta)' }}
                   >
                     {e.title}
@@ -853,7 +794,7 @@ const BookCloseCTA = () => (
         </h2>
       </Reveal>
       <Reveal delay={0.1}>
-        <p className="mt-6 eyebrow text-white/45">Chaos to Creation, p. 221 — Rule 3</p>
+        <p className="mt-6 eyebrow text-white/60">Chaos to Creation, p. 221 — Rule 3</p>
       </Reveal>
 
       <Reveal delay={0.16}>
@@ -861,7 +802,7 @@ const BookCloseCTA = () => (
           <FormatButtons size="lg" />
           <Link viewTransition
             to="/"
-            className="group/back mt-2 inline-flex items-center gap-2 text-white/55 transition-colors hover:text-white"
+            className="group/back mt-2 inline-flex items-center gap-2 text-white/70 transition-colors hover:text-white"
             style={{
               fontSize: 'var(--text-eyebrow)',
               letterSpacing: '0.18em',

@@ -48,7 +48,7 @@ const NotFound = () => {
             }}
           >
             The page{' '}
-            <em className="font-display italic font-normal text-white/55">
+            <em className="font-display italic font-normal text-white/70">
               has wandered off.
             </em>
           </h1>
@@ -56,7 +56,7 @@ const NotFound = () => {
 
         <Reveal delay={0.12}>
           <p
-            className="mt-8 max-w-xl text-pretty leading-relaxed text-white/65"
+            className="mt-8 max-w-xl text-pretty leading-relaxed text-white/75"
             style={{ fontSize: 'var(--text-lede)' }}
           >
             The address you reached has moved or doesn&rsquo;t exist. Everything else is still
@@ -67,7 +67,7 @@ const NotFound = () => {
         <Reveal delay={0.2}>
           <Link viewTransition
             to="/"
-            className="group/back mt-12 inline-flex items-center gap-2 text-white/65 transition-colors hover:text-white"
+            className="group/back mt-12 inline-flex items-center gap-2 text-white/75 transition-colors hover:text-white"
             style={{
               fontSize: 'var(--text-eyebrow)',
               letterSpacing: '0.18em',

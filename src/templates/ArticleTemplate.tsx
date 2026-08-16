@@ -95,7 +95,7 @@ export const ArticleTemplate = ({ hero, progress, body }: ArticleTemplateProps) 
               />
               {block.caption && (
                 <figcaption
-                  className="mt-3 text-white/55"
+                  className="mt-3 text-white/70"
                   style={{ fontSize: 'var(--text-meta)' }}
                 >
                   {block.caption}

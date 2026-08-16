@@ -14,26 +14,29 @@
   --font-display:
     "Fraunces", "Outfit", "Inter", ui-serif, Georgia, ui-sans-serif, system-ui, sans-serif;
 
-  /* Musical type scale — fluid clamps for one-size-fits-most. */
-  --text-eyebrow: 0.6875rem; /* 11px */
-  --text-meta: 0.8125rem;    /* 13px */
-  --text-body: 1.0625rem;    /* 17px — a hair larger than default; reads premium */
-  --text-lede: clamp(1.125rem, 1.5vw, 1.375rem);
+  /* Musical type scale — fluid clamps for one-size-fits-most.
+     Floors are deliberate: body never drops below 18px, meta
+     never below 15px — legibility for an older readership. */
+  --text-eyebrow: 0.75rem;   /* 12px */
+  --text-meta: 0.9375rem;    /* 15px */
+  --text-body: clamp(1.125rem, 1vw + 0.9rem, 1.25rem); /* 18px → 20px */
+  --text-lede: clamp(1.25rem, 1.6vw, 1.5rem);
   --text-title: clamp(1.5rem, 2.5vw, 2.25rem);
   --text-display: clamp(2.5rem, 5vw, 4rem);
   --text-hero: clamp(3.5rem, 8vw, 6.5rem);
 
-  /* Calibrated near-blacks — Apple uses these, not pure black. */
-  --color-brand-bg: #0a0a0c;
-  --color-brand-panel: #141416;
-  --color-brand-elevated: #1c1c1f;
-  --color-brand-border: rgba(255, 255, 255, 0.06);
+  /* Deep editorial blacks — luxury-publication ground. */
+  --color-brand-bg: #050505;
+  --color-brand-panel: #0d0d0d;
+  --color-brand-elevated: #161616;
+  --color-brand-border: rgba(255, 255, 255, 0.08);
 
-  /* Off-white text — Apple's signature on dark surfaces. */
-  --color-brand-text: #f5f5f7;
+  /* Off-white primary text + solid secondary grey. */
+  --color-brand-text: #f7f7f7;
+  --color-brand-muted: #a0a0a0;
 
   /* Accents — keep teal, use sparingly (one per viewport). */
-  --color-medical-teal: #14b8a6;
+  --color-medical-teal: #1fc7c1;
   --color-medical-blue: #0ea5e9;
   /* Warm tone used only in selenium-toned photographic overlays. */
   --color-photo-warm: #d4a373;
@@ -68,7 +71,7 @@
     @apply bg-brand-bg antialiased;
     color: var(--color-brand-text);
     font-size: var(--text-body);
-    line-height: 1.6;
+    line-height: 1.7;
     font-feature-settings: "ss01", "ss02", "cv01", "cv11";
     /* Selection refined: 28% opacity teal, slightly cooler than 30%. */
     &::selection,
@@ -107,7 +110,7 @@
     backdrop-filter: blur(24px) saturate(150%);
     -webkit-backdrop-filter: blur(24px) saturate(150%);
     /* Hairline top-edge highlight — the detail that makes glass read as glass. */
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   }
 
   .glass {
@@ -135,7 +138,7 @@
   .eyebrow {
     @apply text-[length:var(--text-eyebrow)] font-semibold uppercase;
     letter-spacing: 0.18em;
-    color: color-mix(in oklab, var(--color-brand-text) 55%, transparent);
+    color: color-mix(in oklab, var(--color-brand-text) 72%, transparent);
   }
 
   /* Lede — opening paragraph treatment. Larger, serif-leaning. */

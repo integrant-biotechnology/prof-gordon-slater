@@ -27,7 +27,7 @@ const CaseStudies = () => {
         title={
           <>
             From chaos to creation,{' '}
-            <em className="font-display italic font-normal text-white/55">
+            <em className="font-display italic font-normal text-white/70">
               on real bodies.
             </em>
           </>
@@ -75,7 +75,7 @@ const CaseStudies = () => {
                     >
                       {c.body}
                     </p>
-                    <p className="mt-7 eyebrow text-white/40">{c.attribution}</p>
+                    <p className="mt-7 eyebrow text-white/60">{c.attribution}</p>
                   </article>
                 </Reveal>
               </li>

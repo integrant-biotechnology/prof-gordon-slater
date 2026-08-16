@@ -73,7 +73,7 @@ export const ListTemplate = <T,>({
                     className={
                       activeFilter === f.value
                         ? 'rounded-full border border-medical-teal/40 bg-medical-teal/10 px-3.5 py-1.5 text-medical-teal transition-colors'
-                        : 'rounded-full border bg-brand-panel/30 px-3.5 py-1.5 text-white/55 transition-colors hover:text-white/85'
+                        : 'rounded-full border bg-brand-panel/30 px-3.5 py-1.5 text-white/70 transition-colors hover:text-white/85'
                     }
                     style={{
                       fontSize: 'var(--text-eyebrow)',
@@ -97,7 +97,7 @@ export const ListTemplate = <T,>({
     )}
 
     {items.length === 0 ? (
-      <div className="py-12 text-white/45" style={{ fontSize: 'var(--text-meta)' }}>
+      <div className="py-12 text-white/60" style={{ fontSize: 'var(--text-meta)' }}>
         {emptyState ?? 'No entries match.'}
       </div>
     ) : (

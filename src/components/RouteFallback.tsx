@@ -15,7 +15,7 @@ export const RouteFallback = () => (
         aria-hidden="true"
         className="h-2 w-2 animate-pulse rounded-full bg-medical-teal"
       />
-      <span className="eyebrow text-white/55">Loading</span>
+      <span className="eyebrow text-white/70">Loading</span>
     </div>
   </div>
 );
