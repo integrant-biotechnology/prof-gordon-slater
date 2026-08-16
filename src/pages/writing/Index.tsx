@@ -1,29 +1,41 @@
-import { Link } from 'react-router-dom';
+import { useMemo, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import { Reveal } from '@/components/ui/Motion';
 import { PageShell } from '@/templates/PageShell';
 import { PageHero } from '@/templates/PageHero';
+import { EditorialCard } from '@/components/ui/EditorialCard';
+import { Reveal } from '@/components/ui/Motion';
 import { findRoute } from '@/lib/site';
-import { ARTICLES, BLOG_INDEX_URL } from '@/constants';
+import { ARTICLES, BLOG_INDEX_URL, MEDIA, SPEAKING } from '@/constants';
 
 /**
- * /writing — magazine table-of-contents.
+ * /writing — magazine presentation.
  *
- * Page character (plan §B): magazine TOC register; rows of category
- * eyebrow + title + outbound chevron. No photos.
- *
- * Content gap (acknowledged in plan §M): today every article links
- * out — none has `body` populated. Hosted essays land in a later
- * content PR. Index reads as N outbound rows until then.
+ * Featured article as a full-width editorial moment, category filter
+ * chips, then the remaining pieces as a two-column card grid. All
+ * articles currently live on the practice blog, so every card is an
+ * outbound link with the ↗ affordance. Speaking & media sections are
+ * render-gated on the (currently empty) engagements data.
  */
-const WritingIndex = () => {
+const Writing = () => {
   const route = findRoute('/writing');
-  if (!route) return null;
+  const [filter, setFilter] = useState<string>('all');
 
-  // Internal hosted (has slug + body) come first; external link-out rest.
-  // Both lists today are entirely external; the partition is forward-ready.
-  const hosted = ARTICLES.filter((a) => a.slug);
-  const external = ARTICLES.filter((a) => !a.slug);
+  const categories = useMemo(
+    () => ['all', ...Array.from(new Set(ARTICLES.map((a) => a.category)))],
+    [],
+  );
+
+  const featured = ARTICLES.find((a) => a.featured) ?? ARTICLES[0]!;
+  const rest = useMemo(
+    () =>
+      ARTICLES.filter((a) => a.id !== featured.id).filter((a) =>
+        filter === 'all' ? true : a.category === filter,
+      ),
+    [featured.id, filter],
+  );
+  const featuredVisible = filter === 'all' || featured.category === filter;
+
+  if (!route) return null;
 
   return (
     <PageShell route={route}>
@@ -32,135 +44,153 @@ const WritingIndex = () => {
         eyebrow="Writing"
         title={
           <>
-            Essays at the intersection of surgery, science,{' '}
-            <em className="font-display italic font-normal text-white/55">
-              and regeneration.
-            </em>
+            Essays &amp;{' '}
+            <em className="font-display italic font-normal text-white/70">insights.</em>
           </>
         }
-        lede="Long-form pieces — some hosted here, some on the practice site. Foot &amp; ankle conditions, regenerative orthopaedics, and the research behind current practice."
+        lede="Clinical writing for a general readership — regenerative medicine, the diabetic foot, and where orthopaedics is heading. Published on the practice blog; collected here."
       />
 
-      {/* Hosted essays — internal links. Empty today; forward-ready. */}
-      {hosted.length > 0 && (
-        <section
-          aria-label="Hosted essays"
-          className="px-6 pb-16 md:pb-24"
-        >
-          <div className="mx-auto max-w-5xl">
-            <Reveal>
-              <p className="eyebrow">Hosted</p>
-            </Reveal>
-            <ol className="mt-8 divide-y divide-white/10">
-              {hosted.map((article, i) => (
-                <li key={article.id}>
-                  <Reveal delay={i * 0.04}>
-                    <Link viewTransition
-                      to={`/writing/${article.slug}`}
-                      className="group/row flex flex-col gap-3 py-7 transition-colors hover:bg-white/[0.015] md:flex-row md:items-baseline md:justify-between md:gap-10"
+      {/* Topic filter — accessible chip row. */}
+      <section aria-label="Filter by topic" className="px-6 pb-4">
+        <div className="mx-auto max-w-7xl">
+          <Reveal>
+            <ul className="flex flex-wrap gap-2.5">
+              {categories.map((cat) => {
+                const active = filter === cat;
+                return (
+                  <li key={cat}>
+                    <button
+                      type="button"
+                      aria-pressed={active}
+                      onClick={() => setFilter(cat)}
+                      className={
+                        active
+                          ? 'inline-flex min-h-11 items-center rounded-full bg-medical-teal px-5 font-semibold transition-colors'
+                          : 'inline-flex min-h-11 items-center rounded-full glass-thin px-5 text-white/80 transition-colors hover:text-white'
+                      }
+                      style={{
+                        fontSize: 'var(--text-meta)',
+                        ...(active ? { color: 'var(--color-brand-bg)' } : {}),
+                      }}
                     >
-                      <div className="flex flex-1 flex-col gap-2 md:flex-row md:items-baseline md:gap-6">
-                        <span
-                          className="shrink-0 text-medical-teal/85"
-                          style={{
-                            fontSize: 'var(--text-eyebrow)',
-                            letterSpacing: '0.18em',
-                            textTransform: 'uppercase',
-                            fontWeight: 600,
-                            minWidth: '8rem',
-                          }}
-                        >
-                          {article.category}
-                        </span>
-                        <h2
-                          className="font-display font-medium leading-snug text-white/90 transition-colors group-hover/row:text-white"
-                          style={{ fontSize: 'var(--text-title)', letterSpacing: '-0.01em' }}
-                        >
-                          {article.title}
-                        </h2>
-                      </div>
-                    </Link>
-                  </Reveal>
-                </li>
-              ))}
-            </ol>
+                      {cat === 'all' ? 'All topics' : cat}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Featured article — the magazine cover story. */}
+      {featuredVisible && (
+        <section aria-label="Featured article" className="px-6 pt-12 pb-4 md:pt-16">
+          <div className="mx-auto max-w-7xl">
+            <Reveal>
+              <EditorialCard
+                href={featured.href}
+                kicker={`Featured · ${featured.category}`}
+                title={featured.title}
+                body={featured.lede}
+                meta="orthopaedic-surgeon.com.au"
+                cta="Read the article"
+                size="lg"
+              />
+            </Reveal>
           </div>
         </section>
       )}
 
-      {/* External — published on the practice site. */}
-      <section
-        aria-label="On the practice site"
-        className={
-          hosted.length > 0
-            ? 'border-t border-white/10 px-6 py-16 md:py-24'
-            : 'px-6 pb-16 md:pb-24'
-        }
-      >
-        <div className="mx-auto max-w-5xl">
-          <Reveal>
-            <p className="eyebrow">On the practice site</p>
-          </Reveal>
-          <ol className="mt-8 divide-y divide-white/5">
-            {external.map((article, i) => (
-              <li key={article.id}>
-                <Reveal delay={i * 0.04}>
-                  <a
-                    href={article.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Read "${article.title}" on orthopaedic-surgeon.com.au (opens in a new tab)`}
-                    className="group/row flex flex-col gap-3 py-7 transition-colors hover:bg-white/[0.015] md:flex-row md:items-baseline md:justify-between md:gap-10"
-                  >
-                    <div className="flex flex-1 flex-col gap-2 md:flex-row md:items-baseline md:gap-6">
-                      <span
-                        className="shrink-0 text-medical-teal/85"
-                        style={{
-                          fontSize: 'var(--text-eyebrow)',
-                          letterSpacing: '0.18em',
-                          textTransform: 'uppercase',
-                          fontWeight: 600,
-                          minWidth: '8rem',
-                        }}
-                      >
-                        {article.category}
-                      </span>
-                      <h2
-                        className="font-display font-medium leading-snug text-white/90 transition-colors group-hover/row:text-white"
-                        style={{ fontSize: 'var(--text-title)', letterSpacing: '-0.01em' }}
-                      >
-                        {article.title}
-                      </h2>
-                    </div>
-                    <ArrowUpRight
-                      aria-hidden="true"
-                      size={16}
-                      className="shrink-0 text-white/35 transition-all group-hover/row:translate-x-0.5 group-hover/row:-translate-y-0.5 group-hover/row:text-medical-teal"
+      {/* Remaining pieces — two-column editorial grid. */}
+      <section aria-label="All articles" className="px-6 py-16 md:py-20">
+        <div className="mx-auto max-w-7xl">
+          {rest.length > 0 ? (
+            <ul className="grid grid-cols-1 gap-x-10 gap-y-14 md:grid-cols-2">
+              {rest.map((article, i) => (
+                <li key={article.id}>
+                  <Reveal delay={(i % 2) * 0.06}>
+                    <EditorialCard
+                      href={article.href}
+                      kicker={article.category}
+                      title={article.title}
+                      body={article.lede}
+                      cta="Read"
                     />
-                  </a>
-                </Reveal>
-              </li>
-            ))}
-          </ol>
+                  </Reveal>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            !featuredVisible && (
+              <p className="text-white/70">No articles in this topic yet.</p>
+            )
+          )}
+        </div>
+      </section>
 
-          <Reveal delay={0.3}>
+      {/* Speaking & media — render-gated until real entries exist. */}
+      {SPEAKING.length > 0 && (
+        <section aria-label="Speaking" className="border-t border-white/10 px-6 py-20 md:py-28">
+          <div className="mx-auto max-w-7xl">
+            <p className="eyebrow">Speaking</p>
+            <ul className="mt-10 grid grid-cols-1 gap-x-10 gap-y-12 md:grid-cols-2">
+              {SPEAKING.map((talk) => (
+                <li key={`${talk.title}-${talk.year}`}>
+                  <EditorialCard
+                    href={talk.href}
+                    kicker={`${talk.venue} · ${talk.year}`}
+                    title={talk.title}
+                    cta={talk.href ? 'Watch' : undefined}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
+      {MEDIA.length > 0 && (
+        <section aria-label="Media" className="border-t border-white/10 px-6 py-20 md:py-28">
+          <div className="mx-auto max-w-7xl">
+            <p className="eyebrow">Media</p>
+            <ul className="mt-10 grid grid-cols-1 gap-x-10 gap-y-12 md:grid-cols-2">
+              {MEDIA.map((mention) => (
+                <li key={`${mention.title}-${mention.year}`}>
+                  <EditorialCard
+                    href={mention.href}
+                    kicker={`${mention.outlet} · ${mention.year}`}
+                    title={mention.title}
+                    cta={mention.href ? 'Read' : undefined}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
+
+      {/* Outro — everything else lives on the practice blog. */}
+      <section aria-label="More writing" className="border-t border-white/10 px-6 py-16 md:py-20">
+        <div className="mx-auto max-w-7xl">
+          <Reveal>
             <a
               href={BLOG_INDEX_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="group/link mt-12 inline-flex items-center gap-1.5 text-white/65 transition-colors hover:text-medical-teal"
+              className="group/more inline-flex min-h-11 items-center gap-1.5 text-white/75 transition-colors hover:text-medical-teal"
               style={{
                 fontSize: 'var(--text-eyebrow)',
-                letterSpacing: '0.18em',
+                letterSpacing: '0.16em',
                 textTransform: 'uppercase',
                 fontWeight: 600,
               }}
             >
-              More in the news
+              More in the news — orthopaedic-surgeon.com.au
               <ArrowUpRight
                 aria-hidden="true"
-                size={13}
-                className="transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
+                size={14}
+                className="transition-transform group-hover/more:translate-x-0.5 group-hover/more:-translate-y-0.5"
               />
             </a>
           </Reveal>
@@ -170,4 +200,4 @@ const WritingIndex = () => {
   );
 };
 
-export default WritingIndex;
+export default Writing;

@@ -99,7 +99,7 @@ export const EditorialImage = ({
         )}
       </div>
       {(caption || attribution) && (
-        <figcaption className="mt-3 text-[length:var(--text-meta)] leading-snug text-white/55">
+        <figcaption className="mt-3 text-[length:var(--text-meta)] leading-snug text-white/70">
           {caption}
           {attribution && (
             <span className="ml-2 text-white/35">

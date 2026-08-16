@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
-import { ArrowDown } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Reveal } from '@/components/ui/Motion';
 import { EditorialImage } from '@/components/ui/EditorialImage';
 import { DOCTOR_NAME } from '@/constants';
@@ -43,14 +43,19 @@ export const Hero = () => {
         {/* Sentence column — 7/12 at desktop, full-width on mobile. */}
         <div className="md:col-span-7">
           <Reveal>
-            <p className="eyebrow nums-tabular">
-              Sydney <span aria-hidden="true" className="mx-2 text-white/30">·</span>
-              UTS <span aria-hidden="true" className="mx-2 text-white/30">·</span>
-              Author
+            <p className="eyebrow">Professor Gordon Slater</p>
+          </Reveal>
+
+          <Reveal delay={0.05}>
+            <p
+              className="mt-4 font-medium text-white/85"
+              style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.02em' }}
+            >
+              Orthopaedic Surgeon, Researcher and Author
             </p>
           </Reveal>
 
-          <Reveal delay={0.08}>
+          <Reveal delay={0.1}>
             <h1
               id="hero-heading"
               className="mt-7 text-balance font-display font-medium"
@@ -60,42 +65,46 @@ export const Hero = () => {
                 letterSpacing: '-0.025em',
               }}
             >
-              The future of surgery is{' '}
+              The future of longevity is{' '}
               <em
                 className="font-display italic font-normal"
                 style={{ fontStyle: 'italic' }}
               >
-                regenerative.
+                being written today.
               </em>
             </h1>
           </Reveal>
 
-          <Reveal delay={0.18}>
+          <Reveal delay={0.2}>
             <p
-              className="mt-8 max-w-xl text-pretty leading-relaxed text-white/65"
+              className="mt-8 max-w-xl text-pretty leading-relaxed text-white/80"
               style={{ fontSize: 'var(--text-lede)' }}
             >
-              The personal site of {DOCTOR_NAME} — foot &amp; ankle orthopaedic
-              surgeon, Professor at the University of Technology Sydney, and
-              author of <em>Chaos to Creation</em>.
+              For thirty years {DOCTOR_NAME} has worked at the intersection of
+              surgery, biology and human regeneration — sixty peer-reviewed
+              papers, TGA-registered devices, and{' '}
+              <em>Chaos to Creation</em>.
             </p>
           </Reveal>
 
-          {/* Quiet "scroll to read" affordance — Apple-grade affordance,
-              not a CTA button. */}
-          <Reveal delay={0.32}>
-            <a
-              href="#work"
-              className="mt-12 inline-flex items-center gap-2 text-[length:var(--text-meta)] font-medium text-white/55 transition-colors hover:text-white/85"
-            >
-              <span className="eyebrow !text-white/55">Read on</span>
-              <span
-                aria-hidden="true"
-                className="ml-1 inline-flex h-7 w-7 items-center justify-center rounded-full glass-thin"
+          <Reveal delay={0.3}>
+            <div className="mt-10 flex flex-wrap items-center gap-4">
+              <Link
+                to="/research"
+                viewTransition
+                className="inline-flex h-13 min-h-12 items-center justify-center rounded-full bg-medical-teal px-8 text-base font-semibold whitespace-nowrap transition-[background-color,transform] duration-200 ease-out hover:scale-[1.02] hover:bg-medical-teal/90"
+                style={{ color: 'var(--color-brand-bg)' }}
               >
-                <ArrowDown size={13} strokeWidth={1.5} />
-              </span>
-            </a>
+                Explore the Research
+              </Link>
+              <Link
+                to="/book"
+                viewTransition
+                className="inline-flex h-13 min-h-12 items-center justify-center rounded-full border border-white/20 px-8 text-base font-medium whitespace-nowrap text-white/90 transition-colors duration-200 ease-out hover:border-white/40 hover:text-white"
+              >
+                Discover the Book
+              </Link>
+            </div>
           </Reveal>
         </div>
 

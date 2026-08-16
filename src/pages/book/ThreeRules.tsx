@@ -28,7 +28,7 @@ const ThreeRules = () => {
         title={
           <>
             The Three{' '}
-            <em className="font-display italic font-normal text-white/55">Rules.</em>
+            <em className="font-display italic font-normal text-white/70">Rules.</em>
           </>
         }
         lede="The three claims the rest of Chaos to Creation rests on — degeneration, inertia, energy balance. Stated verbatim, as the spine of the Life Force argument."
@@ -77,7 +77,7 @@ const ThreeRules = () => {
                         &rdquo;
                       </span>
                     </blockquote>
-                    <p className="mt-6 eyebrow text-white/40">{rule.attribution}</p>
+                    <p className="mt-6 eyebrow text-white/60">{rule.attribution}</p>
                   </article>
                 </Reveal>
               </li>
@@ -107,7 +107,7 @@ const ThreeRules = () => {
               }}
             >
               The same argument,{' '}
-              <em className="font-display italic font-normal text-white/55">
+              <em className="font-display italic font-normal text-white/70">
                 in one expression.
               </em>
             </h2>
@@ -122,7 +122,7 @@ const ThreeRules = () => {
               <span>
                 L<sup className="text-[0.55em]">F</sup>
               </span>
-              <span className="text-white/45">=</span>
+              <span className="text-white/60">=</span>
               <span className="italic">Ē</span>
               <span className="text-white/30 text-[1.4em] leading-none">(</span>
               <span className="inline-flex flex-col items-center text-[0.78em] leading-tight">
@@ -131,7 +131,7 @@ const ThreeRules = () => {
                 <span>I</span>
               </span>
               <span className="text-white/30 text-[1.4em] leading-none">)</span>
-              <span className="text-white/45">+</span>
+              <span className="text-white/60">+</span>
               <span>
                 S<sub className="text-[0.45em]">Addition</sub>
               </span>
@@ -142,7 +142,7 @@ const ThreeRules = () => {
               className="mt-12 max-w-3xl mx-auto text-pretty text-center font-display italic leading-relaxed text-white/75"
               style={{ fontSize: 'var(--text-lede)' }}
             >
-              <span className="not-italic text-white/45 mr-2">Reading.</span>
+              <span className="not-italic text-white/60 mr-2">Reading.</span>
               {LIFE_FORCE.reading}
             </p>
           </Reveal>

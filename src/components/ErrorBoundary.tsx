@@ -45,12 +45,12 @@ export class ErrorBoundary extends Component<Props, State> {
             }}
           >
             We hit an{' '}
-            <em className="font-display italic font-normal text-white/55">
+            <em className="font-display italic font-normal text-white/70">
               unexpected error.
             </em>
           </h1>
           <p
-            className="mt-7 max-w-md text-pretty leading-relaxed text-white/65"
+            className="mt-7 max-w-md text-pretty leading-relaxed text-white/75"
             style={{ fontSize: 'var(--text-body)' }}
           >
             Sorry about that. Please reload the page — if the problem persists, head back to

@@ -12,6 +12,8 @@ export interface Article {
   lede?: string;
   /** ISO date string, e.g. "2026-04-15". Used for sort order. */
   publishedAt?: string;
+  /** Surfaces the article as the magazine-page feature. */
+  featured?: boolean;
 }
 
 export interface Capability {

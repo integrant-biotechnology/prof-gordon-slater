@@ -19,6 +19,7 @@ export * from './data/research/publications';
 export * from './data/research/body-of-work';
 export * from './data/research/innovations';
 export * from './data/writing';
+export * from './data/engagements';
 export * from './data/community';
 export * from './data/giving';
 export * from './data/social';

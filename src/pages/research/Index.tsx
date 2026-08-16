@@ -25,13 +25,16 @@ import {
  * pages for 1 rich page.
  */
 
-/** Two most-recent publications shown inline in each theme section. */
+/** Three most-recent publications shown inline in each theme section. */
 const samplePapersFor = (slug: string) =>
   FULL_PUBLICATIONS
     .filter((p) => p.theme === slug)
     .slice()
     .reverse()
-    .slice(0, 2);
+    .slice(0, 3);
+
+/** Total corpus per theme — drives the per-theme "All …" links. */
+const countFor = (slug: string) => FULL_PUBLICATIONS.filter((p) => p.theme === slug).length;
 
 const Research = () => {
   const route = findRoute('/research');
@@ -48,7 +51,7 @@ const Research = () => {
         title={
           <>
             A wider body{' '}
-            <em className="font-display italic font-normal text-white/55">of work.</em>
+            <em className="font-display italic font-normal text-white/70">of work.</em>
           </>
         }
         lede="Sixty peer-reviewed papers, 2003–2026, across six themes — from foot &amp; ankle surgery and orthobiologics to hyperbaric oxygen therapy, aging biology, and AI in medicine."
@@ -67,7 +70,11 @@ const Research = () => {
               const papers = samplePapersFor(theme.slug);
               const isPivot = i === 3; // pull-quote runs before theme #4
               return (
-                <li key={theme.slug} className="grid grid-cols-1 gap-10 md:grid-cols-[8rem_1fr] md:gap-16">
+                <li
+                  key={theme.slug}
+                  id={theme.slug}
+                  className="scroll-mt-28 grid grid-cols-1 gap-10 md:grid-cols-[8rem_1fr] md:gap-16"
+                >
                   {isPivot && (
                     <div className="md:col-span-2 -mt-12 mb-12 md:-mt-20 md:mb-20">
                       <PullQuote
@@ -89,7 +96,7 @@ const Research = () => {
                       </p>
                       <span
                         aria-hidden="true"
-                        className="flex h-11 w-11 items-center justify-center rounded-2xl glass-thin text-white/65"
+                        className="flex h-11 w-11 items-center justify-center rounded-2xl glass-thin text-white/75"
                       >
                         <Icon size={18} strokeWidth={1.5} />
                       </span>
@@ -110,7 +117,7 @@ const Research = () => {
                     </Reveal>
                     <Reveal delay={0.08}>
                       <p
-                        className="mt-4 max-w-2xl text-pretty leading-relaxed text-white/65"
+                        className="mt-4 max-w-2xl text-pretty leading-relaxed text-white/75"
                         style={{ fontSize: 'var(--text-body)' }}
                       >
                         {theme.summary}
@@ -131,7 +138,7 @@ const Research = () => {
                                 {p.title}
                               </p>
                               <p
-                                className="shrink-0 italic text-white/45 nums-tabular"
+                                className="shrink-0 italic text-white/60 nums-tabular"
                                 style={{ fontSize: 'var(--text-eyebrow)', letterSpacing: '0.04em' }}
                               >
                                 {p.year}
@@ -139,6 +146,28 @@ const Research = () => {
                             </li>
                           ))}
                         </ul>
+                      </Reveal>
+                    )}
+                    {countFor(theme.slug) > 0 && (
+                      <Reveal delay={0.18}>
+                        <Link
+                          viewTransition
+                          to={`/research/publications?theme=${theme.slug}`}
+                          className="group/theme-link mt-6 inline-flex min-h-11 items-center gap-1.5 text-white/75 transition-colors hover:text-medical-teal"
+                          style={{
+                            fontSize: 'var(--text-eyebrow)',
+                            letterSpacing: '0.16em',
+                            textTransform: 'uppercase',
+                            fontWeight: 600,
+                          }}
+                        >
+                          All {countFor(theme.slug)} publication{countFor(theme.slug) === 1 ? '' : 's'} in this theme
+                          <ArrowRight
+                            aria-hidden="true"
+                            size={13}
+                            className="transition-transform group-hover/theme-link:translate-x-0.5"
+                          />
+                        </Link>
                       </Reveal>
                     )}
                   </div>
@@ -172,7 +201,7 @@ const Research = () => {
               </div>
               <Link viewTransition
                 to="/research/publications"
-                className="group/link inline-flex items-center gap-1.5 text-white/65 transition-colors hover:text-medical-teal"
+                className="group/link inline-flex items-center gap-1.5 text-white/75 transition-colors hover:text-medical-teal"
                 style={{
                   fontSize: 'var(--text-eyebrow)',
                   letterSpacing: '0.16em',
@@ -204,7 +233,7 @@ const Research = () => {
                   </p>
                   {p.venue && (
                     <p
-                      className="mt-1 italic text-white/45"
+                      className="mt-1 italic text-white/60"
                       style={{ fontSize: 'var(--text-meta)' }}
                     >
                       {p.venue}
@@ -213,7 +242,7 @@ const Research = () => {
                 </Reveal>
                 <Reveal delay={i * 0.02 + 0.02} as="span" className="block shrink-0">
                   <p
-                    className="italic text-white/45 nums-tabular"
+                    className="italic text-white/60 nums-tabular"
                     style={{ fontSize: 'var(--text-meta)' }}
                   >
                     {p.year}
@@ -285,7 +314,7 @@ const Research = () => {
                       {item.title}
                     </h4>
                     <p
-                      className="mt-3 max-w-2xl text-pretty leading-relaxed text-white/65"
+                      className="mt-3 max-w-2xl text-pretty leading-relaxed text-white/75"
                       style={{ fontSize: 'var(--text-body)' }}
                     >
                       {item.body}
@@ -295,7 +324,7 @@ const Research = () => {
                         href={item.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group/link mt-4 inline-flex items-center gap-1.5 text-white/65 transition-colors hover:text-medical-teal"
+                        className="group/link mt-4 inline-flex items-center gap-1.5 text-white/75 transition-colors hover:text-medical-teal"
                         style={{
                           fontSize: 'var(--text-eyebrow)',
                           letterSpacing: '0.16em',

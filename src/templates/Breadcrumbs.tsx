@@ -27,7 +27,7 @@ export const Breadcrumbs = ({ route }: BreadcrumbsProps) => {
       {/* Mobile: back chevron only */}
       <Link
         to={parent.path}
-        className="inline-flex items-center gap-1.5 text-white/55 transition-colors hover:text-white/85 md:hidden"
+        className="inline-flex items-center gap-1.5 text-white/70 transition-colors hover:text-white/85 md:hidden"
         style={{ fontSize: 'var(--text-meta)' }}
       >
         <ChevronLeft aria-hidden="true" size={14} strokeWidth={1.5} />
@@ -49,14 +49,14 @@ export const Breadcrumbs = ({ route }: BreadcrumbsProps) => {
           return (
             <li key={step.path} className="flex items-center gap-2">
               {isLast ? (
-                <span className="text-white/55" aria-current="page">
+                <span className="text-white/70" aria-current="page">
                   {step.label}
                 </span>
               ) : (
                 <>
                   <Link
                     to={step.path}
-                    className="text-white/35 transition-colors hover:text-white/65"
+                    className="text-white/35 transition-colors hover:text-white/75"
                   >
                     {step.label}
                   </Link>

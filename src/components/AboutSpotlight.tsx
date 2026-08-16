@@ -35,7 +35,7 @@ export const AboutSpotlight = () => (
           }}
         >
           A surgeon&rsquo;s record.{' '}
-          <em className="font-display italic font-normal text-white/55">
+          <em className="font-display italic font-normal text-white/70">
             A scientist&rsquo;s questions.
           </em>
         </h2>
@@ -56,7 +56,7 @@ export const AboutSpotlight = () => (
 
       <Reveal delay={0.18}>
         <p
-          className="mt-4 max-w-2xl text-pretty leading-relaxed text-white/55"
+          className="mt-4 max-w-2xl text-pretty leading-relaxed text-white/70"
           style={{ fontSize: 'var(--text-body)' }}
         >
           He was among the first surgeons in Australia to adopt minimally invasive
@@ -68,7 +68,7 @@ export const AboutSpotlight = () => (
       <Reveal delay={0.24}>
         <Link viewTransition
           to="/about"
-          className="group/link mt-10 inline-flex items-center gap-1.5 text-white/65 transition-colors hover:text-medical-teal"
+          className="group/link mt-10 inline-flex items-center gap-1.5 text-white/75 transition-colors hover:text-medical-teal"
           style={{
             fontSize: 'var(--text-eyebrow)',
             letterSpacing: '0.16em',

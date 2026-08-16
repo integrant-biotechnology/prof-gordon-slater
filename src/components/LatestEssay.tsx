@@ -101,7 +101,7 @@ export const LatestEssay = () => {
             )}
             <Link viewTransition
               to="/writing"
-              className="group/link inline-flex items-center gap-1.5 text-white/55 transition-colors hover:text-white/85"
+              className="group/link inline-flex items-center gap-1.5 text-white/70 transition-colors hover:text-white/85"
               style={{
                 fontSize: 'var(--text-eyebrow)',
                 letterSpacing: '0.16em',

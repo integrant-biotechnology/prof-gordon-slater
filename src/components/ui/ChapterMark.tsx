@@ -60,7 +60,7 @@ export const ChapterMark = ({
     {subtitle && (
       <Reveal delay={0.1}>
         <p
-          className="mt-5 text-pretty leading-relaxed text-white/65"
+          className="mt-5 text-pretty leading-relaxed text-white/75"
           style={{ fontSize: 'var(--text-lede)' }}
         >
           {subtitle}
@@ -69,7 +69,7 @@ export const ChapterMark = ({
     )}
     {source && (
       <Reveal delay={0.14}>
-        <p className="mt-6 eyebrow text-white/40">{source}</p>
+        <p className="mt-6 eyebrow text-white/60">{source}</p>
       </Reveal>
     )}
   </div>

@@ -52,7 +52,7 @@ export const SITE_ROUTES: SiteRoute[] = [
     label: 'Home',
     title: 'Prof Gordon Slater | Personal site',
     description:
-      'The personal site of Prof Gordon Slater — foot & ankle orthopaedic surgeon, Professor at UTS, and author of Chaos to Creation. A factual record.',
+      'Prof Gordon Slater — leading orthopaedic surgeon, regenerative-medicine researcher, Professor at UTS, and author of Chaos to Creation. Thirty years, sixty papers.',
     inTopNav: true,
     inFooter: false,
     related: ['/about', '/book', '/contact'],
@@ -135,7 +135,7 @@ export const SITE_ROUTES: SiteRoute[] = [
     label: 'Contact',
     title: 'Contact | Prof Gordon Slater',
     description:
-      'Get in touch with Prof Gordon Slater — clinical referral via the practice site; press, speaking, and professional enquiries via the marketing contact.',
+      'Work with Prof Gordon Slater — clinical enquiries via the practice site, research & collaboration, and speaking & media. Three clear pathways.',
     inTopNav: true,
     inFooter: false,
     related: ['/about', '/book'],

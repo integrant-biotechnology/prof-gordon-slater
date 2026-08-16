@@ -16,7 +16,8 @@ interface PageShellProps {
  * PageShell — wraps every non-home page.
  *
  *   - Sets document.title + meta description via useDocumentTitle
- *   - Wraps content in a <main> landmark
+ *   - App.tsx owns the single <main id="main"> landmark; this shell
+ *     renders a plain wrapper to avoid nested main elements
  *   - Auto-renders <Breadcrumbs> when route.parent is set (PR-7)
  *   - Auto-renders <SeeAlsoFooter> when route.related is set (PR-7)
  *
@@ -28,10 +29,10 @@ export const PageShell = ({ route, children, hideSeeAlso = false }: PageShellPro
   useDocumentTitle(route);
 
   return (
-    <main id="content" aria-labelledby="page-title">
+    <div id="content">
       {route.parent && <Breadcrumbs route={route} />}
       {children}
       {!hideSeeAlso && <SeeAlsoFooter route={route} />}
-    </main>
+    </div>
   );
 };

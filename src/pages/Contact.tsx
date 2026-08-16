@@ -1,26 +1,19 @@
-import { ArrowUpRight, Mail, Phone } from 'lucide-react';
-import { Reveal } from '@/components/ui/Motion';
+import { ArrowRight, ArrowUpRight, Phone } from 'lucide-react';
 import { PageShell } from '@/templates/PageShell';
 import { PageHero } from '@/templates/PageHero';
-import { ICONS } from '@/lib/icons';
+import { Reveal } from '@/components/ui/Motion';
 import { findRoute } from '@/lib/site';
-import {
-  CONTACT_EMAIL,
-  PRACTICE_URL,
-  PRESS_PHONE,
-  SOCIAL_LINKS,
-} from '@/constants';
-
-const mailHref = `mailto:${CONTACT_EMAIL}`;
-const telHref = `tel:${PRESS_PHONE.replace(/[^\d+]/g, '')}`;
+import { ICONS } from '@/lib/icons';
+import { CONTACT_PATHWAYS } from '@/data/contact';
+import { SOCIAL_LINKS } from '@/constants';
 
 /**
- * /contact — minimal, single-focus.
+ * /contact — Work With Professor Gordon Slater.
  *
- * Page character (plan §B): type-only register; three explicit
- * contact paths in a vertical typographic stack — clinical care,
- * press & marketing, speaking inquiries. No glass cards, no CTA
- * pressure. Closes with the four verified social profiles.
+ * Three large pathway cards (Clinical → practice site, Research &
+ * Collaboration → email, Speaking & Media → email + phone). The site
+ * stays non-clinical and form-free; every action is an outbound
+ * link, mailto or tel.
  */
 const Contact = () => {
   const route = findRoute('/contact');
@@ -33,37 +26,26 @@ const Contact = () => {
         eyebrow="Contact"
         title={
           <>
-            Get in{' '}
-            <em className="font-display italic font-normal text-white/55">touch.</em>
+            Work with{' '}
+            <em className="font-display italic font-normal text-white/70">
+              Professor Gordon Slater.
+            </em>
           </>
         }
-        lede="This is a personal site — not a clinic. The three paths below cover clinical care, press &amp; marketing, and speaking inquiries."
+        lede="Three pathways — clinical care through the practice, research and collaboration, and speaking or media. Choose the one that fits and reach out directly."
       />
 
-      {/* Three contact paths — typographic stack. */}
-      <section
-        aria-label="Contact paths"
-        className="px-6 pb-16 md:pb-24"
-      >
-        <div className="mx-auto max-w-3xl">
-          <ol className="divide-y divide-white/10">
-            {/* 1. Clinical care */}
-            <li className="py-10 first:pt-0">
-              <Reveal>
-                <p className="eyebrow">Clinical care</p>
+      {/* The three pathways — large panel cards. */}
+      <section aria-label="Contact pathways" className="px-6 pb-24 md:pb-32">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 lg:grid-cols-3">
+          {CONTACT_PATHWAYS.map((pathway, i) => (
+            <Reveal key={pathway.id} delay={i * 0.06} className="h-full">
+              <article
+                className="flex h-full flex-col rounded-3xl p-8 md:p-10"
+                style={{ backgroundColor: 'var(--color-brand-panel)' }}
+              >
                 <p
-                  className="mt-5 max-w-xl text-pretty leading-relaxed text-white/75"
-                  style={{ fontSize: 'var(--text-body)' }}
-                >
-                  For appointments, referrals, or anything clinical, please go through the
-                  practice site.
-                </p>
-                <a
-                  href={PRACTICE_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Visit the practice site at orthopaedic-surgeon.com.au (opens in a new tab)"
-                  className="group/link mt-5 inline-flex items-center gap-1.5 text-medical-teal/85 transition-colors hover:text-medical-teal"
+                  className="text-medical-teal/90"
                   style={{
                     fontSize: 'var(--text-eyebrow)',
                     letterSpacing: '0.18em',
@@ -71,65 +53,63 @@ const Contact = () => {
                     fontWeight: 600,
                   }}
                 >
-                  orthopaedic-surgeon.com.au
-                  <ArrowUpRight
-                    aria-hidden="true"
-                    size={13}
-                    className="transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
-                  />
-                </a>
-              </Reveal>
-            </li>
-
-            {/* 2. Press & marketing */}
-            <li className="py-10">
-              <Reveal>
-                <p className="eyebrow">Press &amp; marketing</p>
-                <p
-                  className="mt-5 max-w-xl text-pretty leading-relaxed text-white/75"
-                  style={{ fontSize: 'var(--text-body)' }}
-                >
-                  Media inquiries, book press, podcast bookings, and partnership requests —
-                  Adelaide Slater handles these.
+                  {pathway.kicker}
                 </p>
-                <div className="mt-5 flex flex-col gap-2">
-                  <a
-                    href={mailHref}
-                    className="inline-flex items-center gap-3 text-white/90 underline-offset-4 transition-colors hover:text-medical-teal hover:underline"
-                    style={{
-                      fontSize: 'var(--text-title)',
-                      fontFamily: 'var(--font-display)',
-                    }}
-                  >
-                    <Mail aria-hidden="true" size={20} strokeWidth={1.5} />
-                    {CONTACT_EMAIL}
-                  </a>
-                  <a
-                    href={telHref}
-                    className="inline-flex items-center gap-2 text-white/55 underline-offset-4 transition-colors hover:text-medical-teal hover:underline"
-                    style={{ fontSize: 'var(--text-meta)' }}
-                  >
-                    <Phone aria-hidden="true" size={13} strokeWidth={1.5} />
-                    {PRESS_PHONE}
-                  </a>
+                <h2
+                  className="mt-4 font-display font-medium text-white/95"
+                  style={{
+                    fontSize: 'var(--text-title)',
+                    lineHeight: 1.1,
+                    letterSpacing: '-0.012em',
+                  }}
+                >
+                  {pathway.title}
+                </h2>
+                <p className="mt-4 flex-1 text-pretty leading-relaxed text-white/80">
+                  {pathway.body}
+                </p>
+                <div className="mt-8 space-y-4">
+                  {pathway.action.external ? (
+                    <a
+                      href={pathway.action.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group/action inline-flex min-h-12 w-full items-center justify-between gap-3 rounded-full border border-white/20 px-6 font-medium text-white/90 transition-colors hover:border-medical-teal/60 hover:text-white"
+                    >
+                      <span className="truncate">{pathway.action.label}</span>
+                      <ArrowUpRight
+                        aria-hidden="true"
+                        size={17}
+                        className="shrink-0 transition-transform group-hover/action:translate-x-0.5 group-hover/action:-translate-y-0.5"
+                      />
+                    </a>
+                  ) : (
+                    <a
+                      href={pathway.action.href}
+                      className="group/action inline-flex min-h-12 w-full items-center justify-between gap-3 rounded-full border border-white/20 px-6 font-medium text-white/90 transition-colors hover:border-medical-teal/60 hover:text-white"
+                    >
+                      <span className="truncate">{pathway.action.label}</span>
+                      <ArrowRight
+                        aria-hidden="true"
+                        size={17}
+                        className="shrink-0 transition-transform group-hover/action:translate-x-0.5"
+                      />
+                    </a>
+                  )}
+                  {pathway.secondary && (
+                    <a
+                      href={pathway.secondary.href}
+                      className="inline-flex min-h-11 items-center gap-2 px-1 text-white/75 underline-offset-4 transition-colors hover:text-medical-teal hover:underline nums-tabular"
+                      style={{ fontSize: 'var(--text-meta)' }}
+                    >
+                      <Phone aria-hidden="true" size={15} strokeWidth={1.5} />
+                      {pathway.secondary.label}
+                    </a>
+                  )}
                 </div>
-              </Reveal>
-            </li>
-
-            {/* 3. Speaking inquiries */}
-            <li className="py-10 last:pb-0">
-              <Reveal>
-                <p className="eyebrow">Speaking inquiries</p>
-                <p
-                  className="mt-5 max-w-xl text-pretty leading-relaxed text-white/75"
-                  style={{ fontSize: 'var(--text-body)' }}
-                >
-                  Conference invitations, university lectures, and panel appearances — same
-                  contact as press &amp; marketing above.
-                </p>
-              </Reveal>
-            </li>
-          </ol>
+              </article>
+            </Reveal>
+          ))}
         </div>
       </section>
 
@@ -138,7 +118,7 @@ const Contact = () => {
         aria-label="Social profiles"
         className="border-t border-white/10 px-6 py-16 md:py-20"
       >
-        <div className="mx-auto max-w-3xl">
+        <div className="mx-auto max-w-7xl">
           <Reveal>
             <p className="eyebrow">Follow</p>
           </Reveal>
@@ -155,9 +135,9 @@ const Contact = () => {
                       rel={isPlaceholder ? 'noopener noreferrer' : 'me noopener noreferrer'}
                       aria-label={`${social.label}${isPlaceholder ? ' (link coming soon)' : ' (opens in a new tab)'}`}
                       title={isPlaceholder ? `${social.label} — link coming soon` : social.label}
-                      className="inline-flex h-11 w-11 items-center justify-center rounded-full glass-thin text-white/65 transition-colors hover:text-medical-teal"
+                      className="inline-flex h-12 w-12 items-center justify-center rounded-full glass-thin text-white/80 transition-colors hover:text-medical-teal"
                     >
-                      <Icon aria-hidden="true" size={17} strokeWidth={1.5} />
+                      <Icon aria-hidden="true" size={18} strokeWidth={1.5} />
                       <span className="sr-only">{social.label}</span>
                     </a>
                   </li>

@@ -102,7 +102,7 @@ const GivingHero = () => (
         }}
       >
         Supporting Australian{' '}
-        <em className="font-display italic font-normal text-white/55">
+        <em className="font-display italic font-normal text-white/70">
           medical research.
         </em>
       </h1>
@@ -115,7 +115,7 @@ const GivingHero = () => (
       </p>
 
       <p
-        className="mt-5 text-pretty font-display italic leading-relaxed text-white/55"
+        className="mt-5 text-pretty font-display italic leading-relaxed text-white/70"
         style={{ fontSize: 'var(--text-meta)' }}
       >
         {GIVING_PLEDGE}
@@ -226,14 +226,14 @@ const EventCard = ({ event: e }: { event: GivingEvent }) => {
             {e.name}
           </h3>
           <p
-            className="mt-2 leading-relaxed text-white/55"
+            className="mt-2 leading-relaxed text-white/70"
             style={{ fontSize: 'var(--text-meta)' }}
           >
             {e.host}
           </p>
           {e.blurb && (
             <p
-              className="mt-3 text-pretty leading-relaxed text-white/65"
+              className="mt-3 text-pretty leading-relaxed text-white/75"
               style={{ fontSize: 'var(--text-meta)' }}
             >
               {e.blurb}
@@ -253,7 +253,7 @@ const EventCard = ({ event: e }: { event: GivingEvent }) => {
                 <>
                   {' '}
                   —{' '}
-                  <span className="text-white/65">{e.beneficiary}</span>
+                  <span className="text-white/75">{e.beneficiary}</span>
                 </>
               )}
             </dd>
@@ -355,7 +355,7 @@ const EventHero = ({ event: e }: { event: GivingEvent }) => {
           {e.hostMark ?? e.host.slice(0, 3).toUpperCase()}
         </span>
         <span
-          className="text-white/45"
+          className="text-white/60"
           style={{
             fontSize: 'var(--text-eyebrow)',
             letterSpacing: '0.24em',
@@ -423,7 +423,7 @@ const GivingCloseSection = () => (
       </p>
       <Link viewTransition
         to="/"
-        className="group/back mt-12 inline-flex items-center gap-2 text-white/55 transition-colors hover:text-white"
+        className="group/back mt-12 inline-flex items-center gap-2 text-white/70 transition-colors hover:text-white"
         style={{
           fontSize: 'var(--text-eyebrow)',
           letterSpacing: '0.18em',

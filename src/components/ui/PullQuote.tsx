@@ -46,7 +46,7 @@ export const PullQuote = ({
       {attribution && (
         <figcaption
           className={cn(
-            'mt-6 text-[length:var(--text-meta)] text-white/55',
+            'mt-6 text-[length:var(--text-meta)] text-white/70',
             align === 'center' ? 'mx-auto' : '',
           )}
         >
