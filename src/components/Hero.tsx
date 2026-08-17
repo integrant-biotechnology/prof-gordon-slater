@@ -81,8 +81,8 @@ export const Hero = () => {
               style={{ fontSize: 'var(--text-lede)' }}
             >
               For thirty years {DOCTOR_NAME} has worked at the intersection of
-              surgery, biology and human regeneration — sixty peer-reviewed
-              papers, TGA-registered devices, and{' '}
+              surgery, biology and human regeneration — more than fifty
+              peer-reviewed papers, TGA-registered devices, and{' '}
               <em>Chaos to Creation</em>.
             </p>
           </Reveal>

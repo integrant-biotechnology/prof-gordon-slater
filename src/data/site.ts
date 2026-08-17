@@ -52,7 +52,7 @@ export const SITE_ROUTES: SiteRoute[] = [
     label: 'Home',
     title: 'Prof Gordon Slater | Personal site',
     description:
-      'Prof Gordon Slater — leading orthopaedic surgeon, regenerative-medicine researcher, Professor at UTS, and author of Chaos to Creation. Thirty years, sixty papers.',
+      'Prof Gordon Slater — leading orthopaedic surgeon, regenerative-medicine researcher, Professor at UTS, and author of Chaos to Creation. Thirty years, more than fifty papers.',
     inTopNav: true,
     inFooter: false,
     related: ['/about', '/book', '/contact'],

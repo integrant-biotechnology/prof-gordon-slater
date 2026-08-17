@@ -54,7 +54,7 @@ const Research = () => {
             <em className="font-display italic font-normal text-white/70">of work.</em>
           </>
         }
-        lede="Sixty peer-reviewed papers, 2003–2026, across six themes — from foot &amp; ankle surgery and orthobiologics to hyperbaric oxygen therapy, aging biology, and AI in medicine."
+        lede="More than fifty peer-reviewed papers, 1993–2026, across six themes — from foot &amp; ankle surgery and orthobiologics to hyperbaric oxygen therapy, aging biology, and AI in medicine."
       />
 
       {/* Six themes as numbered editorial sections (ChapterMark register).
