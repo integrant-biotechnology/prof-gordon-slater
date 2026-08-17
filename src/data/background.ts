@@ -40,13 +40,20 @@ export interface TimelineEntry {
 }
 
 export const CAREER_TIMELINE: TimelineEntry[] = [
+  {
+    year: '1983–87',
+    label: 'The University of New South Wales',
+    detail: 'Bachelor of Medicine, Bachelor of Surgery. First player in tennis, squash and table tennis at Goldstein College; University Regiment infantry 1981–83.',
+    era: 'training',
+  },
   { year: '1987', label: 'MBBS, University of New South Wales', era: 'training' },
   {
     year: '1990',
     label: 'Royal Australasian College of Surgeons — Part 1 examination',
     era: 'training',
   },
-  { year: '1991', label: 'AO basic trauma course, Davos, Switzerland', era: 'training' },
+  { year: '1991', label: 'AO basic trauma course (55th), Davos, Switzerland', era: 'training' },
+  { year: '1992', label: 'Advanced AO Course, Sydney', era: 'training' },
   {
     year: '1993',
     label: 'Early Management of Severe Trauma, St George Hospital',
@@ -59,9 +66,10 @@ export const CAREER_TIMELINE: TimelineEntry[] = [
     era: 'training',
   },
   {
-    year: '2003',
+    year: '1993',
     label: 'First peer-reviewed publications',
-    detail: 'The publication record opens; sixty papers follow across six themes to 2026.',
+    detail:
+      'The publication record opens in the Journal of Paediatric Orthopaedics; more than fifty papers follow across six themes to 2026.',
     era: 'practice',
     href: '/research/publications',
   },
@@ -78,6 +86,18 @@ export const CAREER_TIMELINE: TimelineEntry[] = [
     detail:
       'A planning and execution modification to MIS forefoot surgery — among the first MIS forefoot adaptations adopted broadly in Australia.',
     era: 'innovation',
+  },
+  {
+    year: '2021',
+    label: 'Harvard University LBTech X1 — Technology Entrepreneurship: Lab to Market',
+    detail: 'Executive program with Prof. Karim Lakhani — the commercial grounding behind the device and biologics work.',
+    era: 'practice',
+  },
+  {
+    year: '2023',
+    label: 'Hyperbaric Oxygen Therapy Course',
+    detail: 'Formal HBOT training underpinning the hyperbaric research theme.',
+    era: 'practice',
   },
   {
     year: '2023',
@@ -110,9 +130,58 @@ export interface LeadershipRole {
 export const LEADERSHIP_ROLES: LeadershipRole[] = [
   { role: 'Professor', org: 'University of Technology Sydney' },
   { role: 'Associate Editor', org: 'Foot & Ankle International' },
+  { role: 'Editor-in-Chief', org: 'Journal of Regenerative Biology and Medicine' },
+  { role: 'Editor-in-Chief', org: 'Journal of Dental and Oral Research' },
   { role: 'Editorial Panel', org: 'EC Orthopaedics' },
+  { role: 'Editor', org: 'CPQ Orthopaedics' },
   { role: 'Chair, Foot & Ankle', org: 'Asia Pacific Orthopaedic Association (APOA)' },
 ];
+
+// -------------------------------------------------------------
+// Recognition, appointments, and scholar metrics — from the CV
+// (docs/Gordon-Slater-CV.docx). Rendered on /about.
+// -------------------------------------------------------------
+
+export interface Recognition {
+  title: string;
+  detail?: string;
+}
+
+export const RECOGNITION: Recognition[] = [
+  {
+    title: 'Marquis Who’s Who in Medicine and Healthcare',
+    detail: '2004–2006',
+  },
+  {
+    title: 'Marquis Who’s Who in Science and Engineering',
+    detail: '2004–2006',
+  },
+  {
+    title: 'IBC Leading Health Professional of the World',
+    detail: 'International Biographical Centre, Cambridge, England — 2005',
+  },
+  {
+    title: 'Engineering Awards Finalist',
+    detail: 'Anterior Fusion Plate',
+  },
+  {
+    title: 'Letter of Gratitude, NSW Minister of Health',
+    detail: 'For participation in the Cowper bus crash response',
+  },
+];
+
+export const HOSPITAL_APPOINTMENTS: string[] = [
+  'East Sydney Private Hospital',
+  'Albury Wodonga Private Hospital',
+  'St Luke’s Private Hospital',
+];
+
+/** Google Scholar metrics as recorded in the CV. */
+export const SCHOLAR_METRICS = {
+  citations: 436,
+  hIndex: 7,
+  i10Index: 6,
+} as const;
 
 /** Capabilities — the four-card "what he does" overview. */
 export const CAPABILITIES: Capability[] = [
@@ -125,7 +194,7 @@ export const CAPABILITIES: Capability[] = [
   {
     title: 'Researcher & editor',
     description:
-      'Sixty peer-reviewed papers across foot & ankle surgery, orthobiologics, HBOT, stem cells and regenerative medicine, aging biology, and AI in medicine.',
+      'More than fifty peer-reviewed papers across foot & ankle surgery, orthobiologics, HBOT, stem cells and regenerative medicine, aging biology, and AI in medicine.',
     icon: 'Microscope',
   },
   {

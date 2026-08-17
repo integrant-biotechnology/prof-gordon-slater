@@ -10,7 +10,7 @@ export const BODY_OF_WORK: WorkItem[] = [
     id: 'research',
     title: 'Research & publications',
     description:
-      'Sixty peer-reviewed papers (2003–2026) across foot & ankle surgery, orthobiologics, HBOT, stem cells and regenerative medicine, aging biology, and AI in medicine.',
+      'More than fifty peer-reviewed papers (1993–2026) across foot & ankle surgery, orthobiologics, HBOT, stem cells and regenerative medicine, aging biology, and AI in medicine.',
     icon: 'FlaskConical',
     href: '#publications',
     linkLabel: 'See selected publications',

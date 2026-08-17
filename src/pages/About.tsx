@@ -11,8 +11,11 @@ import {
   COMMUNITY,
   DOCTOR_CREDENTIALS,
   DOCTOR_NAME,
+  HOSPITAL_APPOINTMENTS,
   LEADERSHIP_ROLES,
   PRACTICE_URL,
+  RECOGNITION,
+  SCHOLAR_METRICS,
   VISION_STATEMENT,
 } from '@/constants';
 
@@ -180,7 +183,7 @@ const About = () => {
         className="border-t border-white/10 px-6 py-24 md:py-32"
       >
         <div className="mx-auto max-w-5xl">
-          <StoryHeading id="research-journey-heading" number="02" title="Research journey" italic="— sixty papers on." />
+          <StoryHeading id="research-journey-heading" number="02" title="Research journey" italic="— the record in print." />
           <Reveal delay={0.1}>
             <div
               className="mt-8 max-w-2xl space-y-6 text-pretty leading-relaxed text-white/80"
@@ -230,6 +233,50 @@ const About = () => {
               </li>
             ))}
           </ul>
+
+          {/* Scholar metrics + hospital appointments — quiet meta lines. */}
+          <Reveal delay={0.12}>
+            <p className="mt-10 text-brand-muted nums-tabular" style={{ fontSize: 'var(--text-meta)' }}>
+              {SCHOLAR_METRICS.citations} citations on Google Scholar · h-index{' '}
+              {SCHOLAR_METRICS.hIndex} · i10-index {SCHOLAR_METRICS.i10Index}
+            </p>
+          </Reveal>
+          <Reveal delay={0.14}>
+            <p className="mt-2 text-brand-muted" style={{ fontSize: 'var(--text-meta)' }}>
+              Hospital appointments: {HOSPITAL_APPOINTMENTS.join(' · ')}
+            </p>
+          </Reveal>
+
+          {/* Recognition — honors and named acknowledgements. */}
+          <div className="mt-14 border-t border-white/10 pt-10">
+            <Reveal>
+              <p className="eyebrow">Recognition</p>
+            </Reveal>
+            <ul className="mt-8 grid grid-cols-1 gap-y-6 md:grid-cols-2 md:gap-x-10">
+              {RECOGNITION.map((item, i) => (
+                <li key={item.title} className="grid grid-cols-[auto_1fr] items-baseline gap-x-5">
+                  <Reveal delay={i * 0.03}>
+                    <span
+                      aria-hidden="true"
+                      className="block h-1.5 w-1.5 translate-y-[-3px] rounded-full bg-medical-teal/85"
+                    />
+                  </Reveal>
+                  <Reveal delay={i * 0.03 + 0.02}>
+                    <div>
+                      <p className="font-medium text-white/90" style={{ fontSize: 'var(--text-body)' }}>
+                        {item.title}
+                      </p>
+                      {item.detail && (
+                        <p className="mt-1 text-white/70" style={{ fontSize: 'var(--text-meta)' }}>
+                          {item.detail}
+                        </p>
+                      )}
+                    </div>
+                  </Reveal>
+                </li>
+              ))}
+            </ul>
+          </div>
 
           <Reveal delay={0.16}>
             <Link

@@ -5,10 +5,16 @@ import { PageShell } from '@/templates/PageShell';
 import { PageHero } from '@/templates/PageHero';
 import { ListTemplate, type ListFilter } from '@/templates/ListTemplate';
 import { JsonLd } from '@/templates/JsonLd';
+import { Reveal } from '@/components/ui/Motion';
 import { findRoute } from '@/lib/site';
 import { siteUrl } from '@/lib/site-origin';
-import { FULL_PUBLICATIONS, RESEARCH_THEMES } from '@/constants';
+import { BOOK_CHAPTERS, FULL_PUBLICATIONS, RESEARCH_THEMES } from '@/constants';
 import type { Publication } from '@/types';
+
+/** "2026" → "2020s" — grouping key for the editorial era dividers. */
+const decadeOf = (p: Publication) => `${Math.floor(Number(p.year ?? 0) / 10) * 10}s`;
+
+const DECADE_ORDER = ['2020s', '2010s', '2000s', '1990s'];
 
 const PUBLICATIONS_LD = {
   '@context': 'https://schema.org',
@@ -51,8 +57,11 @@ const Publications = () => {
 
   const filters: ListFilter[] = useMemo(
     () => [
-      { label: 'All', value: 'all' },
-      ...RESEARCH_THEMES.map((t) => ({ label: t.title, value: t.slug })),
+      { label: `All (${FULL_PUBLICATIONS.length})`, value: 'all' },
+      ...RESEARCH_THEMES.map((t) => ({
+        label: `${t.title} (${FULL_PUBLICATIONS.filter((p) => p.theme === t.slug).length})`,
+        value: t.slug,
+      })),
     ],
     [],
   );
@@ -72,6 +81,16 @@ const Publications = () => {
 
   if (!route) return null;
 
+  const activeThemeTitle =
+    filter === 'all' ? null : RESEARCH_THEMES.find((t) => t.slug === filter)?.title;
+  const resultsLabel = [
+    `${items.length} paper${items.length === 1 ? '' : 's'}`,
+    activeThemeTitle,
+    query.trim() ? `matching “${query.trim()}”` : null,
+  ]
+    .filter(Boolean)
+    .join(' · ');
+
   return (
     <PageShell route={route}>
       <JsonLd data={PUBLICATIONS_LD} id="ld-publications" />
@@ -81,13 +100,13 @@ const Publications = () => {
         eyebrow="Peer-reviewed"
         title={
           <>
-            Sixty peer-reviewed papers ·{' '}
+            {FULL_PUBLICATIONS.length} peer-reviewed papers ·{' '}
             <em className="font-display italic font-normal text-white/70">
-              2003–2026.
+              1993–2026.
             </em>
           </>
         }
-        lede="Search across all titles and venues; filter by theme. Outbound links point to the journal entry where available."
+        lede="Search across all titles and venues; filter by theme. Linked titles open the paper's DOI record at doi.org."
       />
 
       <section aria-label="Publications" className="px-6 pb-24 md:pb-32">
@@ -101,6 +120,9 @@ const Publications = () => {
           activeFilter={filter}
           onFilterChange={setFilter}
           emptyState="No publications match this filter and search."
+          resultsLabel={resultsLabel}
+          groupBy={decadeOf}
+          groupOrder={DECADE_ORDER}
           renderItem={(p, i) => (
             <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between sm:gap-8">
               <div className="flex-1">
@@ -113,6 +135,7 @@ const Publications = () => {
                       href={p.href}
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label={`${p.title} (opens DOI record at doi.org)`}
                       className="group/link inline-flex items-baseline gap-1.5 underline-offset-4 transition-colors hover:text-white hover:underline"
                     >
                       {p.title}
@@ -145,6 +168,72 @@ const Publications = () => {
             </div>
           )}
         />
+      </section>
+
+      {/* Book chapters — contributed chapters in surgical references. */}
+      <section
+        aria-labelledby="book-chapters-heading"
+        className="border-t border-white/10 px-6 py-20 md:py-28"
+      >
+        <div className="mx-auto max-w-5xl">
+          <Reveal>
+            <p className="eyebrow">Book chapters</p>
+          </Reveal>
+          <Reveal delay={0.05}>
+            <h2
+              id="book-chapters-heading"
+              className="mt-4 font-display font-medium"
+              style={{ fontSize: 'var(--text-title)', lineHeight: 1.1, letterSpacing: '-0.012em' }}
+            >
+              Contributed chapters in surgical references.
+            </h2>
+          </Reveal>
+          <ol className="mt-10 divide-y divide-white/5">
+            {BOOK_CHAPTERS.map((chapter) => (
+              <li
+                key={chapter.title}
+                className="flex flex-col gap-2 py-6 first:pt-0 last:pb-0 sm:flex-row sm:items-baseline sm:justify-between sm:gap-8"
+              >
+                <div className="flex-1">
+                  <p
+                    className="font-display font-medium leading-snug text-white/90"
+                    style={{ fontSize: '1.0625rem', letterSpacing: '-0.005em' }}
+                  >
+                    {chapter.href ? (
+                      <a
+                        href={chapter.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`${chapter.title} (opens DOI record at doi.org)`}
+                        className="group/link inline-flex items-baseline gap-1.5 underline-offset-4 transition-colors hover:text-white hover:underline"
+                      >
+                        {chapter.title}
+                        <ArrowUpRight
+                          aria-hidden="true"
+                          size={11}
+                          className="transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
+                        />
+                      </a>
+                    ) : (
+                      chapter.title
+                    )}
+                  </p>
+                  {chapter.venue && (
+                    <p className="mt-1 italic text-white/70" style={{ fontSize: 'var(--text-meta)' }}>
+                      {chapter.venue}
+                    </p>
+                  )}
+                </div>
+                <p
+                  className="shrink-0 italic text-white/70 nums-tabular"
+                  style={{ fontSize: 'var(--text-meta)' }}
+                >
+                  {chapter.year}
+                </p>
+              </li>
+            ))}
+          </ol>
+        </div>
       </section>
     </PageShell>
   );
