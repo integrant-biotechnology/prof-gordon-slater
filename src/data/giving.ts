@@ -38,6 +38,7 @@ export const GIVING_EVENTS: GivingEvent[] = [
     cause: 'Breast cancer research',
     contribution: 'HBOT sessions and Integrant skincare donations',
     accent: 'pink',
+    logo: '/giving/australian-turf-club-logo.svg',
     eventUrl: 'https://www.australianturfclub.com.au/hospitality/pink-fashion-lunch/',
     since: '2007',
     blurb:
