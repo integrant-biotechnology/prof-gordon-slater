@@ -164,7 +164,7 @@ const GivingEvents = () => (
         id="events-heading"
         eyebrow="Events"
         title="Sydney charity events this year."
-        intro="Each event funds research into conditions Prof Slater encounters in clinical practice. Contributions are non-monetary in-kind donations of HBOT sessions and Integrant skincare products."
+        intro="Long-standing Sydney events supporting Australian medical research and the institutions behind it."
         className="mb-12 md:mb-16"
       />
 
@@ -234,33 +234,7 @@ const EventCard = ({ event: e }: { event: GivingEvent }) => {
           )}
         </div>
 
-        <dl className="mt-auto space-y-3 border-t border-white/5 pt-5">
-          <div>
-            <dt className="eyebrow">Supporting</dt>
-            <dd
-              className="mt-1 leading-relaxed text-white/80"
-              style={{ fontSize: 'var(--text-meta)' }}
-            >
-              {e.cause}
-              {e.beneficiary && (
-                <>
-                  {' '}
-                  —{' '}
-                  <span className="text-white/75">{e.beneficiary}</span>
-                </>
-              )}
-            </dd>
-          </div>
-          <div>
-            <dt className="eyebrow">Contribution</dt>
-            <dd
-              className="mt-1 leading-relaxed text-white/80"
-              style={{ fontSize: 'var(--text-meta)' }}
-            >
-              {e.contribution}
-            </dd>
-          </div>
-        </dl>
+        <div className="mt-auto border-t border-white/5 pt-5" />
 
         {e.eventUrl && (
           <a
