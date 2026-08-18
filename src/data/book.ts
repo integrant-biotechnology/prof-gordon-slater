@@ -36,6 +36,12 @@ export const BOOK = {
 export const BOOK_COVER_SRCSET =
   '/book-cover-chaos-to-creation-480.webp 480w, /book-cover-chaos-to-creation-800.webp 800w, /book-cover-chaos-to-creation-1200.webp 1200w';
 
+/** Official book site — editions, FAQs, press quotes, media kit. */
+export const BOOK_SITE_URL = 'https://chaostocreation.com.au';
+
+/** Press & media kit on the official book site. */
+export const BOOK_PRESS_URL = 'https://chaostocreation.com.au/press';
+
 /** Three Amazon AU formats — Hardcover · Paperback · Kindle. */
 export const BOOK_FORMATS: BookFormat[] = [
   {

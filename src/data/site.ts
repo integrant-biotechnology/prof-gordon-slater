@@ -93,7 +93,7 @@ export const SITE_ROUTES: SiteRoute[] = [
     label: 'Book',
     title: 'Chaos to Creation | Prof Gordon Slater',
     description:
-      'Chaos to Creation: Longevity and Regeneration Frontiers (9 April 2026) — Prof Gordon Slater’s book on lifespan as a modifiable outcome.',
+      'Chaos to Creation: Longevity and Regeneration Frontiers — Prof Gordon Slater’s book on lifespan as a modifiable outcome. Official site: chaostocreation.com.au.',
     inTopNav: true,
     inFooter: false,
     related: ['/book/three-rules', '/book/case-studies', '/research'],

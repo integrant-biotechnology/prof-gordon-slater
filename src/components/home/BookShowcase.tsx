@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { BookCover } from '@/components/ui/BookCover';
 import { Reveal } from '@/components/ui/Motion';
-import { BOOK } from '@/constants';
+import { BOOK, BOOK_SITE_URL } from '@/constants';
 
 /**
  * BookShowcase — the home book moment, Stripe Press register.
@@ -65,18 +65,40 @@ export const BookShowcase = () => (
         </Reveal>
 
         <Reveal delay={0.24}>
-          <Link
-            to="/book"
-            viewTransition
-            className="group/bookcta mt-10 inline-flex h-13 min-h-12 items-center justify-center gap-2 rounded-full border border-white/20 px-8 text-base font-medium text-white/90 transition-colors hover:border-medical-teal/60 hover:text-white"
-          >
-            Discover the Book
-            <ArrowRight
-              aria-hidden="true"
-              size={16}
-              className="transition-transform group-hover/bookcta:translate-x-0.5"
-            />
-          </Link>
+          <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4">
+            <Link
+              to="/book"
+              viewTransition
+              className="group/bookcta inline-flex h-13 min-h-12 items-center justify-center gap-2 rounded-full border border-white/20 px-8 text-base font-medium text-white/90 transition-colors hover:border-medical-teal/60 hover:text-white"
+            >
+              Discover the Book
+              <ArrowRight
+                aria-hidden="true"
+                size={16}
+                className="transition-transform group-hover/bookcta:translate-x-0.5"
+              />
+            </Link>
+            <a
+              href={BOOK_SITE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Official book site, chaostocreation.com.au (opens in a new tab)"
+              className="group/booksite inline-flex min-h-11 items-center gap-1.5 text-white/75 transition-colors hover:text-medical-teal"
+              style={{
+                fontSize: 'var(--text-eyebrow)',
+                letterSpacing: '0.16em',
+                textTransform: 'uppercase',
+                fontWeight: 600,
+              }}
+            >
+              chaostocreation.com.au
+              <ArrowUpRight
+                aria-hidden="true"
+                size={14}
+                className="transition-transform group-hover/booksite:translate-x-0.5 group-hover/booksite:-translate-y-0.5"
+              />
+            </a>
+          </div>
         </Reveal>
       </div>
 

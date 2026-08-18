@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { ArrowUp, ArrowUpRight } from 'lucide-react';
 import { ICONS } from '@/lib/icons';
 import {
+  BOOK_SITE_URL,
   DOCTOR_NAME,
   DOCTOR_TITLE,
   FOOTER_DISCLAIMER,
@@ -35,6 +36,7 @@ const FOOTER_SECTIONS: { title: string; links: FooterLink[] }[] = [
     title: 'Work',
     links: [
       { label: 'The book', href: '/book', route: true },
+      { label: 'Book site', href: BOOK_SITE_URL, external: true },
       { label: 'Writing', href: '/writing', route: true },
       { label: 'Giving back', href: '/giving', route: true },
     ],

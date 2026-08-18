@@ -12,6 +12,7 @@ import {
 } from './src/data/research/publications';
 import { RESEARCH_THEMES } from './src/data/research/themes';
 import { MEDIA, SPEAKING } from './src/data/engagements';
+import { BOOK_PRESS_URL, BOOK_SITE_URL } from './src/data/book';
 
 /**
  * Inline data-integrity plugin — fails the build loudly when the
@@ -57,6 +58,10 @@ const checkDataIntegrity = (): Plugin => ({
       if (r.parent && !paths.has(r.parent)) errors.push(`route ${r.path}: missing parent ${r.parent}`);
       for (const rel of r.related ?? [])
         if (!paths.has(rel)) errors.push(`route ${r.path}: missing related ${rel}`);
+    }
+    for (const url of [BOOK_SITE_URL, BOOK_PRESS_URL]) {
+      if (!/^https:\/\/chaostocreation\.com\.au(\/|$)?/.test(url))
+        errors.push(`book-site URL malformed: "${url}"`);
     }
     for (const e of [...SPEAKING, ...MEDIA]) {
       if (!e.title.trim() || !e.year.trim())

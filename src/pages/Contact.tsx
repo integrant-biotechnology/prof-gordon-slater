@@ -106,6 +106,23 @@ const Contact = () => {
                       {pathway.secondary.label}
                     </a>
                   )}
+                  {pathway.press && (
+                    <a
+                      href={pathway.press.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${pathway.press.label} (opens in a new tab)`}
+                      className="group/press inline-flex min-h-11 items-center gap-2 px-1 text-white/75 underline-offset-4 transition-colors hover:text-medical-teal hover:underline"
+                      style={{ fontSize: 'var(--text-meta)' }}
+                    >
+                      {pathway.press.label}
+                      <ArrowUpRight
+                        aria-hidden="true"
+                        size={14}
+                        className="transition-transform group-hover/press:translate-x-0.5 group-hover/press:-translate-y-0.5"
+                      />
+                    </a>
+                  )}
                 </div>
               </article>
             </Reveal>

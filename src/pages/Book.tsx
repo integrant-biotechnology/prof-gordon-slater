@@ -13,6 +13,7 @@ import {
   BOOK,
   BOOK_ENDORSEMENTS,
   BOOK_FORMATS,
+  BOOK_SITE_URL,
   BOOK_INSIDE,
   BOOK_RULES,
   CASE_STUDIES,
@@ -34,8 +35,10 @@ const BOOK_LD = {
   inLanguage: 'en-AU',
   image: siteUrl('/book-cover-chaos-to-creation.webp'),
   bookFormat: ['Hardcover', 'Paperback', 'EBook'],
-  url: siteUrl('/book'),
+  url: 'https://chaostocreation.com.au',
+  mainEntityOfPage: siteUrl('/book'),
   sameAs: [
+    'https://chaostocreation.com.au',
     'https://www.amazon.com.au/Chaos-Creation-Prof-Gordon-Slater/dp/B0GWTSZN7M',
     'https://www.amazon.com.au/Chaos-Creation-Prof-Gordon-Slater/dp/B0GWTQFMSP',
     'https://www.amazon.com.au/Chaos-Creation-Prof-Gordon-Slater-ebook/dp/B0GWTGTHBN',
@@ -101,22 +104,45 @@ export default Book;
 // Reusable: 3-format chips (Hardcover · Paperback · Kindle)
 // -------------------------------------------------------------
 
+/** Primary outbound CTA — the official book site leads every action row. */
+const BookSiteButton = ({ size = 'md' }: { size?: 'md' | 'lg' }) => (
+  <a
+    href={BOOK_SITE_URL}
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Visit the official book site, chaostocreation.com.au (opens in a new tab)"
+    className={`group/site inline-flex min-h-11 items-center gap-1.5 rounded-full bg-white text-brand-bg transition-colors hover:bg-white/90 ${
+      size === 'lg' ? 'px-6 py-3' : 'px-5 py-2'
+    }`}
+    style={{
+      fontSize: 'var(--text-eyebrow)',
+      letterSpacing: '0.16em',
+      textTransform: 'uppercase',
+      fontWeight: 600,
+    }}
+  >
+    Official book site
+    <ArrowUpRight
+      aria-hidden="true"
+      size={13}
+      className="transition-transform group-hover/site:translate-x-0.5 group-hover/site:-translate-y-0.5"
+    />
+  </a>
+);
+
 const FormatButtons = ({ size = 'md' }: { size?: 'md' | 'lg' }) => {
   const padding = size === 'lg' ? 'px-5 py-3' : 'px-4 py-2';
   return (
     <div className="flex flex-wrap items-center gap-2.5">
-      {BOOK_FORMATS.map((f, i) => (
+      <BookSiteButton size={size} />
+      {BOOK_FORMATS.map((f) => (
         <a
           key={f.format}
           href={f.url}
           target="_blank"
           rel="noopener noreferrer"
           aria-label={`${f.format} on Amazon AU (opens in a new tab)`}
-          className={`group/format inline-flex items-center gap-1.5 rounded-full transition-colors ${padding} ${
-            i === 0
-              ? 'bg-white text-brand-bg hover:bg-white/90'
-              : 'glass-thin text-white/75 hover:text-medical-teal'
-          }`}
+          className={`group/format inline-flex min-h-11 items-center gap-1.5 rounded-full transition-colors ${padding} glass-thin text-white/80 hover:text-medical-teal`}
           style={{
             fontSize: 'var(--text-eyebrow)',
             letterSpacing: '0.16em',

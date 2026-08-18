@@ -1,3 +1,4 @@
+import { BOOK_PRESS_URL } from './book';
 import { CONTACT_EMAIL, PRACTICE_URL, PRESS_PHONE } from './identity';
 
 // -------------------------------------------------------------
@@ -15,6 +16,8 @@ export interface ContactPathway {
   body: string;
   action: { label: string; href: string; external?: boolean };
   secondary?: { label: string; href: string };
+  /** Optional external resource row (e.g. the book's press & media kit). */
+  press?: { label: string; href: string };
 }
 
 export const CONTACT_PATHWAYS: ContactPathway[] = [
@@ -39,5 +42,6 @@ export const CONTACT_PATHWAYS: ContactPathway[] = [
     body: 'Keynotes, panels, podcast and media appearances — on regenerative orthopaedics, longevity science, and Chaos to Creation.',
     action: { label: CONTACT_EMAIL, href: `mailto:${CONTACT_EMAIL}` },
     secondary: { label: PRESS_PHONE, href: `tel:${PRESS_PHONE.replace(/\s/g, '')}` },
+    press: { label: 'Book press & media kit', href: BOOK_PRESS_URL },
   },
 ];
