@@ -3,8 +3,10 @@
 //
 // SPEAKING is transcribed from the authoritative CV
 // (docs/Gordon-Slater-CV.docx, "Presented"), newest first.
-// MEDIA ships empty until verifiable entries exist; sections
-// consuming an empty array render nothing.
+// MEDIA mirrors the book site's press collection
+// (chaostocreation.com.au/media/) — verifiable coverage only, with a
+// live URL, newest first. Sections consuming an empty array render
+// nothing.
 // -------------------------------------------------------------
 
 export interface Engagement {
@@ -114,4 +116,12 @@ export const SPEAKING: Engagement[] = [
   },
 ];
 
-export const MEDIA: MediaMention[] = [];
+export const MEDIA: MediaMention[] = [
+  {
+    title:
+      'Chaos to Creation reaches bestseller status, exploring the future of AI, biotechnology, and regenerative innovation',
+    outlet: 'National Law Review',
+    year: '2026',
+    href: 'https://natlawreview.com/press-releases/chaos-creation-reaches-bestseller-status-exploring-future-ai-biotechnology',
+  },
+];

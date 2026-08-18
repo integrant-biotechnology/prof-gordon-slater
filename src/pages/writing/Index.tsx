@@ -5,7 +5,7 @@ import { PageHero } from '@/templates/PageHero';
 import { EditorialCard } from '@/components/ui/EditorialCard';
 import { Reveal } from '@/components/ui/Motion';
 import { findRoute } from '@/lib/site';
-import { ARTICLES, BLOG_INDEX_URL, MEDIA, SPEAKING } from '@/constants';
+import { ARTICLES, BLOG_INDEX_URL, BOOK_PRESS_URL, MEDIA, SPEAKING } from '@/constants';
 
 /**
  * /writing — magazine presentation.
@@ -166,6 +166,27 @@ const Writing = () => {
                 </li>
               ))}
             </ul>
+            <Reveal>
+              <a
+                href={BOOK_PRESS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group/kit mt-12 inline-flex min-h-11 items-center gap-1.5 text-white/75 transition-colors hover:text-medical-teal"
+                style={{
+                  fontSize: 'var(--text-eyebrow)',
+                  letterSpacing: '0.16em',
+                  textTransform: 'uppercase',
+                  fontWeight: 600,
+                }}
+              >
+                Press &amp; media kit — chaostocreation.com.au
+                <ArrowUpRight
+                  aria-hidden="true"
+                  size={14}
+                  className="transition-transform group-hover/kit:translate-x-0.5 group-hover/kit:-translate-y-0.5"
+                />
+              </a>
+            </Reveal>
           </div>
         </section>
       )}
