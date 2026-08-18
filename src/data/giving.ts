@@ -10,7 +10,7 @@ export const GIVING_PLEDGE =
 
 /** Intro paragraph for the /giving page. */
 export const GIVING_INTRO =
-  'Three Sydney charity events that fund research into conditions Prof Slater treats every week — bone, joint, vascular and ocular. He contributes hyperbaric oxygen therapy (HBOT) sessions and Integrant skincare to each, in support of the institutions that fund the underlying science.';
+  'Sydney charity events that fund research into conditions Prof Slater treats every week — bone, joint, vascular and ocular. He contributes hyperbaric oxygen therapy (HBOT) sessions and Integrant skincare to each, in support of the institutions that fund the underlying science.';
 
 /** Closing pledge paragraph for the /giving page. */
 export const GIVING_CLOSE =
