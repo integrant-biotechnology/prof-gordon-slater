@@ -6,7 +6,6 @@ import type { GivingEvent } from '@/types';
 import { Card } from '@/components/ui/Card';
 import { Glow } from '@/components/ui/Glow';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { StatStrip } from '@/components/ui/StatStrip';
 import { JsonLd } from '@/templates/JsonLd';
 import { siteUrl } from '@/lib/site-origin';
 import {
@@ -15,7 +14,6 @@ import {
   GIVING_EVENTS,
   GIVING_INTRO,
   GIVING_PLEDGE,
-  GIVING_STATS,
 } from '@/constants';
 
 const GIVING_LD = {
@@ -51,11 +49,6 @@ const Giving = () => {
     <>
       <JsonLd data={GIVING_LD} id="ld-giving" />
       <GivingHero />
-      <StatStrip
-        stats={GIVING_STATS}
-        ariaLabel="By the numbers"
-        className="border-t border-white/5"
-      />
       <GivingEvents />
       <GivingPartners />
       <GivingCloseSection />
