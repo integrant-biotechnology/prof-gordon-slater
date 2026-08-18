@@ -8,3 +8,7 @@ coverage/
 AGENTS.md
 .env*
 !.env.example
+.vercel
+
+# Word/Office lock files
+~$*
