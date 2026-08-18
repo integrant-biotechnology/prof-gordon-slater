@@ -163,7 +163,7 @@ const GivingEvents = () => (
       <SectionHeading
         id="events-heading"
         eyebrow="Events"
-        title="Three Sydney charity events this year."
+        title="Sydney charity events this year."
         intro="Each event funds research into conditions Prof Slater encounters in clinical practice. Contributions are non-monetary in-kind donations of HBOT sessions and Integrant skincare products."
         className="mb-12 md:mb-16"
       />
