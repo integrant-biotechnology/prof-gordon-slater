@@ -1,261 +1,112 @@
-# Prof Gordon Slater — personal site
+# Prof Gordon Slater
 
-The **personal website** of **Prof Gordon Slater** — foot &amp; ankle orthopaedic surgeon,
-**Professor at the University of Technology Sydney**, and author of *From Chaos to Creation: The
-Life Force Formula* (February 2026). A calm, factual hub for who he is and the breadth of his
-work, separate from the practice. **It does not take appointments.** Anyone seeking clinical
-care is pointed to <https://orthopaedic-surgeon.com.au/>.
+Personal website of Prof Gordon Slater — foot and ankle orthopaedic surgeon, Professor at the University of Technology Sydney, and author of *Chaos to Creation*.
 
-## Design
+**Live site:** [profgordonslater.com.au](https://profgordonslater.com.au)
 
-Dark, restrained, premium — deep charcoal surfaces, glassy panels, restrained teal accents,
-soft ambient glows. The brief is "considered, not salesy". Body copy and labels are kept at
-legible contrast; all looping motion is disabled for visitors who prefer reduced motion.
+## Overview
 
-## Tech stack
+A factual hub for Prof Slater's background, research, writing and book, kept separate from his clinical practice. The site does not take appointments; anyone seeking clinical care is directed to [orthopaedic-surgeon.com.au](https://orthopaedic-surgeon.com.au/).
 
-- **React 19** + **TypeScript**
-- **Vite 6** — with an inline plugin that regenerates `public/sitemap.xml` from `SITE_ROUTES` on every build (see `vite.config.ts`)
-- **react-router-dom v7** — ten substantive routes (see "Information architecture" below); every internal `<Link>` opts into the **View Transitions API** for cross-route cross-fades
-- **Tailwind CSS v4** (`@tailwindcss/vite`, theme tokens in `src/index.css`)
-- **Motion** (`motion/react`) — subtle reveal and ambient animations; every primitive respects `prefers-reduced-motion`
-- **Lucide React** — iconography (registry in `src/lib/icons.ts`)
-- **ESLint** (flat config) — `npm run lint`
+The design is dark and restrained: charcoal surfaces, glass panels, a single teal accent. Body copy and labels are held at legible contrast, and all looping motion is disabled for visitors who prefer reduced motion.
+
+## Stack
+
+| | |
+|---|---|
+| UI | React 19 with TypeScript |
+| Build | Vite 6 — a build plugin regenerates `public/sitemap.xml` from the route table |
+| Routing | React Router 7 — code-split routes with View Transitions |
+| Styling | Tailwind CSS 4 — theme tokens in `src/index.css` |
+| Motion | Motion (`motion/react`), honouring `prefers-reduced-motion` |
+| Icons | Lucide React |
+| Hosting | Vercel (static single-page app) |
 
 ## Getting started
 
+Use the Node.js version pinned in `.nvmrc`.
+
 ```bash
-npm install      # install dependencies
-npm run dev      # start the dev server (http://localhost:3000)
-npm run build    # production build → dist/
-npm run preview  # preview the production build
-npm run lint     # eslint
-npm run lint:tsc # type-check only (tsc --noEmit)
+npm ci
+npm run dev
 ```
 
-## Deploying to Vercel
+The site runs at `http://localhost:3000`.
 
-This is a static Vite SPA, so Vercel needs no special configuration beyond what's in
-[`vercel.json`](vercel.json) (framework preset, build command `npm run build`, output `dist`,
-an `index.html` rewrite fallback for client-side routing — so `/book` deep-links survive a
-refresh — and long-cache headers for hashed assets).
+| Command | Purpose |
+|---|---|
+| `npm run dev` | Start the development server |
+| `npm run build` | Production build to `dist/` |
+| `npm run preview` | Preview the production build |
+| `npm run lint` | ESLint |
+| `npm run lint:tsc` | Type-check only |
 
-1. Push this repo to GitHub.
-2. In Vercel, **Add New… → Project**, import `prof-gordon-slater`, and deploy. The defaults
-   (Framework: *Vite*, Build: `npm run build`, Output: `dist`) are picked up automatically.
-3. Set `VITE_SITE_URL` to the production origin (for example
-   `https://profgordonslater.com.au`) so canonical / Open Graph / JSON-LD URLs resolve from one
-   place.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for branching and review conventions, and [SECURITY.md](SECURITY.md) for reporting a vulnerability.
 
-Or from the CLI: `npm i -g vercel && vercel` (preview) / `vercel --prod` (production).
+## Configuration
 
-## Information architecture
+Copy `.env.example` to `.env.local` to override defaults. Only public, `VITE_`-prefixed values are used; never commit secrets.
 
-Ten substantive routes plus a designed `404`. Top nav surfaces six; the rest live behind their
-parents. `SITE_ROUTES` in `src/data/site.ts` is the single source of truth — it drives Navbar,
-Breadcrumbs, the per-page See-also footer, page `<title>` + meta description, and the auto-
-generated `sitemap.xml`.
+| Variable | Purpose |
+|---|---|
+| `VITE_SITE_URL` | Production origin used for canonical, Open Graph and JSON-LD URLs |
 
-```text
-TOP NAV (6)
-  /                      Home              — Hero · AboutSpotlight · PullQuote · CuratedTrio
-                                             · LatestEssay · ClosingConnect (5 sections)
-  /about                 About             — portrait-led editorial spread; training timeline;
-                                             "beyond the operating theatre" community + vision
-  /research              Research          — 6 numbered themes (ChapterMark register);
-                                             publications strip; innovations strip
-  /book                  Book              — cinematic; the marquee
-  /writing               Writing           — magazine TOC; hosted essays + external links
-  /contact               Contact           — clinical care · press · speaking inquiries
+## Site map
 
-SUB-PAGES (3 substantive, breadcrumbed back to their parents)
-  /research/publications List of all peer-reviewed papers + search + theme filter chips
-  /book/three-rules      Three Rules editorial deep-dive
-  /book/case-studies     Case-study editorial cards
-  /writing/:slug         Long-form article template (dynamic; NotFound until bodies populated)
+`SITE_ROUTES` in `src/data/site.ts` is the single source of truth for routing. It drives the navigation, breadcrumbs, related-page links, page titles, meta descriptions and the generated sitemap.
 
-FOOTER-LINKED
-  /giving                Three Sydney charity events (HBOT + Integrant in-kind support)
-  /*                     Designed NotFound (404)
-```
+| Route | Page |
+|---|---|
+| `/` | Home |
+| `/about` | Background, training and community work |
+| `/research` | Research themes |
+| `/research/publications` | Peer-reviewed publications, searchable and filterable |
+| `/book` | The book |
+| `/book/three-rules` | Editorial deep-dive |
+| `/book/case-studies` | Case studies from the book |
+| `/writing` | Essays and external writing |
+| `/writing/:slug` | Long-form article |
+| `/giving` | Charity events supported |
+| `/contact` | Clinical care, press and speaking enquiries |
 
-Every route is code-split via `React.lazy`, so the first paint on `/` doesn't ship the other
-routes' JS. Each route is wrapped in its own `<ErrorBoundary>` so a crash inside (say) `/book`
-no longer collapses Navbar, Footer, or any other route.
+To add a page, add an entry to `SITE_ROUTES` and register the lazy-loaded route in `src/App.tsx`. Navigation, breadcrumbs, metadata and the sitemap update on the next build.
 
-## Source tree
+## Project structure
 
 ```text
 src/
-  App.tsx                                # router shell + skip link + per-route ErrorBoundary
-  index.css                              # Tailwind import, theme tokens, View Transitions API,
-                                          # reduced-motion + print stylesheets
-  constants.ts                           # barrel re-export of src/data/*
-  types.ts                               # shared content types
-  data/
-    site.ts                              # SITE_ROUTES — canonical route table
-    identity.ts                          # DOCTOR_NAME, contact constants
-    background.ts                        # TRAINING, LEADERSHIP_ROLES, CAPABILITIES
-    book.ts                              # BOOK + BOOK_RULES + LIFE_FORCE + CASE_STUDIES
-    research/
-      themes.ts                          # 6 typed ResearchTheme objects
-      publications.ts                    # SELECTED_PUBLICATIONS + FULL_PUBLICATIONS (24 seed)
-      innovations.ts                     # patents · named devices · named techniques
-      body-of-work.ts                    # BODY_OF_WORK (legacy support)
-    writing.ts                           # ARTICLES
-    community.ts                         # COMMUNITY items + VISION_STATEMENT
-    giving.ts                            # GIVING_EVENTS + stats + copy
-    social.ts                            # SOCIAL_LINKS + FOOTER_DISCLAIMER
-  lib/
-    icons.ts                             # Lucide icon registry
-    utils.ts                             # cn() class merge helper
-    seo.ts                               # useDocumentTitle hook
-    site.ts                              # findRoute / parentOf / childrenOf / relatedRoutes
-                                          # / topNavRoutes / footerRoutes / breadcrumbsFor
-  templates/
-    PageShell.tsx                        # auto-wires title, breadcrumbs, see-also footer
-    PageHero.tsx                         # 3 variants — editorial / photo-led / type-only
-    Breadcrumbs.tsx                      # desktop chain · mobile back-chevron
-    SeeAlsoFooter.tsx                    # per-page "Continue" block from route.related[]
-    ListTemplate.tsx                     # typographic list + search + filter chips
-    ArticleTemplate.tsx                  # long-form reading flow with typed ArticleBlock[]
-    JsonLd.tsx                           # per-route structured-data injection
-  pages/
-    Home.tsx                             # /
-    About.tsx                            # /about
-    Book.tsx                             # /book — cinematic
-    Giving.tsx                           # /giving
-    Contact.tsx                          # /contact
-    NotFound.tsx                         # /*
-    research/
-      Index.tsx                          # /research
-      Publications.tsx                   # /research/publications
-    book/
-      ThreeRules.tsx                     # /book/three-rules
-      CaseStudies.tsx                    # /book/case-studies
-    writing/
-      Index.tsx                          # /writing
-      Article.tsx                        # /writing/:slug
-  components/
-    Hero · AboutSpotlight · CuratedTrio · LatestEssay · ClosingConnect   (home slots)
-    Navbar · Footer
-    ErrorBoundary · ScrollToTop · RouteFallback
-  components/ui/                         # primitives: Button · Card · Glow · Motion (Reveal)
-                                          # · EditorialImage · PullQuote · ChapterMark
-                                          # · ReadingProgress · StatStrip · Lede · Material
-                                          # · SectionHeading · PageEnterHairline
-                                          # · CursorCompanion
-public/
-  favicon.svg
-  portrait-gordon-slater-hero.webp        # blazer portrait — Hero
-  portrait-gordon-slater-about.webp       # scrubs arms-crossed portrait — About spread
-  book-cover-chaos-to-creation.webp       # real book cover (-480/-800/-1200 + .jpg fallback)
-  giving/                                 # partner logos + event hero images for /giving
-  robots.txt
-  sitemap.xml                             # auto-generated from SITE_ROUTES on every build
-docs/
-  voice-source-v0_1.md                    # canonical content KB this site is built from
+  App.tsx         Router shell, skip link, per-route error boundaries
+  index.css       Theme tokens, view transitions, reduced-motion and print styles
+  data/           Site content as typed modules (routes, identity, book, research, writing)
+  lib/            Helpers: icon registry, SEO hook, route lookups
+  templates/      Page shell, hero variants, breadcrumbs, list and article templates
+  pages/          One component per route
+  components/     Home-page sections, navigation, footer
+  components/ui/  Design-system primitives
+public/           Static assets, robots.txt and the generated sitemap
+docs/             Source material the site content is drawn from
 ```
 
-### Adding a new top-nav route
+All user-visible copy flows from the modules in `src/data/`, so content changes do not require component edits.
 
-Single field flip on a `SITE_ROUTES` entry:
+## Deployment
 
-```ts
-{ path: '/new-page', label: 'New page', title: '...', description: '...',
-  inTopNav: true, inFooter: false, related: ['/about', '/book'] }
-```
+The site is a static Vite single-page app. [`vercel.json`](vercel.json) sets the framework preset, the build command (`npm run build`), the output directory (`dist`), an `index.html` fallback so deep links survive a refresh, and long-lived cache headers for hashed assets. Continuous integration runs linting, type-checking and a build on every pull request.
 
-Then register the route in `App.tsx` (lazy-import + `<Route>`). Navbar, breadcrumbs (if
-`parent` is set), see-also (if `related` is set), `<title>`, meta, and `sitemap.xml` all
-update on the next build.
+## Compliance
 
-## What you need to supply (placeholder checklist)
+The site is governed by Australian frameworks.
 
-The site is built and ready; these items render today as clearly-marked placeholders. Replace
-them in `src/constants.ts` (and rebuild) — no component edits needed:
+- **AHPRA — Guidelines for advertising a regulated health service.** No testimonials, no comparative or superlative claims, and nothing that could create unrealistic expectations of treatment.
+- **TGA — Therapeutic Goods Advertising Code.** Device and innovation copy is factual and avoids therapeutic claims or consumer promotion of specific products. Clinical material is attributed to its published source.
+- **Privacy Act 1988 — Australian Privacy Principles.** The site has no forms and collects no personal information.
 
-- [x] ~~Book purchase URL~~ — done. `BOOK_FORMATS` (Hardcover · Paperback · Kindle) carries the
-      three real Amazon AU URLs.
-- [x] ~~Book cover image~~ — done. Real cover at `public/book-cover-chaos-to-creation.webp`,
-      with `-480.webp`, `-800.webp`, `-1200.webp` and a `.jpg` fallback for `<picture>`/`srcset`.
-- [x] ~~Verified social URLs~~ — done. `SOCIAL_LINKS` carries the four canonical accounts
-      (LinkedIn, X, YouTube, Instagram), each rendered with `rel="me noopener noreferrer"` for
-      verified-identity semantics and mirrored into `Person.sameAs` in `index.html` for
-      knowledge-graph entity linking. No public research profile (Scholar / ORCID / ResearchGate
-      / PubMed) is wired yet — drop one into `SOCIAL_LINKS` and `sameAs` when ready.
-- [ ] **Selected publications links** — `SELECTED_PUBLICATIONS` entries currently have no
-      `href` (titles render as plain text). Add `href` per entry so more titles resolve directly
-      to journal or reference pages.
-- [x] ~~Personal contact email~~ — `CONTACT_EMAIL` remains
-      `marketing@drgordonslater.com.au` (Adelaide Slater handles, per the KB).
-- [ ] **Real OG image** — `og:image`/`twitter:image` currently point at the portrait as a
-      stopgap; a purpose-built 1200×630 image is preferred. Per-route OG (e.g. cover image on
-      `/book`) needs a pre-rendering plugin — flagged as a TODO in `index.html`.
-- [ ] **Favicon** — `public/favicon.svg` is a "GS" monogram — replace if a brand mark exists.
-- [ ] **Domain & canonical** — set `VITE_SITE_URL` if the production domain differs from
-      `https://profgordonslater.com.au`.
-- [x] ~~Legal pages~~ — footer *Privacy / Disclaimer / Accessibility* links now resolve to real
-      internal pages.
+The footer disclaimer states that this is a personal site, that its content is not medical advice, and where to go for clinical care.
 
-### Cross-site work — not in this repo
+## Third-party marks
 
-The `/giving` page (and the *"Professor Slater is a proud supporter of …"* surface) is on this
-personal site only. The same treatment should be applied to two adjacent properties Sam owns:
+Partner logos and event imagery under `public/giving/` belong to their respective organisations. They are used only to identify the events supported, are unmodified beyond resizing and re-encoding, and link to each event's official page.
 
-- The **RegenU** site.
-- The **practice site** at `orthopaedic-surgeon.com.au` (WordPress / Elementor).
+## Licence
 
-### Partner logos & event imagery on `/giving`
-
-Logos and hero imagery in [`public/giving/`](public/giving/) belong to their respective
-organisations (the Ingham Institute, The Black & White Committee, the Australian Turf Club).
-They are used here only to identify the events Prof Slater supports, are not modified beyond
-resizing / WebP-encoding, and link back to each event's official page. If a partner asks for a
-specific treatment (or removal), swap the file at the same path or set the entry's `logo` /
-`heroBase` to `undefined` in `src/constants.ts` — the card gracefully falls back to a
-typographic chip. ATC ("Pink Luncheon") currently uses that chip fallback because the ATC site
-blocks automated image fetches; drop a `public/giving/pink-luncheon-logo.webp` and add a
-`heroBase` to upgrade it in place.
-
-## Content sourcing
-
-The site is built directly from a curated knowledge-base markdown — the source of truth lives
-in this repo at [`docs/voice-source-v0_1.md`](docs/voice-source-v0_1.md). It anchors every
-quote, paper title, training milestone, and editorial role to a public, defensible source.
-
-That KB also defines the **wall** for what stays *off* the public site (and therefore out of
-this codebase):
-
-- **No Integrant Pre-IPO / investor-restricted content.** No valuation figures, listing case,
-  raise mechanics, PPM/F-1 references, comparables, or walled-off product live-matter. The
-  TGA-sponsor experience is described abstractly only ("a fifteen-year personal record of
-  TGA-registered medical-device approvals") — no company brand on the personal site.
-- **No REGEN Healthcare references.**
-- **The 150–200-year framing is presented as Slater's hypothesis, not a clinical claim.**
-  The `/book` page surfaces this with the explicit "founder voice — not a treatment promise"
-  callout that the KB itself uses.
-
-When new KB content is approved, update `docs/voice-source-v0_1.md`, then propagate through
-`src/constants.ts` (everything user-visible flows from those constants).
-
-## Compliance — Australia
-
-This site is governed by Australian frameworks, not US ones.
-
-- **HIPAA does *not* apply.** HIPAA is United States legislation for Protected Health
-  Information; it has no force in Australia and no role here. (No PHI is collected anyway —
-  the site has no form.)
-- **AHPRA — *Guidelines for advertising a regulated health service*.** The site avoids
-  testimonials, comparative or superlative claims (e.g. "best", "leading"), and content that
-  could create unrealistic expectations. The display title *"Prof"* is supported — Slater is
-  Professor at the University of Technology Sydney per the KB §1 affiliation block.
-- **TGA — Therapeutic Goods Advertising Code.** Innovation / device copy is intentionally
-  factual and avoids therapeutic claims or consumer promotion of specific products. The book
-  page's clinical cases attribute every claim to the published paper or book reference.
-- **Privacy Act 1988 — Australian Privacy Principles.** The site collects no personal
-  information today (no form, no analytics). If analytics or a contact form are added, add a
-  short Privacy Policy and link it from the footer.
-- The footer disclaimer (`FOOTER_DISCLAIMER` in `src/constants.ts`) makes the personal-site
-  status, the no-medical-advice nature of the content, and the link to the practice for
-  clinical care explicit.
+No open-source licence is granted. All rights are reserved by the respective owners.
