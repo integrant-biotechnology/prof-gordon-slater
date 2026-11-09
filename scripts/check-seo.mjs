@@ -61,11 +61,20 @@ for (const file of walk(dist)) {
   const robots = metaContent(html, 'name', 'robots');
   const canonicals = all(html, /<link rel="canonical" href="([^"]*)"/g);
   const h1s = all(html, /<h1\b[^>]*>([\s\S]*?)<\/h1>/g);
-  const root = html.match(/<div id="root">([\s\S]*)<\/div>\s*<script/)?.[1] ?? '';
+  // Everything inside <div id="root"> … up to </body> (the bundler may
+  // put its module <script> in <head> or after #root; scripts are stripped).
+  const root = html.match(/<div id="root">([\s\S]*)<\/body>/)?.[1] ?? '';
   const text = root.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
   const noindex = robots.some((r) => r.includes('noindex'));
 
   if (html.includes('<!--app-head-->') || html.includes('<!--app-html-->')) err(rel, 'unfilled prerender placeholder');
+  // Production CSP is script-src 'self': any inline script other than
+  // JSON-LD data would be blocked, and a pending Suspense boundary
+  // (<!--$?-->) relies on one to reveal its content.
+  if (/<!--\$\?-->/.test(html)) err(rel, 'pending Suspense boundary in static HTML (content hidden until an inline script runs)');
+  for (const tag of all(html, /<script\b([^>]*)>/g))
+    if (!/\bsrc=/.test(tag) && !/type="application\/ld\+json"/.test(tag))
+      err(rel, `inline <script${tag}> would be blocked by the CSP (script-src 'self')`);
   if (titleTags.length !== 1) err(rel, `expected 1 <title>, found ${titleTags.length}`);
   if (descs.length !== 1) err(rel, `expected 1 meta description, found ${descs.length}`);
   if (robots.length !== 1) err(rel, `expected 1 meta robots, found ${robots.length}`);
