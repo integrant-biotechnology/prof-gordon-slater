@@ -24,9 +24,16 @@ import { cn } from '@/lib/utils';
  *    + slide registers (see index.css)
  */
 export const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const { pathname } = useLocation();
+  // The menu is "open for a path": navigating anywhere else closes it
+  // without a state update in an effect.
+  const [openOnPath, setOpenOnPath] = useState<string | null>(null);
+  const isOpen = openOnPath === pathname;
+  const setIsOpen = (next: boolean | ((open: boolean) => boolean)) => {
+    const value = typeof next === 'function' ? next(isOpen) : next;
+    setOpenOnPath(value ? pathname : null);
+  };
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const links = topNavRoutes();
 
@@ -36,11 +43,6 @@ export const Navbar = () => {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  // Close mobile menu on route change.
-  useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
 
   return (
     <nav aria-label="Primary" className="fixed inset-x-0 top-0 z-50">

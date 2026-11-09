@@ -34,7 +34,7 @@ interface ArticleTemplateProps {
  * Today (PR-1) this is a typed scaffold. PR-6 adopts it.
  */
 export const ArticleTemplate = ({ hero, progress, body }: ArticleTemplateProps) => {
-  let paragraphIndex = 0;
+  const firstParagraph = body.findIndex((block) => block.kind === 'paragraph');
 
   return (
     <>
@@ -44,8 +44,7 @@ export const ArticleTemplate = ({ hero, progress, body }: ArticleTemplateProps) 
       <article className="mx-auto max-w-3xl px-6 pb-24 md:pb-32">
         {body.map((block, i) => {
           if (block.kind === 'paragraph') {
-            const isFirst = paragraphIndex === 0;
-            paragraphIndex += 1;
+            const isFirst = i === firstParagraph;
             return (
               <Reveal key={i} delay={0.02}>
                 <p

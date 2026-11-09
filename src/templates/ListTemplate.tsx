@@ -85,7 +85,10 @@ export const ListTemplate = <T,>({
     </ol>
   );
 
-  let runningOffset = 0;
+  // Row-number offset of each group (sum of the groups before it).
+  const groupOffsets = (grouped ?? []).map((_, gi, all) =>
+    all.slice(0, gi).reduce((sum, g) => sum + g.items.length, 0),
+  );
 
   return (
   <div className="mx-auto max-w-5xl px-6">
@@ -157,9 +160,8 @@ export const ListTemplate = <T,>({
       </div>
     ) : grouped ? (
       <div className="space-y-14">
-        {grouped.map((group) => {
-          const offset = runningOffset;
-          runningOffset += group.items.length;
+        {grouped.map((group, gi) => {
+          const offset = groupOffsets[gi];
           return (
             <section key={group.label} aria-label={group.label}>
               <h3

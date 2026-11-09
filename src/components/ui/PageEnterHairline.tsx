@@ -8,28 +8,23 @@ import { useLocation } from 'react-router-dom';
  * Apple-grade "we noticed you arrived" acknowledgement. Calibrated,
  * not flashy — 1200ms total, hidden under `prefers-reduced-motion`.
  *
- * Re-triggers on every route change by keying off `location.pathname`
- * so the visitor gets the same quiet acknowledgement when they
- * navigate between rooms.
+ * Re-triggers on every route change: the line is keyed by
+ * `location.pathname`, so each navigation mounts a fresh instance.
  */
 export const PageEnterHairline = () => {
   const { pathname } = useLocation();
-  const [token, setToken] = useState(0);
+  return <Hairline key={pathname} />;
+};
 
-  // Re-mount the line on every route change by bumping a token.
-  useEffect(() => {
-    setToken((t) => t + 1);
-  }, [pathname]);
-
-  // Auto-hide after the animation completes so the element does not
-  // sit in the DOM blocking interactions.
+/** One scan. Removes itself once the animation has finished so it
+ *  never sits in the DOM blocking interactions. */
+const Hairline = () => {
   const [visible, setVisible] = useState(true);
   useEffect(() => {
-    setVisible(true);
     const t = window.setTimeout(() => setVisible(false), 1300);
     return () => window.clearTimeout(t);
-  }, [token]);
+  }, []);
 
   if (!visible) return null;
-  return <div key={token} aria-hidden="true" className="page-enter-hairline" />;
+  return <div aria-hidden="true" className="page-enter-hairline" />;
 };

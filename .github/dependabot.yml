@@ -8,6 +8,11 @@ updates:
     open-pull-requests-limit: 5
     labels:
       - dependencies
+    ignore:
+      # @types/node must track the Node runtime (.nvmrc / engines: 22.x),
+      # not the newest Node release. Bump its major with the runtime.
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
     groups:
       types:
         patterns:
