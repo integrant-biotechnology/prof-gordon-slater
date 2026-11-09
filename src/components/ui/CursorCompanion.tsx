@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import { motion, useReducedMotion, useSpring } from 'motion/react';
 
 /**
@@ -20,22 +20,23 @@ import { motion, useReducedMotion, useSpring } from 'motion/react';
  *  - Position rendered via transform translate3d so it composites
  *    onto its own layer (avoids paint thrashing during mouse move).
  */
+const FINE_POINTER = '(hover: hover) and (pointer: fine)';
+const isFinePointer = () => window.matchMedia(FINE_POINTER).matches;
+const subscribeFinePointer = (onChange: () => void) => {
+  const mq = window.matchMedia(FINE_POINTER);
+  mq.addEventListener('change', onChange);
+  return () => mq.removeEventListener('change', onChange);
+};
+
 export const CursorCompanion = () => {
   const reduceMotion = useReducedMotion();
-  const [enabled, setEnabled] = useState(false);
+  // Hover-capable device check (touch / coarse-pointer devices get
+  // nothing). Server snapshot is false so the pre-rendered HTML and the
+  // hydrating render agree; the real value applies right after.
+  const enabled = useSyncExternalStore(subscribeFinePointer, isFinePointer, () => false);
   const [hovering, setHovering] = useState(false);
   const x = useSpring(0, { stiffness: 350, damping: 28, mass: 0.4 });
   const y = useSpring(0, { stiffness: 350, damping: 28, mass: 0.4 });
-
-  useEffect(() => {
-    // Hover-capable device check. Touch devices (and OS-level
-    // pointer-coarse environments) get nothing.
-    const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
-    setEnabled(mq.matches);
-    const onChange = () => setEnabled(mq.matches);
-    mq.addEventListener('change', onChange);
-    return () => mq.removeEventListener('change', onChange);
-  }, []);
 
   useEffect(() => {
     if (!enabled || reduceMotion) return;

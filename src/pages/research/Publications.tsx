@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 import { PageShell } from '@/templates/PageShell';
@@ -6,6 +6,7 @@ import { PageHero } from '@/templates/PageHero';
 import { ListTemplate, type ListFilter } from '@/templates/ListTemplate';
 import { Reveal } from '@/components/ui/Motion';
 import { findRoute } from '@/lib/site';
+import { useHydrated } from '@/lib/use-hydrated';
 import { BOOK_CHAPTERS, FULL_PUBLICATIONS, RESEARCH_THEMES } from '@/constants';
 import type { Publication } from '@/types';
 
@@ -25,17 +26,18 @@ const Publications = () => {
   const [searchParams] = useSearchParams();
   // Deep-links from /research theme sections preselect their filter
   // via ?theme=<slug>; unknown slugs fall back to "all".
-  // Applied after mount, not in the useState initialiser: the page is
-  // pre-rendered without a query string, so reading it during the
-  // first render would make the hydrated markup disagree with the
-  // static HTML.
+  // The page is pre-rendered without a query string, so ?theme= only
+  // applies once hydrated — the first client render then matches the
+  // static HTML exactly.
+  const hydrated = useHydrated();
   const themeParam = searchParams.get('theme');
-  const [filter, setFilter] = useState<string>('all');
+  const urlFilter =
+    hydrated && themeParam && RESEARCH_THEMES.some((t) => t.slug === themeParam) ? themeParam : 'all';
+  // A chip the visitor clicks wins until the ?theme= in the URL changes.
+  const [chosen, setChosen] = useState<{ param: string | null; value: string } | null>(null);
+  const filter = chosen && chosen.param === themeParam ? chosen.value : urlFilter;
+  const setFilter = (value: string) => setChosen({ param: themeParam, value });
   const [query, setQuery] = useState<string>('');
-
-  useEffect(() => {
-    if (themeParam && RESEARCH_THEMES.some((t) => t.slug === themeParam)) setFilter(themeParam);
-  }, [themeParam]);
 
   const filters: ListFilter[] = useMemo(
     () => [
