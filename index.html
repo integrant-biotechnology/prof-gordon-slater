@@ -4,45 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Prof Gordon Slater | Personal site</title>
-    <meta
-      name="description"
-      content="The personal site of Prof Gordon Slater — foot &amp; ankle orthopaedic surgeon, Professor at the University of Technology Sydney, and author of Chaos to Creation: Longevity and Regeneration Frontiers (9 April 2026). A factual record of his publications, devices, writing, and support for Australian medical research. Not a clinic."
-    />
     <meta name="theme-color" content="#0a0a0c" />
-    <link rel="canonical" href="%VITE_SITE_URL%/" />
+
+    <!-- Per-page title, description, canonical, robots, Open Graph,
+         Twitter and JSON-LD are written here at build time by
+         scripts/prerender.mjs from SITE_ROUTES (src/lib/seo.ts +
+         src/lib/structured-data.ts). Do not hand-add any of them:
+         every page would inherit the duplicate. -->
+    <!--app-head-->
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="profile" />
-    <meta property="og:site_name" content="Prof Gordon Slater" />
-    <meta property="og:title" content="Prof Gordon Slater | Personal site" />
-    <meta
-      property="og:description"
-      content="Surgery, research, medical-device development, writing, and support for Australian medical research — and the book Chaos to Creation. A factual personal hub for Prof Gordon Slater. Not a clinic."
-    />
-    <meta property="og:url" content="%VITE_SITE_URL%/" />
-    <meta property="og:locale" content="en_AU" />
-    <meta property="og:image" content="%VITE_SITE_URL%/og-card.png?v=1" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Prof Gordon Slater — Orthopaedic Surgeon, Researcher and Author" />
-    <meta property="profile:first_name" content="Gordon" />
-    <meta property="profile:last_name" content="Slater" />
-    <!-- TODO: per-route OG (e.g. swap to the book cover for /book) requires
-         pre-rendering / SSR, which this SPA build does not yet do. -->
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Prof Gordon Slater | Personal site" />
-    <meta
-      name="twitter:description"
-      content="Surgery, research, medical-device development and writing — a personal hub for Prof Gordon Slater."
-    />
-    <meta name="twitter:image" content="%VITE_SITE_URL%/og-card.png?v=1" />
 
     <!-- Fonts — Fraunces (display) + Inter (body). Fraunces is a variable
          font with optical-size and SOFT axes; we load the variable file
@@ -60,48 +33,9 @@
       href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,30..70;1,9..144,300..700,30..70&family=Inter:wght@400;500;600&display=swap"
     />
 
-    <!-- Baseline Person JSON-LD — universal site identity. Crawlers that
-         don't execute JS see this; the per-page <JsonLd> components inject
-         additional schemas (Book, ItemList of events, ScholarlyArticle
-         collection) on the routes they apply to. -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Prof Gordon Slater",
-        "image": "%VITE_SITE_URL%/portrait-gordon-slater-hero.jpg?v=4",
-        "description": "Foot & ankle orthopaedic surgeon, researcher, medical-device innovator and author.",
-        "jobTitle": "Specialist Foot & Ankle Orthopaedic Surgeon",
-        "url": "%VITE_SITE_URL%",
-        "alumniOf": {
-          "@type": "CollegeOrUniversity",
-          "name": "University of New South Wales"
-        },
-        "worksFor": {
-          "@type": "CollegeOrUniversity",
-          "name": "University of Technology Sydney"
-        },
-        "knowsAbout": [
-          "Foot and ankle surgery",
-          "Minimally invasive orthopaedic surgery",
-          "Regenerative orthopaedics",
-          "Hyperbaric oxygen therapy",
-          "Medical-device innovation",
-          "Aging biology",
-          "Sports injuries"
-        ],
-        "sameAs": [
-          "https://chaostocreation.com.au",
-          "https://www.linkedin.com/in/drgordonslater/",
-          "https://x.com/drgordonslater",
-          "https://www.youtube.com/@profgordonslater",
-          "https://www.instagram.com/profgordonslater/"
-        ]
-      }
-    </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"><!--app-html--></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

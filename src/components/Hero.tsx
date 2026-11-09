@@ -42,22 +42,26 @@ export const Hero = () => {
       <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 md:grid-cols-12 md:gap-16">
         {/* Sentence column — 7/12 at desktop, full-width on mobile. */}
         <div className="md:col-span-7">
-          <Reveal>
-            <p className="eyebrow">Professor Gordon Slater</p>
-          </Reveal>
-
-          <Reveal delay={0.05}>
-            <p
-              className="mt-4 font-medium text-white/85"
-              style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.02em' }}
-            >
-              Orthopaedic Surgeon, Researcher and Author
-            </p>
-          </Reveal>
+          {/* The page's one <h1> carries the name and specialty — the
+              words people search for. Visually it is unchanged: the
+              same eyebrow + subtitle lines, now one heading. */}
+          <h1 id="hero-heading">
+            <Reveal as="span" className="block">
+              <span className="eyebrow block">Professor Gordon Slater</span>
+            </Reveal>
+            <span className="sr-only"> — </span>
+            <Reveal as="span" delay={0.05} className="block">
+              <span
+                className="mt-4 block font-medium text-white/85"
+                style={{ fontSize: 'var(--text-meta)', letterSpacing: '0.02em' }}
+              >
+                Foot &amp; Ankle Orthopaedic Surgeon, Researcher and Author
+              </span>
+            </Reveal>
+          </h1>
 
           <Reveal delay={0.1}>
-            <h1
-              id="hero-heading"
+            <p
               className="mt-7 text-balance font-display font-medium"
               style={{
                 fontSize: 'var(--text-hero)',
@@ -72,7 +76,7 @@ export const Hero = () => {
               >
                 being written today.
               </em>
-            </h1>
+            </p>
           </Reveal>
 
           <Reveal delay={0.2}>

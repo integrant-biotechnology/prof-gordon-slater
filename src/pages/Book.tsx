@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, ArrowUpRight, Quote } from 'lucide-react';
 import { BookCover } from '@/components/ui/BookCover';
@@ -7,8 +6,6 @@ import { ChapterMark } from '@/components/ui/ChapterMark';
 import { PullQuote } from '@/components/ui/PullQuote';
 import { ReadingProgress } from '@/components/ui/ReadingProgress';
 import { Reveal } from '@/components/ui/Motion';
-import { JsonLd } from '@/templates/JsonLd';
-import { siteUrl } from '@/lib/site-origin';
 import {
   BOOK,
   BOOK_ENDORSEMENTS,
@@ -17,33 +14,8 @@ import {
   BOOK_INSIDE,
   BOOK_RULES,
   CASE_STUDIES,
-  DOCTOR_NAME,
   LIFE_FORCE,
 } from '@/constants';
-
-const BOOK_LD = {
-  '@context': 'https://schema.org',
-  '@type': 'Book',
-  name: 'Chaos to Creation',
-  alternateName: 'Longevity and Regeneration Frontiers',
-  author: {
-    '@type': 'Person',
-    name: 'Professor Gordon Slater',
-    url: siteUrl(''),
-  },
-  datePublished: '2026-04-09',
-  inLanguage: 'en-AU',
-  image: siteUrl('/book-cover-chaos-to-creation.webp'),
-  bookFormat: ['Hardcover', 'Paperback', 'EBook'],
-  url: 'https://chaostocreation.com.au',
-  mainEntityOfPage: siteUrl('/book'),
-  sameAs: [
-    'https://chaostocreation.com.au',
-    'https://www.amazon.com.au/Chaos-Creation-Prof-Gordon-Slater/dp/B0GWTSZN7M',
-    'https://www.amazon.com.au/Chaos-Creation-Prof-Gordon-Slater/dp/B0GWTQFMSP',
-    'https://www.amazon.com.au/Chaos-Creation-Prof-Gordon-Slater-ebook/dp/B0GWTGTHBN',
-  ],
-};
 
 const FOUR_QUESTIONS = [
   'What can we address with the data at hand?',
@@ -73,16 +45,8 @@ const EPILOGUE_POINTS = [
 ];
 
 const Book = () => {
-  useEffect(() => {
-    document.title = `${BOOK.title}: ${BOOK.subtitle} | ${DOCTOR_NAME}`;
-    return () => {
-      document.title = `${DOCTOR_NAME} | Personal site`;
-    };
-  }, []);
-
   return (
     <>
-      <JsonLd data={BOOK_LD} id="ld-book" />
       <ReadingProgress />
       <BookHero />
       <InsideThisBook />

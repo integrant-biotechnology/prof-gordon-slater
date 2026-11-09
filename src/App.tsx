@@ -1,5 +1,6 @@
 import { lazy, Suspense, type ComponentType, type ReactElement } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { RouteMeta } from '@/lib/seo';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -41,9 +42,16 @@ const guard = (Component: ComponentType): ReactElement => (
   </ErrorBoundary>
 );
 
-export default function App() {
+/**
+ * AppShell — everything inside the router. Shared by the browser
+ * entry (BrowserRouter, below) and the build-time pre-renderer
+ * (src/entry-server.tsx, StaticRouter), so the HTML Google receives
+ * is exactly the tree React hydrates.
+ */
+export function AppShell() {
   return (
-    <BrowserRouter>
+    <>
+      <RouteMeta />
       <ScrollToTop />
       <PageEnterHairline />
       <CursorCompanion />
@@ -78,6 +86,14 @@ export default function App() {
 
         <Footer />
       </div>
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppShell />
     </BrowserRouter>
   );
 }

@@ -1,9 +1,7 @@
-import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Reveal } from '@/components/ui/Motion';
 import { Glow } from '@/components/ui/Glow';
-import { DOCTOR_NAME } from '@/constants';
 
 /**
  * NotFound — Apple-grade 404.
@@ -15,13 +13,6 @@ import { DOCTOR_NAME } from '@/constants';
  * arrived somewhere considered, not somewhere broken.
  */
 const NotFound = () => {
-  useEffect(() => {
-    document.title = `Page not found | ${DOCTOR_NAME}`;
-    return () => {
-      document.title = `${DOCTOR_NAME} | Personal site`;
-    };
-  }, []);
-
   return (
     <section
       aria-labelledby="not-found-heading"
