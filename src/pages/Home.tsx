@@ -7,7 +7,7 @@ import { BookShowcase } from '@/components/home/BookShowcase';
 import { AboutSpotlight } from '@/components/AboutSpotlight';
 import { LatestEssay } from '@/components/LatestEssay';
 import { ClosingConnect } from '@/components/ClosingConnect';
-import { DOCTOR_NAME, DOCTOR_TITLE } from '@/constants';
+import { DOCTOR_TITLE } from '@/constants';
 
 /**
  * Home — the credibility → expertise → thought leadership → action arc.
@@ -22,11 +22,6 @@ import { DOCTOR_NAME, DOCTOR_TITLE } from '@/constants';
  */
 const Home = () => {
   const { hash, pathname } = useLocation();
-
-  // per-route document title
-  useEffect(() => {
-    document.title = `${DOCTOR_NAME} | Personal site`;
-  }, []);
 
   // hash navigation that works cross-route (e.g. /book → "/#explore" → /, scroll)
   useEffect(() => {

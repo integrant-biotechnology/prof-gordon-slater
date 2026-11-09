@@ -15,7 +15,7 @@ legible contrast; all looping motion is disabled for visitors who prefer reduced
 ## Tech stack
 
 - **React 19** + **TypeScript**
-- **Vite 6** — with an inline plugin that regenerates `public/sitemap.xml` from `SITE_ROUTES` on every build (see `vite.config.ts`)
+- **Vite 6** — plus a build-time pre-render that writes every page as static HTML, with `sitemap.xml` and `robots.txt` generated from `SITE_ROUTES` (see "Search (SEO) pipeline")
 - **react-router-dom v7** — ten substantive routes (see "Information architecture" below); every internal `<Link>` opts into the **View Transitions API** for cross-route cross-fades
 - **Tailwind CSS v4** (`@tailwindcss/vite`, theme tokens in `src/index.css`)
 - **Motion** (`motion/react`) — subtle reveal and ambient animations; every primitive respects `prefers-reduced-motion`
@@ -99,7 +99,7 @@ src/
     book.ts                              # BOOK + BOOK_RULES + LIFE_FORCE + CASE_STUDIES
     research/
       themes.ts                          # 6 typed ResearchTheme objects
-      publications.ts                    # SELECTED_PUBLICATIONS + FULL_PUBLICATIONS (24 seed)
+      publications.ts                    # SELECTED_PUBLICATIONS + FULL_PUBLICATIONS (55, from the CV)
       innovations.ts                     # patents · named devices · named techniques
       body-of-work.ts                    # BODY_OF_WORK (legacy support)
     writing.ts                           # ARTICLES
@@ -109,17 +109,18 @@ src/
   lib/
     icons.ts                             # Lucide icon registry
     utils.ts                             # cn() class merge helper
-    seo.ts                               # useDocumentTitle hook
+    seo.ts                               # metaFor(path) + <RouteMeta> — per-page <head>
+    structured-data.ts                   # graphFor(path) — JSON-LD graph (build-time only)
+    head-html.ts                         # headFor(path) — <head> HTML for the prerenderer
     site.ts                              # findRoute / parentOf / childrenOf / relatedRoutes
                                           # / topNavRoutes / footerRoutes / breadcrumbsFor
   templates/
-    PageShell.tsx                        # auto-wires title, breadcrumbs, see-also footer
+    PageShell.tsx                        # auto-wires breadcrumbs, see-also footer
     PageHero.tsx                         # 3 variants — editorial / photo-led / type-only
     Breadcrumbs.tsx                      # desktop chain · mobile back-chevron
     SeeAlsoFooter.tsx                    # per-page "Continue" block from route.related[]
     ListTemplate.tsx                     # typographic list + search + filter chips
     ArticleTemplate.tsx                  # long-form reading flow with typed ArticleBlock[]
-    JsonLd.tsx                           # per-route structured-data injection
   pages/
     Home.tsx                             # /
     About.tsx                            # /about
@@ -151,8 +152,6 @@ public/
   portrait-gordon-slater-about.webp       # scrubs arms-crossed portrait — About spread
   book-cover-chaos-to-creation.webp       # real book cover (-480/-800/-1200 + .jpg fallback)
   giving/                                 # partner logos + event hero images for /giving
-  robots.txt
-  sitemap.xml                             # auto-generated from SITE_ROUTES on every build
 docs/
   voice-source-v0_1.md                    # canonical content KB this site is built from
 ```
@@ -167,8 +166,34 @@ Single field flip on a `SITE_ROUTES` entry:
 ```
 
 Then register the route in `App.tsx` (lazy-import + `<Route>`). Navbar, breadcrumbs (if
-`parent` is set), see-also (if `related` is set), `<title>`, meta, and `sitemap.xml` all
-update on the next build.
+`parent` is set), see-also (if `related` is set), `<title>`, meta, canonical, JSON-LD, the
+pre-rendered HTML file and `sitemap.xml` all update on the next build. Set `noindex: true`
+to keep a page out of search results and the sitemap.
+
+### Search (SEO) pipeline
+
+`npm run build` does four things; Vercel runs the same command on every deploy:
+
+1. `vite build` — the client bundle → `dist/`.
+2. `vite build --ssr src/entry-server.tsx` — a server bundle of the same app.
+3. `scripts/prerender.mjs` — renders every `SITE_ROUTES` path to `dist/<path>.html`
+   with the full page body and that page's own `<head>` (title, description,
+   self-canonical, robots, Open Graph, JSON-LD), plus `dist/404.html`,
+   `dist/sitemap.xml` and `dist/robots.txt`. Vercel's `cleanUrls` serves
+   `dist/about.html` at `/about`; unknown URLs get `404.html` with a real 404 status.
+4. `scripts/check-seo.mjs` — the SEO gate. The build **fails** if any page has a
+   missing/duplicate/over-long title or description, a canonical that isn't its own
+   URL, not exactly one `<h1>`, an empty body, invalid JSON-LD, AHPRA-restricted
+   wording (best, leading, testimonial…), or if the sitemap and pages disagree.
+
+The browser then hydrates the pre-rendered HTML; `<RouteMeta>` keeps the head in sync
+on client-side navigation. `npm run preview` serves `dist/` like production (real files,
+real 404s). Never hand-add `<title>`, canonical, OG or JSON-LD to `index.html` — every
+page would inherit the duplicate.
+
+The canonical host is `SITE_ORIGIN` (`src/lib/site-origin.ts`, overridable with
+`VITE_SITE_URL`). It must match the **primary domain** in Vercel → Domains, with the other
+host redirecting to it.
 
 ## What you need to supply (placeholder checklist)
 

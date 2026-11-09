@@ -1,13 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 import { PageShell } from '@/templates/PageShell';
 import { PageHero } from '@/templates/PageHero';
 import { ListTemplate, type ListFilter } from '@/templates/ListTemplate';
-import { JsonLd } from '@/templates/JsonLd';
 import { Reveal } from '@/components/ui/Motion';
 import { findRoute } from '@/lib/site';
-import { siteUrl } from '@/lib/site-origin';
 import { BOOK_CHAPTERS, FULL_PUBLICATIONS, RESEARCH_THEMES } from '@/constants';
 import type { Publication } from '@/types';
 
@@ -16,44 +14,28 @@ const decadeOf = (p: Publication) => `${Math.floor(Number(p.year ?? 0) / 10) * 1
 
 const DECADE_ORDER = ['2020s', '2010s', '2000s', '1990s'];
 
-const PUBLICATIONS_LD = {
-  '@context': 'https://schema.org',
-  '@type': 'ItemList',
-  name: 'Selected peer-reviewed publications by Prof Gordon Slater',
-  url: siteUrl('/research/publications'),
-  itemListElement: FULL_PUBLICATIONS.slice()
-    .reverse()
-    .map((p, i) => ({
-      '@type': 'ListItem',
-      position: i + 1,
-      item: {
-        '@type': 'ScholarlyArticle',
-        headline: p.title,
-        ...(p.venue && { publisher: p.venue }),
-        ...(p.year && { datePublished: p.year }),
-        author: { '@type': 'Person', name: 'Prof Gordon Slater' },
-      },
-    })),
-};
-
 /**
  * /research/publications — full publications listing.
  *
  * Page character (plan §B): pure typographic, no photos. Search
  * field + filter chips for the six themes. Listed newest-first.
- *
- * Today 24 papers ship; the remaining ~36 land in a content PR.
  */
 const Publications = () => {
   const route = findRoute('/research/publications');
   const [searchParams] = useSearchParams();
   // Deep-links from /research theme sections preselect their filter
   // via ?theme=<slug>; unknown slugs fall back to "all".
+  // Applied after mount, not in the useState initialiser: the page is
+  // pre-rendered without a query string, so reading it during the
+  // first render would make the hydrated markup disagree with the
+  // static HTML.
   const themeParam = searchParams.get('theme');
-  const initialFilter =
-    themeParam && RESEARCH_THEMES.some((t) => t.slug === themeParam) ? themeParam : 'all';
-  const [filter, setFilter] = useState<string>(initialFilter);
+  const [filter, setFilter] = useState<string>('all');
   const [query, setQuery] = useState<string>('');
+
+  useEffect(() => {
+    if (themeParam && RESEARCH_THEMES.some((t) => t.slug === themeParam)) setFilter(themeParam);
+  }, [themeParam]);
 
   const filters: ListFilter[] = useMemo(
     () => [
@@ -93,7 +75,6 @@ const Publications = () => {
 
   return (
     <PageShell route={route}>
-      <JsonLd data={PUBLICATIONS_LD} id="ld-publications" />
       <PageHero
         variant="type-only"
         kicker="Research / Publications"

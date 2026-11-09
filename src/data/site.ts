@@ -6,9 +6,12 @@
 //   - Footer (resources column rendering)
 //   - <Breadcrumbs> (parent chain for sub-pages)
 //   - <SeeAlsoFooter> (per-page related links block)
-//   - useDocumentTitle (per-page <title> + meta description)
-//   - scripts/generate-sitemap.mjs (sitemap.xml at build time)
-//   - <JsonLd> (per-page structured data)
+//   - src/lib/seo.ts metaFor() → <head> tags (pre-rendered at build
+//     time by scripts/prerender.mjs, kept in sync on client navigation
+//     by <RouteMeta>)
+//   - src/lib/structured-data.ts graphFor() → per-page JSON-LD
+//   - scripts/prerender.mjs → dist/<path>/index.html + sitemap.xml
+//   - scripts/check-seo.mjs → build-failing SEO gate
 //
 // Touched in every PR from PR-2 onwards as new pages register.
 // -------------------------------------------------------------
@@ -30,8 +33,15 @@ export interface SiteRoute {
   parent?: string;
   /** Paths shown in the per-page "See also" block. 2–3 recommended. */
   related?: string[];
-  /** Per-route OG image. Reserved for a later route-level metadata pass. */
+  /** Per-route OG image (site-relative path). Defaults to /og-card.png. */
   ogImage?: string;
+  /** Alt text for ogImage. Required whenever ogImage is set. */
+  ogImageAlt?: string;
+  /**
+   * Keep out of search results (robots noindex,follow) and out of
+   * sitemap.xml. Used for legal boilerplate pages.
+   */
+  noindex?: boolean;
 }
 
 /**
@@ -50,9 +60,9 @@ export const SITE_ROUTES: SiteRoute[] = [
   {
     path: '/',
     label: 'Home',
-    title: 'Prof Gordon Slater | Personal site',
+    title: 'Prof Gordon Slater — Foot & Ankle Orthopaedic Surgeon Sydney',
     description:
-      'Prof Gordon Slater — leading orthopaedic surgeon, regenerative-medicine researcher, Professor at UTS, and author of Chaos to Creation. Thirty years, more than fifty papers.',
+      'Prof Gordon Slater is a Sydney foot & ankle orthopaedic surgeon, Professor at UTS, regenerative-medicine researcher and author of Chaos to Creation.',
     inTopNav: true,
     inFooter: false,
     related: ['/about', '/book', '/contact'],
@@ -60,9 +70,9 @@ export const SITE_ROUTES: SiteRoute[] = [
   {
     path: '/about',
     label: 'About',
-    title: 'About | Prof Gordon Slater',
+    title: 'About Prof Gordon Slater — Surgeon, Professor, Author',
     description:
-      'Bio, training, editorial roles, and research collaborators of Prof Gordon Slater — foot & ankle orthopaedic surgeon and Professor at UTS.',
+      'Biography of Prof Gordon Slater: UNSW-trained foot & ankle orthopaedic surgeon, HSS New York fellow, Professor at UTS, journal editor and author.',
     inTopNav: true,
     inFooter: false,
     related: ['/research', '/book', '/contact'],
@@ -70,9 +80,9 @@ export const SITE_ROUTES: SiteRoute[] = [
   {
     path: '/research',
     label: 'Research',
-    title: 'Research | Prof Gordon Slater',
+    title: 'Regenerative Orthopaedics Research | Prof Gordon Slater',
     description:
-      'Six research themes spanning foot & ankle surgery, orthobiologics, stem cells & regenerative medicine, HBOT, aging biology, and AI in medicine.',
+      'Prof Gordon Slater’s research: foot & ankle surgery, orthobiologics, stem cells and regenerative medicine, hyperbaric oxygen, aging biology and AI.',
     inTopNav: true,
     inFooter: false,
     related: ['/research/publications', '/book', '/about'],
@@ -80,9 +90,9 @@ export const SITE_ROUTES: SiteRoute[] = [
   {
     path: '/research/publications',
     label: 'Publications',
-    title: 'Publications | Prof Gordon Slater',
+    title: 'Peer-Reviewed Publications | Prof Gordon Slater',
     description:
-      'Selected peer-reviewed publications by Prof Gordon Slater (2003–2026) across surgery, orthobiologics, HBOT, regenerative medicine, and AI in medicine.',
+      'Peer-reviewed papers by Prof Gordon Slater (1993–2026) on foot & ankle surgery, orthobiologics, HBOT, regenerative medicine and AI in medicine.',
     inTopNav: false,
     inFooter: false,
     parent: '/research',
@@ -91,9 +101,11 @@ export const SITE_ROUTES: SiteRoute[] = [
   {
     path: '/book',
     label: 'Book',
-    title: 'Chaos to Creation | Prof Gordon Slater',
+    title: 'Chaos to Creation: Longevity & Regeneration | Gordon Slater',
     description:
-      'Chaos to Creation: Longevity and Regeneration Frontiers — Prof Gordon Slater’s book on lifespan as a modifiable outcome. Official site: chaostocreation.com.au.',
+      'Chaos to Creation: Longevity and Regeneration Frontiers — the book by Prof Gordon Slater on aging, regenerative medicine and lifespan.',
+    ogImage: '/book-cover-chaos-to-creation.jpg',
+    ogImageAlt: 'Chaos to Creation by Prof Gordon Slater — book cover',
     inTopNav: true,
     inFooter: false,
     related: ['/book/three-rules', '/book/case-studies', '/research'],
@@ -101,9 +113,9 @@ export const SITE_ROUTES: SiteRoute[] = [
   {
     path: '/book/three-rules',
     label: 'Three Rules',
-    title: 'The Three Rules | Chaos to Creation',
+    title: 'The Three Rules — Chaos to Creation by Gordon Slater',
     description:
-      'The three claims the book rests on — life drifts toward degeneration; biologic inertia must be overcome; lifespan is an energy balance, not a clock.',
+      'The three rules behind Chaos to Creation: life drifts toward degeneration, biologic inertia must be overcome, and lifespan is an energy balance.',
     inTopNav: false,
     inFooter: false,
     parent: '/book',
@@ -112,9 +124,9 @@ export const SITE_ROUTES: SiteRoute[] = [
   {
     path: '/book/case-studies',
     label: 'Case studies',
-    title: 'Case Studies | Chaos to Creation',
+    title: 'Case Studies — Chaos to Creation by Gordon Slater',
     description:
-      'Two factual clinical-case panels referenced in Chaos to Creation — talus reconstitution via autologous stem cells, and HBOT-assisted healing of a Brooker-4 diabetic ulcer.',
+      'Two clinical cases from Chaos to Creation: talus reconstitution with autologous stem cells, and HBOT-assisted healing of a Brooker-4 diabetic ulcer.',
     inTopNav: false,
     inFooter: false,
     parent: '/book',
@@ -123,9 +135,9 @@ export const SITE_ROUTES: SiteRoute[] = [
   {
     path: '/writing',
     label: 'Writing',
-    title: 'Writing | Prof Gordon Slater',
+    title: 'Writing on Foot & Ankle Surgery | Prof Gordon Slater',
     description:
-      'Essays and commentary by Prof Gordon Slater — long-form pieces on foot & ankle surgery, regenerative orthopaedics, HBOT, and the research behind current practice.',
+      'Articles by Prof Gordon Slater on ankle arthritis, plantar fibroma, diabetic foot care, limb salvage, stem cells and regenerative orthopaedics.',
     inTopNav: true,
     inFooter: false,
     related: ['/research', '/book', '/about'],
@@ -133,9 +145,9 @@ export const SITE_ROUTES: SiteRoute[] = [
   {
     path: '/contact',
     label: 'Contact',
-    title: 'Contact | Prof Gordon Slater',
+    title: 'Contact Prof Gordon Slater — Research, Media & Speaking',
     description:
-      'Work with Prof Gordon Slater — clinical enquiries via the practice site, research & collaboration, and speaking & media. Three clear pathways.',
+      'Contact Prof Gordon Slater for research collaboration, speaking and media. Clinical appointments are arranged through his practice website.',
     inTopNav: true,
     inFooter: false,
     related: ['/about', '/book'],
@@ -143,9 +155,9 @@ export const SITE_ROUTES: SiteRoute[] = [
   {
     path: '/giving',
     label: 'Giving',
-    title: 'Giving | Prof Gordon Slater',
+    title: 'Giving — Sydney Medical-Research Charities | Gordon Slater',
     description:
-      'Three Sydney charity events Prof Gordon Slater supports — funding breast-cancer, cardiovascular, and vision research through in-kind donations.',
+      'Three Sydney charity events Prof Gordon Slater supports, helping fund breast-cancer, cardiovascular and vision research through in-kind donations.',
     inTopNav: true,
     inFooter: true,
     related: ['/about', '/book', '/contact'],
@@ -156,6 +168,7 @@ export const SITE_ROUTES: SiteRoute[] = [
     title: 'Privacy | Prof Gordon Slater',
     description:
       'Privacy information for Prof Gordon Slater’s personal website — no forms, no analytics, and no collection of personal information today.',
+    noindex: true,
     inTopNav: false,
     inFooter: false,
     related: ['/contact', '/disclaimer', '/accessibility'],
@@ -166,6 +179,7 @@ export const SITE_ROUTES: SiteRoute[] = [
     title: 'Disclaimer | Prof Gordon Slater',
     description:
       'General-information disclaimer for Prof Gordon Slater’s personal website, including the separation from clinical care and the practice site.',
+    noindex: true,
     inTopNav: false,
     inFooter: false,
     related: ['/privacy', '/contact', '/accessibility'],

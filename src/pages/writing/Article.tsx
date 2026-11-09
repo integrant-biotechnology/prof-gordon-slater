@@ -34,7 +34,7 @@ const Article = () => {
 
   // Forward-ready — reached only when an ARTICLES entry gains body.
   return (
-    <main id="content" className="px-6 py-32">
+    <div id="content" className="px-6 py-32">
       <article className="mx-auto max-w-3xl">
         <p
           className="text-medical-teal/85"
@@ -58,7 +58,7 @@ const Article = () => {
           {article.title}
         </h1>
       </article>
-    </main>
+    </div>
   );
 };
 

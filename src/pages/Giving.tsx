@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ArrowUpRight, Eye, Heart, Sparkles } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
@@ -6,48 +5,16 @@ import type { GivingEvent } from '@/types';
 import { Card } from '@/components/ui/Card';
 import { Glow } from '@/components/ui/Glow';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { JsonLd } from '@/templates/JsonLd';
-import { siteUrl } from '@/lib/site-origin';
 import {
-  DOCTOR_NAME,
   GIVING_CLOSE,
   GIVING_EVENTS,
   GIVING_INTRO,
   GIVING_PLEDGE,
 } from '@/constants';
 
-const GIVING_LD = {
-  '@context': 'https://schema.org',
-  '@type': 'ItemList',
-  name: 'Sydney charity events supported by Prof Gordon Slater',
-  url: siteUrl('/giving'),
-  itemListElement: GIVING_EVENTS.map((event, i) => ({
-    '@type': 'ListItem',
-    position: i + 1,
-    item: {
-      '@type': 'Event',
-      name: event.name,
-      description: event.blurb,
-      url: event.eventUrl,
-      location: { '@type': 'Place', name: 'Sydney' },
-      ...(event.beneficiary && {
-        organizer: { '@type': 'Organization', name: event.beneficiary },
-      }),
-    },
-  })),
-};
-
 const Giving = () => {
-  useEffect(() => {
-    document.title = `Giving back | ${DOCTOR_NAME}`;
-    return () => {
-      document.title = `${DOCTOR_NAME} | Personal site`;
-    };
-  }, []);
-
   return (
     <>
-      <JsonLd data={GIVING_LD} id="ld-giving" />
       <GivingHero />
       <GivingEvents />
       <GivingPartners />

@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import { useDocumentTitle } from '@/lib/seo';
 import { Breadcrumbs } from '@/templates/Breadcrumbs';
 import { SeeAlsoFooter } from '@/templates/SeeAlsoFooter';
 import type { SiteRoute } from '@/data/site';
@@ -15,7 +14,7 @@ interface PageShellProps {
 /**
  * PageShell — wraps every non-home page.
  *
- *   - Sets document.title + meta description via useDocumentTitle
+ *   - <head> metadata is owned by <RouteMeta> (src/lib/seo.ts)
  *   - App.tsx owns the single <main id="main"> landmark; this shell
  *     renders a plain wrapper to avoid nested main elements
  *   - Auto-renders <Breadcrumbs> when route.parent is set (PR-7)
@@ -26,8 +25,6 @@ interface PageShellProps {
  * hideSeeAlso when a page has a bespoke closing moment.
  */
 export const PageShell = ({ route, children, hideSeeAlso = false }: PageShellProps) => {
-  useDocumentTitle(route);
-
   return (
     <div id="content">
       {route.parent && <Breadcrumbs route={route} />}
