@@ -16,6 +16,16 @@ export { SITE_ORIGIN } from '@/lib/site-origin';
  * chunk and Suspense boundary to resolve — the output is the full
  * page, never the loading fallback.
  */
+/**
+ * `progressiveChunkSize: Infinity` keeps every Suspense boundary inline.
+ * By default React outlines any boundary larger than ~12 KB: it writes
+ * the fallback, then the real content later with inline reveal
+ * scripts ($RC/$RV). That suits streaming, but for static HTML it is
+ * harmful — production's CSP (script-src 'self') blocks those inline
+ * scripts, so the content would stay hidden and never hydrate.
+ * check-seo.mjs fails the build if a pending boundary or inline script
+ * ever slips through.
+ */
 export async function render(url: string): Promise<string> {
   const { prelude } = await prerenderToNodeStream(
     <StrictMode>
@@ -23,6 +33,7 @@ export async function render(url: string): Promise<string> {
         <AppShell />
       </StaticRouter>
     </StrictMode>,
+    { progressiveChunkSize: Number.POSITIVE_INFINITY },
   );
   let html = '';
   for await (const chunk of prelude) html += chunk;
