@@ -13,6 +13,11 @@ updates:
       # not the newest Node release. Bump its major with the runtime.
       - dependency-name: '@types/node'
         update-types: ['version-update:semver-major']
+      # typescript-eslint 8.x only supports TypeScript <6.1, so a new
+      # TypeScript major cannot install until typescript-eslint adds
+      # support. Remove this rule and bump both together when it does.
+      - dependency-name: 'typescript'
+        update-types: ['version-update:semver-major']
     groups:
       types:
         patterns:
